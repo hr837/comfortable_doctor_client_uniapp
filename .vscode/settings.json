@@ -1,0 +1,13 @@
+{
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "files.associations": {
+    ".env**": "properties",
+    ".env": "properties",
+    "*.cjson": "jsonc",
+  },
+}
