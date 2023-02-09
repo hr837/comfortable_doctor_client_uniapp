@@ -3,7 +3,23 @@
     {
       "path": "pages/index/index",
       "style": {
-        "navigationBarTitleText": "系统功能"
+        "navigationBarTitleText": "系统功能",
+        "titleNView": {
+          "buttons": [
+            {
+              "text": "退出",
+              "fontSize": "16px",
+              "width": "60px",
+              "color": "#60a5fa",
+              "colorPressed": "#3b82f6"
+            },
+            {
+              "text": "姓名",
+              "fontSize": "16px",
+              "width": "130px"
+            }
+          ]
+        }
       }
     }
   ],
