@@ -2,3 +2,14 @@ html,
 body {
   font-size: $uni-font-size-lg;
 }
+
+
+/* 修复uni-ui 组件样式 */
+.uni-forms {
+  .uni-forms-item{
+    // 不设置label的时候，设置label块隐藏
+    .uni-forms-item__label.no-label{
+      display: none;
+    }
+  }
+}

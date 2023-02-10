@@ -1,6 +1,6 @@
 import path from 'path'
-import { defineConfig } from "vite";
-import uni from "@dcloudio/vite-plugin-uni";
+import { defineConfig } from 'vite'
+import uni from '@dcloudio/vite-plugin-uni'
 import AutoImport from 'unplugin-auto-import/vite'
 import Unocss from 'unocss/vite'
 
@@ -14,23 +14,23 @@ export default defineConfig({
   plugins: [
     uni({
       vueOptions: {
-        reactivityTransform: true
-      }
+        reactivityTransform: true,
+      },
     }),
     AutoImport({
-      imports: ["vue/macros", "uni-app", "vue"],
-      dts: "typings/auto-imports.d.ts",
+      imports: ['vue/macros', 'uni-app', 'vue'],
+      dts: 'typings/auto-imports.d.ts',
       vueTemplate: true,
-      ignore: ['createApp']
+      ignore: ['createApp'],
     }),
-    Unocss()
+    Unocss(),
   ],
   build: {
-    minify: "terser",
+    minify: 'terser',
     terserOptions: {
       compress: {
-        drop_console: true
-      }
-    }
-  }
-});
+        drop_console: true,
+      },
+    },
+  },
+})
