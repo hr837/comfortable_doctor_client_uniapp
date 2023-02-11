@@ -1,5 +1,5 @@
 /** 菜单信息 */
-declare interface GridMenuInfo {
+export interface GridMenuInfo {
   /** 显示文字 */
   text: string
   /** Icon名称 */

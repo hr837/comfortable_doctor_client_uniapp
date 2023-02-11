@@ -17,7 +17,7 @@
       "@dcloudio/types",
       "@uni-helper/uni-app-types",
       "@uni-helper/uni-ui-types"
-    ]
+    ],
   },
   "vueCompilerOptions": {
     "experimentalRuntimeMode": "",

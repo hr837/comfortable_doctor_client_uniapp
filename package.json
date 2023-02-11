@@ -51,7 +51,8 @@
     "@dcloudio/uni-quickapp-webview": "3.0.0-3061820230117001",
     "@unocss/transformer-directives": "^0.49.4",
     "dayjs": "^1.11.7",
-    "vue": "^3.2.45",
+    "query-string": "^8.1.0",
+    "vue": "3.2.45",
     "vue-i18n": "^9.1.9"
   },
   "devDependencies": {

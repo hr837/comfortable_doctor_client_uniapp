@@ -23,9 +23,35 @@
       }
     },
     {
-      "path": "pages/patient/patient-query",
+      "path": "pages/patient-query/patient-query",
       "style": {
         "navigationBarTitleText": "患者查询"
+      }
+    },
+    {
+      "path": "pages/patient-query/patient-narcotic-query",
+      "style": {
+        "navigationBarTitleText": "麻醉记录查询"
+      }
+    },
+    {
+      "path": "pages/patient-detail/patient-narcotic-detail",
+      "style": {
+        "navigationBarTitleText": "麻醉详情",
+        "titleNView": {
+          "buttons": [
+            {
+              "type": "menu",
+              "width": "60px"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "path": "pages/patient-detail/patient-attach-file",
+      "style": {
+        "navigationBarTitleText": "术前附件查看"
       }
     },
     {

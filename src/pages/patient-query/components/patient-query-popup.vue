@@ -7,7 +7,7 @@ const emits = defineEmits(['command', 'update:show'])
 // ref
 const popupRef = ref<UniHelper.UniPopupProps>()
 
-function onClick(name: 'visitRecord' | 'contract' | 'narcotizingRecord') {
+function onClick(name: PopupCommandType) {
   popupRef.value?.close()
   emits('command', name)
   emits('update:show', false)

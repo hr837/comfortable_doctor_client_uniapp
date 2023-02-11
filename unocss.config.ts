@@ -5,6 +5,7 @@ import {
   presetWebFonts,
 } from 'unocss'
 import transformerDirectives from '@unocss/transformer-directives'
+import presetRemToPx from '@unocss/preset-rem-to-px'
 
 export default defineConfig({
   shortcuts: [
@@ -16,6 +17,7 @@ export default defineConfig({
   transformers: [transformerDirectives()],
   presets: [
     presetUno(),
+    presetRemToPx(),
     presetWebFonts({
       fonts: {
         sans: 'DM Sans',
