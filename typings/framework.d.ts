@@ -3,5 +3,5 @@ declare type UniEvent<T> = import("@uni-helper/uni-app-types").CustomEvent<T>
 
 /** UniFormRef */
 declare type UniForm = {
-  validate: () => Promise<void>
+  validate: UniHelper.UniFormsValidate
 }

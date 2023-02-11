@@ -18,5 +18,5 @@
   },
   "scss.lint.unknownAtRules": "ignore",
   "css.lint.unknownAtRules": "ignore",
-  "scss.validate": false
+  "scss.validate": false,
 }
