@@ -10,7 +10,13 @@ const dict = {
 
 <template>
   <view class="component patient-base-info">
-    <uni-section title="基本信息" type="line" />
+    <uni-section title="基本信息" type="line">
+      <template #right>
+        <button type="primary" size="mini">
+          保存
+        </button>
+      </template>
+    </uni-section>
     <uni-forms ref="formRef" label-width="100px" label-align="right" class="p-4 p-t-0">
       <uni-row>
         <uni-col :xs="24" :sm="12" :md="8">
