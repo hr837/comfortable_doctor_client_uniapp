@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 const currentIndex = $ref(0)
+const CHAR = '✓'
 </script>
 
 <template>
@@ -44,19 +45,19 @@ const currentIndex = $ref(0)
           11:{{ 5 + index * 2 }}
         </uni-td>
         <uni-td align="center">
-          {{ index % 3 === 0 ? '✓' : '' }}
+          {{ index % 3 === 0 ? CHAR : '' }}
         </uni-td>
         <uni-td align="center">
-          {{ index % 3 === 0 ? '✓' : '' }}
+          {{ index % 3 === 0 ? CHAR : '' }}
         </uni-td>
         <uni-td align="center">
-          {{ index % 2 === 0 ? '✓' : '' }}
+          {{ index % 2 === 0 ? CHAR : '' }}
         </uni-td>
         <uni-td align="center">
-          {{ index % 5 === 0 ? '✓' : '' }}
+          {{ index % 5 === 0 ? CHAR : '' }}
         </uni-td>
         <uni-td align="center">
-          {{ index % 4 === 0 ? '✓' : '' }}
+          {{ index % 4 === 0 ? CHAR : '' }}
         </uni-td>
         <uni-td align="center">
           <uni-icons v-show="currentIndex === index" class="leading-none" type="trash" size="20" color="#d9001b" />

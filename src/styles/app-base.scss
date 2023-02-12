@@ -6,18 +6,35 @@ body {
 
 /* 修复uni-ui 组件样式 */
 .uni-forms {
-  .uni-forms-item{
+  .uni-forms-item {
+
     // 不设置label的时候，设置label块隐藏
-    .uni-forms-item__label.no-label{
+    .uni-forms-item__label.no-label {
       display: none;
     }
   }
 }
 
 
-.uni-table{
-  .uni-table-loading{
+.uni-table {
+  .uni-table-loading {
     height: 200px !important;
     line-height: 200px !important;
+  }
+}
+
+.uni-date {
+  .uni-date-editor {
+    .uni-date-single{
+      .icon-calendar{
+        padding: 0 5px;
+      }
+    }
+    .uni-date__icon-clear {
+      padding-right: 5px!important;
+      .uniui-clear{
+        font-size: 24px !important;
+      }
+    }
   }
 }
