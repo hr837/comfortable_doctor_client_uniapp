@@ -1,7 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3886913 */
   /* Color fonts */
-  src:  url('/static/iconfont.ttf') format('truetype');
+  src:
+       url('/static/iconfont.ttf') format('truetype');
 }
 
 .iconfont {
@@ -10,6 +11,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-nvxing:before {
+  content: "\e876";
+}
+
+.icon-nanxing:before {
+  content: "\ea0d";
 }
 
 .icon-yiliao_dianzishebaoka:before {

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import PatientQueryTable from './components/patient-query-table.vue'
 import PatientQueryForm from './components/patient-query-form.vue'
 import PatientQueryPopup from './components/patient-query-popup.vue'
+import PatientQueryList from './components/patient-query-list.vue'
 import { getPatienData } from '@/composables/patient-query'
 import type { PreOperativePatientInfo } from '@/types/patient.type'
 import { goToNarcoticDetailPage, goToPatientAttchPage } from '@/composables'
@@ -34,7 +34,7 @@ function onPopupCommand(command: PopupCommandType) {
 <template>
   <view class="page  patient-query">
     <PatientQueryForm @submit="onSubmit" />
-    <PatientQueryTable :data="dataSet" @row-click="onRowClick" />
+    <PatientQueryList :data="dataSet" @row-click="onRowClick" />
     <PatientQueryPopup v-model:show="pageData.showPopup" :data="pageData.row as any" @command="onPopupCommand" />
   </view>
 </template>

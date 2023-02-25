@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import PatientQueryTable from './components/patient-query-table.vue'
 import PatientQueryForm from './components/patient-query-form.vue'
+import PatientQueryList from './components/patient-query-list.vue'
 import { getPatienData } from '@/composables/patient-query'
 import { goToNarcoticDetailPage } from '@/composables'
 import type { PreOperativePatientInfo } from '@/types/patient.type'
@@ -21,6 +21,6 @@ async function onSubmit(query: any) {
 <template>
   <view class="page  patient-narcotic-query">
     <PatientQueryForm @submit="onSubmit" />
-    <PatientQueryTable :data="dataSet" @row-click="goToNarcoticDetailPage" />
+    <PatientQueryList :data="dataSet" @row-click="goToNarcoticDetailPage" />
   </view>
 </template>

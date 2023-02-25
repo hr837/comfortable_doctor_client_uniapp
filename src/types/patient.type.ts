@@ -6,6 +6,8 @@ export interface PatientBaseInfo {
   sex: string
   /** 年龄 */
   age: number
+  /** 年龄单位 */
+  ageUnit?: string
   /** 就诊卡号 */
   code: string
   /** 报销方式 */
