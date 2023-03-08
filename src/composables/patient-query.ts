@@ -23,6 +23,8 @@ export function getPatienData() {
           'date': '@date',
           'expense|1': ['市医保', '居民医保', '无'],
           'extend|1': ['无', 'xxx'],
+          'visitRecordFile|1': ['31.pdf', '32.pdf'],
+          'contractFile|1': ['33.pdf', '34.pdf'],
         },
       ],
     }).data)

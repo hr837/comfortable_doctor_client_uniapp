@@ -33,4 +33,9 @@ export default defineConfig({
       },
     },
   },
+  server: {
+    proxy: {
+      '/files': 'http://localhost:801',
+    },
+  },
 })

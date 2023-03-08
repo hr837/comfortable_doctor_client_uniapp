@@ -30,4 +30,8 @@ export interface PreOperativePatientInfo extends PatientBaseInfo {
   date: string
   /** 其他病情 */
   extend: string
+  /** 访视记录单 */
+  visitRecordFile: string
+  /** 知情同意书 */
+  contractFile: string
 }

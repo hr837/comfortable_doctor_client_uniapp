@@ -1,24 +1,20 @@
 <script lang="ts" setup>
-import type { PatientBaseInfo } from '@/types/patient.type'
-
-let pageQueryData: PatientBaseInfo
+let src = '/static/mobile-viewer/viewer.html'
 
 onLoad((query) => {
   if (query === undefined)
     return
-  pageQueryData = query as PatientBaseInfo
-  const { name, sex, age } = pageQueryData
+  const { name, sex, age, file } = query
   const title = `${name} ${sex} ${age}岁`
   uni.setNavigationBarTitle({ title })
+  src += `?file=${file}`
 })
 </script>
 
 <template>
   <view class="component patient-attach-file">
-    patient-attach-file--附件查看
+    <web-view :src="src" />
   </view>
 </template>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

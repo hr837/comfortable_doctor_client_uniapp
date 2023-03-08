@@ -1,6 +1,6 @@
 import queryString from 'query-string'
 import type { GridMenuInfo } from '@/types/index-page.type'
-import type { PatientBaseInfo } from '@/types/patient.type'
+import type { PatientBaseInfo, PreOperativePatientInfo } from '@/types/patient.type'
 
 /** 宫格菜单配置 */
 export const GridMenuSetting: GridMenuInfo[] = [
@@ -71,11 +71,16 @@ export function goToNarcoticDetailPage(data: PatientBaseInfo) {
  * 跳转到附件查看页面
  * @param data 含有病人基本信息的数据
  */
-export function goToPatientAttchPage(data: PatientBaseInfo, command: PopupCommandType) {
-  const query = getPatientBaseData(data)
+export function goToPatientAttchPage(data: PreOperativePatientInfo, command: PopupCommandType) {
+  const query = {
+    name: data.name,
+    age: data.age,
+    sex: data.sex,
+    file: command === 'contract' ? data.contractFile : data.visitRecordFile,
+  }
   const url = queryString.stringifyUrl({
     url: '/pages/patient-detail/patient-attach-file',
-    query: { ...query, type: command },
+    query,
   })
 
   uni.navigateTo({
