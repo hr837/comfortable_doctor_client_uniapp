@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-let src = '/static/mobile-viewer/viewer.html'
+// let src = '/static/mobile-viewer/viewer.html'
+let src = 'http://10.0.2.2'
 
 onLoad((query) => {
   if (query === undefined)

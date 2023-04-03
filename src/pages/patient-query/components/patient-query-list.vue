@@ -86,7 +86,7 @@ const genderIcon = (str: string) => str === '女' ? 'icon-nvxing' : 'icon-nanxin
       </uni-collapse-item>
     </uni-collapse>
     <view v-else class="column flex-center py-10">
-      <img src="/static/notdata.png">
+      <image src="/static/notdata.png" mode="aspectFit"></image>
       <view class="text-gray-300 mt-4">
         暂无数据
       </view>
