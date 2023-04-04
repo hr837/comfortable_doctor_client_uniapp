@@ -27,7 +27,7 @@ const genderIcon = (str: string) => str === '女' ? 'icon-nvxing' : 'icon-nanxin
               {{ item.name }}
             </text>
             <text class="patient-query-list-item_title_item font-bold">
-              {{ item.age }}{{ item.ageUnit ?? '岁' }}
+              {{ item.age }}
             </text>
             <text class="patient-query-list-item_title_item">
               {{ item.source }}
@@ -86,7 +86,7 @@ const genderIcon = (str: string) => str === '女' ? 'icon-nvxing' : 'icon-nanxin
       </uni-collapse-item>
     </uni-collapse>
     <view v-else class="column flex-center py-10">
-      <image src="/static/notdata.png" mode="aspectFit"></image>
+      <image src="/static/notdata.png" mode="aspectFit" />
       <view class="text-gray-300 mt-4">
         暂无数据
       </view>

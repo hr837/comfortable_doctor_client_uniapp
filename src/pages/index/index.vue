@@ -1,18 +1,31 @@
 <script setup lang="ts">
 import { GridMenuSetting } from '@/composables'
+import { STORE_KEY_USER } from '@/utils/app.constant'
+
+const goToLogin = () =>
+  uni.redirectTo({
+    url: '/pages/login/login',
+  })
 
 onMounted(() => {
-
-  // const webView = this.$mp.page.$getAppWebview();
+  const userInfo = uni.getStorageSync(STORE_KEY_USER)
+  if (!userInfo) {
+    setTitleButtonText('未登录')
+    goToLogin()
+  }
+  else {
+    const { UserName } = userInfo
+    setTitleButtonText(UserName)
+  }
 })
 
-onNavigationBarButtonTap((o) => {
-  if (o.index !== 0)
-    return
-  setTitleButtonText((Math.random() * 10000).toFixed(0))
+onNavigationBarButtonTap(({ index }) => {
+  if (index === 0)
+    goToLogin()
 })
 
 function setTitleButtonText(text: string) {
+  // #ifdef APP-PLUS
   const [page] = getCurrentPages().slice(-1)
   if (!page)
     return
@@ -20,6 +33,16 @@ function setTitleButtonText(text: string) {
     return
   const webView = page.$getAppWebview()
   webView.setTitleNViewButtonStyle(1, { text })
+  // #endif
+
+  // #ifdef H5
+  const headft = document.querySelector('.uni-page-head-ft')
+  if (!headft)
+    return
+  const nameEl = headft.lastChild?.lastChild
+  if (nameEl)
+    nameEl.textContent = text
+  // #endif
 }
 
 function onChagne(e: UniEvent<{ index: number }>) {

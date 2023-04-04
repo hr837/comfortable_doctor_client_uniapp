@@ -1,28 +1,25 @@
 <script lang="ts" setup>
+import type { Department } from '@/types/department.type'
+
+export interface QueryInfo {
+  query: string
+  date: string
+  department: string
+}
 const emits = defineEmits(['submit'])
 
 const formRef = ref<UniForm>()
 
-const model = $ref({
+const model = $ref<QueryInfo>({
   query: '',
   date: '',
   department: '',
 })
 
-const departmentList = $ref<any[]>([
-  {
-    text: '科室1',
-    value: 'dept1',
-  },
-  {
-    text: '科室2',
-    value: 'dept2',
-  },
-  {
-    text: '科室3',
-    value: 'dept3',
-  },
-])
+const departmentList = computed(() => getApp().globalData!.deptList.map((item: Department) => ({
+  text: item.ItemName,
+  value: item.ItemCode,
+})))
 
 // 提交事件回调
 const onSubmit = () => emits('submit', { ...model })
@@ -51,10 +48,15 @@ const onSubmit = () => emits('submit', { ...model })
           </uni-forms-item>
         </uni-col>
       </uni-row>
+      <slot name="append" />
     </uni-forms>
   </view>
 </template>
 
 <style lang="scss" scoped>
-
+.patient-query-form {
+  :deep(.uni-forms-item) {
+    margin-bottom: 12px;
+  }
+}
 </style>

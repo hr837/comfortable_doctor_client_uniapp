@@ -23,6 +23,12 @@
       }
     },
     {
+      "path":"pages/login/login",
+      "style":{
+        "navigationStyle":"custom"
+      }
+    },
+    {
       "path": "pages/patient-query/patient-query",
       "style": {
         "navigationBarTitleText": "患者查询"
@@ -52,12 +58,6 @@
       "path": "pages/patient-detail/patient-attach-file",
       "style": {
         "navigationBarTitleText": "术前附件查看"
-      }
-    },
-    {
-      "path": "pages/test/test",
-      "style": {
-        "navigationBarTitleText": "测试页面"
       }
     }
   ],

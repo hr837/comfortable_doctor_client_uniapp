@@ -5,21 +5,19 @@ export interface PatientBaseInfo {
   /** 性别 */
   sex: string
   /** 年龄 */
-  age: number
-  /** 年龄单位 */
-  ageUnit?: string
+  age: string
   /** 就诊卡号 */
   code: string
   /** 报销方式 */
   expense: string
+  /** 身份证号 */
+  idCard: string
 }
 
 /** 术前患者信息 */
 export interface PreOperativePatientInfo extends PatientBaseInfo {
   /** 病人来源 */
   source: string
-  /** 就诊卡号 */
-  code: string
   /** 科室 */
   dept: string
   /** 诊断 */

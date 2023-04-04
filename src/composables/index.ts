@@ -48,6 +48,7 @@ export function getPatientBaseData(data: PatientBaseInfo): PatientBaseInfo {
     sex: data.sex,
     age: data.age,
     expense: data.expense,
+    idCard: data.idCard,
   }
 }
 

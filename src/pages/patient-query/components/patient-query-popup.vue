@@ -34,7 +34,7 @@ function onPopupChange(e: UniEvent<{ val: boolean }>) {
           <text class="m-x-4">
             {{ props.data.sex }}
           </text>
-          <text>{{ props.data.age }}岁</text>
+          <text>{{ props.data.age }}</text>
         </view>
         <view class=" column p-8">
           <button class="w-full" @click="onClick('visitRecord')">

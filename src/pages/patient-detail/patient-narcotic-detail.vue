@@ -1,4 +1,3 @@
-<!-- eslint-disable unused-imports/no-unused-imports -->
 <script lang="ts" setup>
 import PatientDetailPopup from './components/patient-detail-popup.vue'
 import { ComponentSetting } from '@/composables/patient-narcotic-detail.composable'
@@ -20,7 +19,7 @@ onLoad((query) => {
     return
   pageQueryData = query as PatientBaseInfo
   const { name, sex, age } = pageQueryData
-  const title = `${name} ${sex} ${age}岁`
+  const title = `${name} ${sex} ${age}`
   pageData.code = pageQueryData.code
   uni.setNavigationBarTitle({ title })
 })
@@ -30,7 +29,7 @@ onNavigationBarButtonTap(() => pageData.show = true)
 function onCommand(command: PopupCommandType) {
   if (!pageQueryData)
     return
-  goToPatientAttchPage(pageQueryData, command)
+  goToPatientAttchPage(pageQueryData as any, command)
 }
 
 function onClickItem(e: { currentIndex: number }) {

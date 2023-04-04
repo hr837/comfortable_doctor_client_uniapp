@@ -1,10 +1,14 @@
 <script  lang="ts">
+import { getDeptList } from '@/utils/api'
+
 export default defineComponent({
   globalData: {
-    text: '123',
+    deptList: [],
   },
   onLaunch() {
-    console.log('App Launch')
+    getDeptList().then((data) => {
+      getApp().globalData!.deptList = data
+    })
   },
   onShow() {
     console.log('App Show')
