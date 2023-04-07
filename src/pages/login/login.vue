@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { login } from '@/utils/api'
+import LoginSetting from './components/login-setting.vue'
+import { getDeptList, login } from '@/utils/api'
 import type { ApiRequestType } from '@/utils/api.help'
 import { STORE_KEY_USER } from '@/utils/app.constant'
 
@@ -28,8 +29,10 @@ const toLogin = () => login(loginModel).then((data) => {
     data,
     success: goToIndex,
   })
+  getDeptList().then((dataDept) => {
+    getApp().globalData!.deptList = dataDept
+  })
 })
-
 function submitForm() {
   formRef.value?.validate([], (err) => {
     if (!err)
@@ -40,6 +43,9 @@ function submitForm() {
 
 <template>
   <view class="page login">
+    <view class="login-setting">
+      <LoginSetting />
+    </view>
     <view class="login-title">
       舒适化治疗医生客户端
     </view>
@@ -68,8 +74,12 @@ function submitForm() {
 
   @apply absolute top-0 right-0 bottom-0 left-0 items-center;
 
+  .login-setting{
+    @apply absolute top-8 right-8;
+  }
+
   .login-title {
-    @apply m-y-100px text-3xl font-bold text-gray-600;
+    @apply m-y-150px text-4xl font-bold text-gray-600;
   }
 
   .login-form-container {

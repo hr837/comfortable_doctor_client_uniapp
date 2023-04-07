@@ -31,7 +31,6 @@ specifiers:
   '@vue/tsconfig': ^0.1.3
   dayjs: ^1.11.7
   eslint: ^8.33.0
-  mockjs: ^1.1.0
   postcss: ^8.4.21
   query-string: ^8.1.0
   sass: ^1.58.0
@@ -79,7 +78,6 @@ devDependencies:
   '@unocss/reset': 0.49.4
   '@vue/tsconfig': 0.1.3_@types+node@18.11.19
   eslint: 8.33.0
-  mockjs: 1.1.0
   postcss: 8.4.21
   sass: 1.58.0
   typescript: 4.9.5
@@ -5448,13 +5446,6 @@ packages:
       pathe: 1.1.0
       pkg-types: 1.0.1
       ufo: 1.0.1
-    dev: true
-
-  /mockjs/1.1.0:
-    resolution: {integrity: sha512-eQsKcWzIaZzEZ07NuEyO4Nw65g0hdWAyurVol1IPl1gahRwY+svqzfgfey8U8dahLwG44d6/RwEzuK52rSa/JQ==}
-    hasBin: true
-    dependencies:
-      commander: 2.20.3
     dev: true
 
   /module-alias/2.2.2:

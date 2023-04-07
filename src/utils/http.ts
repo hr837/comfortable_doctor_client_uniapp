@@ -1,4 +1,7 @@
-export const server = 'https://mock.apifox.cn/m1/2536589-0-default'
+// export const server = 'https://mock.apifox.cn/m1/2536589-0-default'
+// export const server = 'http://172.16.1.28:8088'
+
+import { STORE_KEY_SERVER } from './app.constant'
 
 interface RequestParam {
   /**
@@ -23,29 +26,22 @@ interface RequestParam {
   loadingMsg?: string
 }
 
-/** HTTP数据返回类型 */
-interface HttpResponseType<T> {
-  /** 业务状态码 */
-  code: string
-  /** 业务返回数据 */
-  data: T
-  /** API响应状态 */
-  success: boolean
-  /** API返回消息 */
-  msg: string
-}
-
 /**
  * 封装的网络请求，支持Get,Post请求
  * @param params 请求参数对象
  */
 export function request<T>(params: RequestParam) {
   return new Promise<T>((resolve, reject) => {
+    const server = uni.getStorageSync(STORE_KEY_SERVER)
+    if (!server)
+      throw new Error('未配置Server地址')
+
     if (params.loading) {
       uni.showLoading({
         title: params.loadingMsg ?? '加载中...',
       })
     }
+
     uni.request({
       url: server + params.path,
       method: params.method,
@@ -58,13 +54,10 @@ export function request<T>(params: RequestParam) {
         }
         else {
           // HTTP 状态码正常就通过业务结构状态判断业务是否成功
-          resolve(res.data)
-          // const { msg, success, data } = res.data;
-          // if (success) {
-          //   resolve(data);
-          // } else {
-          //   reject(res.data);
-          // }
+          if (res.data === null)
+            throw new Error('Server Error')
+          else
+            resolve(res.data)
         }
       },
       fail(err) {
