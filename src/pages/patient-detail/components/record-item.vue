@@ -23,7 +23,8 @@ defineEmits(['delete', 'click'])
 
 <style lang="scss" scoped>
 .record-item {
-  @apply: m-b-4 bg-gray-100 rounded-2 row items-start overflow-hidden;;
+  @apply: m-b-4 bg-gray-100 rounded-2 row items-start overflow-hidden;
+  ;
 }
 
 .record-item-tag,
@@ -33,9 +34,10 @@ defineEmits(['delete', 'click'])
 }
 
 .record-item_content {
-  @apply: flex-1 text-gray-500 text-sm active:bg-gray-2 duration-200;
+  @apply: flex-1 text-gray-500 text-sm active: bg-gray-2 duration-200;
 }
-.record-item-action{
-  @apply: self-stretch active:bg-gray-2 duration-200;
+
+.record-item-action {
+  @apply: self-stretch active: bg-gray-2 duration-200;
 }
 </style>

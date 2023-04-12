@@ -1,4 +1,3 @@
-import type { Department } from '@/types/department.type'
 import type { PreOperativePatientInfo } from '@/types/patient.type'
 
 export namespace ApiRequestType {
@@ -30,6 +29,66 @@ export namespace ApiRequestType {
      * 患者来源，参数为字符串”门诊”或”住院”或”全部”
      */
     PatientSource: string
+  }
+
+  /** 输液、麻醉用药 */
+  export interface Transfusion {
+    /**
+     * 药品类型，2输液、3麻醉用药
+     */
+    TypeCode: string
+    /**
+     * 手术患者ID，患者详情或患者列表中的ID
+     */
+    AnesthesiaId: string
+    /**
+     * 药品名称
+     */
+    DrugName: string
+    /**
+     * 药品编码
+     */
+    DrugCode: string
+    /**
+     * 0单次，1持续
+     */
+    DrugFlag: string
+    /**
+     * 晶体液或胶体液，麻醉用药时可为空
+     */
+    DrugType: string
+    /**
+     * 剂量或用量
+     */
+    Dose: number
+    /**
+     * 单位
+     */
+    Unit: string
+    /**
+    * 持续用药开始时间，单次用药时该值为Min
+    */
+    BeginTime: string
+    /**
+     * 持续用药结束时间，单次用药时该值为Min
+     */
+    EndTime: string
+    /**
+     * 用药方式
+     */
+    Mode: string
+    /**
+     * 单次用药时间，持续用药时该值为Min
+     */
+    PointTime: string
+    /**
+     * 药品规格，可以为空
+     */
+    Spect?: string
+    /**
+    * 记录ID，添加时该参数为空
+    */
+    Id?: string
   }
 
 }
@@ -68,7 +127,7 @@ export namespace ApiResonseType {
   }
 
   /** 部门查询返回列表 */
-  export type DepartmentList = Department[]
+  export type DepartmentList = ItemInfo[]
 
   /** 查询返回病人列表 */
   export interface PatientInfo {
@@ -183,6 +242,43 @@ export namespace ApiResonseType {
     SubscribeDate: string
     SubscribeId: string
   }
+
+  /** 获取用药单位返回列表 */
+  export type DrugUnitList = ItemInfo[]
+  /** 获取用药单位返回列表 */
+  export type DrugWayList = ItemInfo[]
+
+  /** 药品信息 */
+  export interface DrugInfo {
+    /**
+     * 剂量，自定义剂量，添加药品是时默认的剂量
+     */
+    CustomDose: number
+    /**
+     * 用药单位，自定义的默认用药单位
+     */
+    CustomUnit: string
+    /**
+     * 药品编码
+     */
+    DrugCode: string
+    /**
+     * 药品名称
+     */
+    DrugName: string
+    /**
+     * 拼音码
+     */
+    DrugSpell: string
+    /**
+     * 规格
+     */
+    Dspec: string
+    /**
+     * 用药方式
+     */
+    InjectionMode: string
+  }
 }
 
 export namespace ApiDataConvert {
@@ -206,4 +302,20 @@ export namespace ApiDataConvert {
       idCard: data.PatientIdCard,
     }
   }
+}
+
+/** 项目 */
+export interface ItemInfo {
+  /**
+   * 单位编码
+   */
+  ItemCode: string
+  /**
+   * 单位名称
+   */
+  ItemName: string
+  /**
+   * 拼音码
+   */
+  Spell?: string
 }

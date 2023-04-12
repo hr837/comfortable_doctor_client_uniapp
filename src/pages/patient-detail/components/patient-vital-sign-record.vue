@@ -4,7 +4,7 @@ const CHAR = '✓'
 </script>
 
 <template>
-  <view class="component ">
+  <view class="component patient-vital-sign-record">
     <uni-section title="生命体征" type="line">
       <template #right>
         <button type="primary" size="mini">
@@ -16,27 +16,53 @@ const CHAR = '✓'
       </template>
     </uni-section>
 
-    <uni-table border stripe>
+    <!-- fixed table header -->
+    <!-- <uni-table border stripe class="patient-vital-sign-record-table--fixed">
       <uni-tr>
-        <uni-th align="center">
+        <uni-th align="center" width="200px">
           时间
         </uni-th>
-        <uni-th align="center">
+        <uni-th align="center" width="100px">
           收缩压
         </uni-th>
-        <uni-th align="center">
+        <uni-th align="center" width="100px">
           舒张压
         </uni-th>
-        <uni-th align="center">
+        <uni-th align="center" width="100px">
           血氧
         </uni-th>
-        <uni-th align="center">
+        <uni-th align="center" width="100px">
           呼吸
         </uni-th>
-        <uni-th align="center">
+        <uni-th align="center" width="100px">
           心率
         </uni-th>
-        <uni-th align="center">
+        <uni-th align="center" width="100px">
+          操作
+        </uni-th>
+      </uni-tr>
+    </uni-table> -->
+    <uni-table border stripe class="patient-vital-sign-record-table">
+      <uni-tr class="patient-vital-sign-record-table-tr-hidden">
+        <uni-th align="center" width="200px">
+          时间
+        </uni-th>
+        <uni-th align="center" width="100px">
+          收缩压
+        </uni-th>
+        <uni-th align="center" width="100px">
+          舒张压
+        </uni-th>
+        <uni-th align="center" width="100px">
+          血氧
+        </uni-th>
+        <uni-th align="center" width="100px">
+          呼吸
+        </uni-th>
+        <uni-th align="center" width="100px">
+          心率
+        </uni-th>
+        <uni-th align="center" width="100px">
           操作
         </uni-th>
       </uni-tr>
@@ -67,6 +93,31 @@ const CHAR = '✓'
   </view>
 </template>
 
-<style lang="scss" scoped>
+<!-- <style lang="scss" scoped>
+.patient-vital-sign-record {
+  @apply page h-full;
 
-</style>
+  &-table {
+    @apply flex-1 overflow-auto;
+    // &-tr-hidden{
+    //   visibility: hidden;
+    //   th{
+    //     height: 0;
+    //     overflow: hidden;
+    //     padding: 0;
+    //   }
+    //   ::v-deep .uni-table-th-content{
+    //     display: block;
+    //     height: 0px;
+    //     overflow: hidden;
+    //   }
+    // }
+
+    // &--fixed {
+    //   ::v-deep .uni-table-loading {
+    //     display: none;
+    //   }
+    // }
+  }
+}
+</style> -->

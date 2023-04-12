@@ -44,3 +44,33 @@ export function getPatientDetail(id: string) {
     loading: true,
   })
 }
+
+/**
+ *  获取用药单位
+ */
+export function getDrugUnitList() {
+  return request<ApiResonseType.DrugUnitList>({
+    path: '/api/Drug/GetDrugUnitList',
+    method: 'GET',
+  })
+}
+
+/**
+ *  获取用药方式
+ */
+export function getDrugWayList() {
+  return request<ApiResonseType.DrugWayList>({
+    path: '/api/Drug/GetDrugWayList',
+    method: 'GET',
+  })
+}
+
+/**
+ *  获取药品信息
+ */
+export function getDrugList() {
+  return request<ApiResonseType.DrugWayList>({
+    path: '/api/Drug/GetDrugList',
+    method: 'GET',
+  })
+}

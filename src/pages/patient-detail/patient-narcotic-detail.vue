@@ -42,7 +42,7 @@ const component = $computed(() => ComponentSetting[pageData.current].component)
 
 <template>
   <PatientDetailPopup v-model:show="pageData.show" @command="onCommand" />
-  <view class="page patient-narcotic-detail">
+  <view class="page patient-narcotic-detail ">
     <uni-segmented-control
       :current="pageData.current" :values="pageData.controlItems" style-type="button"
       @click-item="onClickItem"
@@ -52,3 +52,21 @@ const component = $computed(() => ComponentSetting[pageData.current].component)
     </view>
   </view>
 </template>
+
+<style lang="scss" scoped>
+page {
+  // display: flex;
+  // flex-flow: column nowrap;
+  // height: 100%;
+  @apply page h-full;
+}
+
+.patient-narcotic-detail,
+{
+@apply flex-1 overflow-hidden;
+}
+
+.patient-narcotic-detail-container {
+  @apply flex-1 overflow-auto;
+}
+</style>

@@ -1,16 +1,33 @@
 <script lang="ts" setup>
 import RecordItem from './record-item.vue'
+import TransfusionInfoEdit from './transfusion-info-edit.vue'
+
+const popup = ref()
+
+function open() {
+  popup.value.open()
+}
+
+function close() {
+  popup.value.close()
+}
 </script>
 
 <template>
   <view class="component patient-transfusion-record">
     <uni-section title="输液" type="line">
       <template #right>
-        <button type="primary" size="mini">
+        <button type="primary" size="mini" @click="open">
           添加
         </button>
       </template>
     </uni-section>
+
+    <uni-popup ref="popup" type="dialog" background-color="#fff">
+      <!-- <uni-popup-dialog mode="base" type="info" title="添加输液记录" before-close> -->
+      <TransfusionInfoEdit pid="123" @close="close" />
+      <!-- </uni-popup-dialog> -->
+    </uni-popup>
 
     <view class="patient-transfusion-record-container">
       <RecordItem v-for="index of 10" :key="`record-item-${index}`">
@@ -51,7 +68,7 @@ import RecordItem from './record-item.vue'
   @apply: p-r-6;
 }
 
-.animate-spin{
+.animate-spin {
   animation-duration: 3s;
 }
 </style>
