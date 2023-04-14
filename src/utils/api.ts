@@ -171,3 +171,17 @@ export function getMonitorItems(id: string) {
     method: 'GET',
   })
 }
+
+/**
+ *  添加一条监控时间
+ * @param id 病人ID
+ * @param time 时间
+ */
+export function addMonitorRecord(id: string, time: string) {
+  return request<ApiResonseType.MonitorItem[]>({
+    path: '/api/MonitorRecord/Add',
+    data: { AnesthesiaId: id, RecordTime: time },
+    method: 'POST',
+    loading: true,
+  })
+}

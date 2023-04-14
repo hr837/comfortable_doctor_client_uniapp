@@ -1,6 +1,15 @@
 import queryString from 'query-string'
-import type { GridMenuInfo } from '@/types/index-page.type'
-import type { PatientBaseInfo, PreOperativePatientInfo } from '@/types/patient.type'
+import dayJs from 'dayjs'
+import type { ApiResonseType } from '@/utils/api.help'
+
+interface GridMenuInfo {
+  /** 显示文字 */
+  text: string
+  /** Icon名称 */
+  icon: string
+  /** 对应页面路径 */
+  path: string
+}
 
 /** 宫格菜单配置 */
 export const GridMenuSetting: GridMenuInfo[] = [
@@ -16,48 +25,17 @@ export const GridMenuSetting: GridMenuInfo[] = [
   },
 ]
 
-// /** 数据字典 */
-// export const DictData = {
-//   /** 科室 */
-//   department: [
-//     { text: '消化内科', value: 'xhnk' },
-//     { text: '妇产科', value: 'fck' },
-//     { text: '耳鼻喉科', value: 'ebhk' },
-//   ],
-//   /** 性别 */
-//   gender: [
-//     { text: '男', value: 'nan' },
-//     { text: '女', value: 'nv' },
-//   ],
-//   /**  */
-//   ageUnit: [
-//     { text: '岁', value: 'y' },
-//     { text: '月', value: 'm' },
-//     { text: '日', value: 'd' },
-//   ],
-// }
-
-/**
- * 简化数据 ：获取病人基本信息
- * @param data 列表的数据
- */
-export function getPatientBaseData(data: PatientBaseInfo): PatientBaseInfo {
-  return {
-    name: data.name,
-    code: data.code,
-    sex: data.sex,
-    age: data.age,
-    expense: data.expense,
-    idCard: data.idCard,
-  }
-}
-
 /**
  * 跳转到病人麻醉详情页面
  * @param data 含有病人基本信息的数据
  */
-export function goToNarcoticDetailPage(data: PatientBaseInfo) {
-  const query = getPatientBaseData(data)
+export function goToNarcoticDetailPage(data: ApiResonseType.PatientInfo) {
+  const query = {
+    name: data.PatientName,
+    age: data.PatientAge,
+    sex: data.PatientSex,
+    id: data.Id,
+  }
   const url = queryString.stringifyUrl({
     url: '/pages/patient-detail/patient-narcotic-detail',
     query: { ...query },
@@ -72,12 +50,13 @@ export function goToNarcoticDetailPage(data: PatientBaseInfo) {
  * 跳转到附件查看页面
  * @param data 含有病人基本信息的数据
  */
-export function goToPatientAttchPage(data: PreOperativePatientInfo, command: PopupCommandType) {
+export function goToPatientAttchPage(data: ApiResonseType.PatientInfo, command: PopupCommandType) {
   const query = {
-    name: data.name,
-    age: data.age,
-    sex: data.sex,
-    file: command === 'contract' ? data.contractFile : data.visitRecordFile,
+    name: data.PatientName,
+    age: data.PatientAge,
+    sex: data.PatientSex,
+    // file: command === 'contract' ? data.contractFile : data.visitRecordFile,
+    file: '31.pdf',
   }
   const url = queryString.stringifyUrl({
     url: '/pages/patient-detail/patient-attach-file',
@@ -87,4 +66,9 @@ export function goToPatientAttchPage(data: PreOperativePatientInfo, command: Pop
   uni.navigateTo({
     url,
   })
+}
+
+/** 时间格式化 */
+export function dateFormat(date: string, fmt = 'YYYY-MM-DD HH:mm:ss') {
+  return dayJs(date).format(fmt)
 }

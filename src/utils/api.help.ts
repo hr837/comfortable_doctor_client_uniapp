@@ -1,5 +1,3 @@
-import type { PreOperativePatientInfo } from '@/types/patient.type'
-
 export namespace ApiRequestType {
   /**  登录 */
   export interface Login {
@@ -185,61 +183,229 @@ export namespace ApiResonseType {
   }
 
   export interface PatientDetailInfo {
+    /**
+     * 入恢复室时间
+     */
     AccessPacuTime: string
+    /**
+     * 入手术室时间
+     */
     AccessTime: string
+    /**
+     * 麻醉开始时间
+     */
     AnesthesiaBeginTime: string
+    /**
+     * 麻醉结束时间
+     */
     AnesthesiaEndTime: string
+    /**
+     * 麻醉方法编码
+     */
     AnesthesiaMethodCode: string
+    /**
+     * 麻醉方法名称
+     */
     AnesthesiaMethodName: string
+    /**
+     * 麻醉医生编码
+     */
     Anesthetist1Code: string
+    /**
+     * 麻醉医生姓名
+     */
     Anesthetist1Name: string
+    /**
+     * 麻醉护士编码
+     */
     Anesthetist3Code: string
+    /**
+     * 麻醉护士姓名
+     */
     Anesthetist3Name: string
+    /**
+     * 预约取消原因
+     */
     AppointmentCancel: string
+    /**
+     * 评估时间
+     */
     AssessTime: string
+    /**
+     * 诊断编码
+     */
     DiagnosisCode: string
+    /**
+     * 诊断名称
+     */
     DiagnosisName: string
+    /**
+     * 申请医生编码
+     */
     DoctorCode: string
+    /**
+     * 申请医生姓名
+     */
     DoctorName: string
+    /**
+     * 检查时间
+     */
     ExamineTime: string
+    /**
+     * 检查类型
+     */
     ExamineType: string
+    /**
+     * 拔罐时间
+     */
     ExtubationTime: string
+    /**
+     * ID主键
+     */
     Id: string
+    /**
+     * 插管时间
+     */
     IntubateTime: string
+    /**
+     * 是否审核
+     */
     IsChecked: boolean
+    /**
+     * 是否急诊
+     */
     IsEmergency: boolean
+    /**
+     * 出恢复室时间
+     */
     LeavePacuTime: string
+    /**
+     * 出手术室时间
+     */
     LeaveTime: string
+    /**
+     * 护士编码
+     */
     NurseCode: string
+    /**
+     * 护士姓名
+     */
     NurseName: string
+    /**
+     * 手术取消原因
+     */
     OperateCancel: string
+    /**
+     * 手术间编码
+     */
     OperatingRoomCode: string
+    /**
+     * 手术间名称
+     */
     OperatingRoomName: string
+    /**
+     * 手术开始时间
+     */
     OperationBeginTime: string
+    /**
+     * 手术编码
+     */
     OperationCode: string
+    /**
+     * 手术结束时间
+     */
     OperationEndTime: string
+    /**
+     * 手术名称
+     */
     OperationName: string
+    /**
+     * 手术医生编码
+     */
     OperatorCode: string
+    /**
+     * 手术医生姓名
+     */
     OperatorName: string
+    /**
+     * 处理意见
+     */
     Opinion: string
+    /**
+     * 年龄
+     */
     PatientAge: string
+    /**
+     * 床号
+     */
     PatientBedCode: string
+    /**
+     * 床号名称
+     */
     PatientBedName: string
+    /**
+     * 患者生日
+     */
     PatientBirthday: string
+    /**
+     * 科室编码
+     */
     PatientDepartmentCode: string
+    /**
+     * 科室名称
+     */
     PatientDepartmentName: string
+    /**
+     * 身份证号
+     */
     PatientIdCard: string
+    /**
+     * 医保类型
+     */
     PatientIdentity: string
+    /**
+     * 病历号
+     */
     PatientMrn: string
+    /**
+     * 患者姓名
+     */
     PatientName: string
+    /**
+     * 就诊号，住院号/门诊号
+     */
     PatientNumber: string
+    /**
+     * 患者性别
+     */
     PatientSex: string
+    /**
+     * 患者来源，门诊或住院
+     */
     PatientSource: string
+    /**
+     * 病区编码
+     */
     PatientWardCode: string
+    /**
+     * 病区名称
+     */
     PatientWardName: string
+    /**
+     * 预约开始时间
+     */
     PlanStartTime: string
+    /**
+     * 特殊感染
+     */
     SpecialInfect: string
+    /**
+     * 申请日期
+     */
     SubscribeDate: string
+    /**
+     * HIS申请单ID
+     */
     SubscribeId: string
   }
 
@@ -305,30 +471,7 @@ export namespace ApiResonseType {
 
   /** 体征检测项目 */
   export type MonitorItem = Omit<ItemInfo, 'Spell'>
-}
 
-export namespace ApiDataConvert {
-  export function PatientInfoConvert(data: ApiResonseType.PatientInfo): PreOperativePatientInfo {
-    return {
-      // base
-      name: data.PatientName,
-      sex: data.PatientSex,
-      age: data.PatientAge,
-      code: data.PatientNumber,
-      expense: '未知',
-      // extend
-      source: data.PatientSource,
-      dept: data.PatientDepartmentName,
-      result: data.DiagnosisName,
-      doctor: data.DoctorName,
-      date: data.SubscribeDate,
-      extend: data.SpecialInfect,
-      visitRecordFile: '32.pdf',
-      contractFile: '31.pdf',
-      idCard: data.PatientIdCard,
-      id: data.Id,
-    }
-  }
 }
 
 /** 项目 */

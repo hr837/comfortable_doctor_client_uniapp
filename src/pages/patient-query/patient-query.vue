@@ -3,12 +3,11 @@ import PatientQueryForm, { type QueryInfo } from './components/patient-query-for
 import PatientQueryPopup from './components/patient-query-popup.vue'
 import PatientQueryList from './components/patient-query-list.vue'
 import PatientQuerySelectSource from './components/patient-query-select-source.vue'
-import type { PreOperativePatientInfo } from '@/types/patient.type'
 import { goToNarcoticDetailPage, goToPatientAttchPage } from '@/composables'
 import { queryPatients } from '@/utils/api'
-import { ApiDataConvert, type ApiRequestType } from '@/utils/api.help'
+import type { ApiRequestType, ApiResonseType } from '@/utils/api.help'
 
-const dataSet = ref<PreOperativePatientInfo[]>([])
+const dataSet = ref<ApiResonseType.PatientInfo[]>([])
 const pageData = reactive({
   row: {},
   showPopup: false,
@@ -22,29 +21,29 @@ const queryData = reactive<ApiRequestType.Patient>({
   OperateState: -1,
 })
 
-function onSubmit(query: QueryInfo) {
-  queryData.KeyWord = query.query
-  queryData.ExamineDate = query.date
-  queryData.DepartmentName = query.department
+function onSubmit(query?: QueryInfo) {
+  queryData.KeyWord = query?.query ?? ''
+  queryData.ExamineDate = query?.date ?? ''
+  queryData.DepartmentName = query?.department ?? ''
 
   queryPatients(queryData).then((data) => {
-    dataSet.value = data.map(ApiDataConvert.PatientInfoConvert)
-  }).catch(() => { })
+    dataSet.value = data
+  })
 }
 
-function onRowClick(data: PreOperativePatientInfo) {
+function onRowClick(data: ApiResonseType.PatientInfo) {
   pageData.row = data
   pageData.showPopup = true
 }
 
 function onPopupCommand(command: PopupCommandType) {
   if (command === 'narcotizingRecord')
-    goToNarcoticDetailPage(pageData.row as PreOperativePatientInfo)
+    goToNarcoticDetailPage(pageData.row as ApiResonseType.PatientInfo)
   else
-    goToPatientAttchPage(pageData.row as PreOperativePatientInfo, command)
+    goToPatientAttchPage(pageData.row as ApiResonseType.PatientInfo, command)
 }
 
-onMounted(() => onSubmit({} as any))
+onMounted(onSubmit)
 </script>
 
 <template>

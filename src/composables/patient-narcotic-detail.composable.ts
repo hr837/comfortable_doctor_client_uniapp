@@ -1,4 +1,3 @@
-import dayJs from 'dayjs'
 import PatientBaseInfoForm from '@/pages/patient-detail/components/patient-base-info-form.vue'
 import PatientNarcoticDrugRecord from '@/pages/patient-detail/components/patient-narcotic-drug-record.vue'
 import PatientNarcoticResult from '@/pages/patient-detail/components/patient-narcotic-result.vue'
@@ -25,6 +24,11 @@ export const PatientDetailDict = {
   breathActiveState: [{ text: '可按医师吩咐咳嗽', value: 'n', disabled: false }, { text: '可自主维持呼吸道通畅', value: 'y', disabled: false }, { text: '呼吸道需予以支持', value: 'z', disabled: false }],
   bodyActiveState: [{ text: '肢体活动有意识的活动', value: 'n', disabled: false }, { text: '肢体活动无意识活动', value: 'y', disabled: false }, { text: '肢体无活动', value: 'z', disabled: false }],
   passTo: [{ text: '恢复室', value: 'n', disabled: false }, { text: '观察室', value: 'y', disabled: false }, { text: '其它', value: 'z', disabled: false }],
+  source: [{ text: '门诊', value: 'mz', disable: false }, { text: '住院', value: 'zy', disable: false }],
+  department: [{ text: '科室一', value: 'mz', disable: false }, { text: '科室二', value: 'zy', disable: false }],
+  bloodType: [{ text: '未检测', value: '', disable: false }, { text: 'A型', value: 'a', disable: false }, { text: 'B型', value: 'b', disable: false }, { text: 'AB型', value: 'ab', disable: false }, { text: 'O型', value: 'o', disable: false }],
+  bolldRH: [{ text: '未检测', value: '', disable: false }, { text: '阳性', value: '+', disable: false }, { text: '阴性', value: '-', disable: false }],
+  operation: [{ text: '宫腔镜', value: 'gqj', disable: false }, { text: '气管检查镜', value: 'qgjcj', disable: false }, { text: '人流', value: 'rl', disable: false }],
 }
 
 interface DropDownItemInfo {
@@ -80,9 +84,4 @@ export function dictConvertDrugFlag(type?: string) {
     default:
       return ''
   }
-}
-
-/** 时间格式化 */
-export function dateFormat(date: string, fmt = 'YYYY-MM-DD HH:mm:ss') {
-  return dayJs(date).format(fmt)
 }

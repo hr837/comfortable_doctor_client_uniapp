@@ -4,11 +4,10 @@ import PatientQueryList from './components/patient-query-list.vue'
 import PatientQuerySelectSource from './components/patient-query-select-source.vue'
 import PatientQuerySelectStatus from './components/patient-query-select-status.vue'
 import { goToNarcoticDetailPage } from '@/composables'
-import type { PreOperativePatientInfo } from '@/types/patient.type'
 import { queryPatients } from '@/utils/api'
-import { ApiDataConvert, type ApiRequestType } from '@/utils/api.help'
+import type { ApiRequestType, ApiResonseType } from '@/utils/api.help'
 
-const dataSet = ref<PreOperativePatientInfo[]>([])
+const dataSet = ref<ApiResonseType.PatientInfo[]>([])
 
 const queryData = reactive<ApiRequestType.Patient>({
   KeyWord: '',
@@ -18,15 +17,17 @@ const queryData = reactive<ApiRequestType.Patient>({
   OperateState: -1,
 })
 
-async function onSubmit(query: QueryInfo) {
-  queryData.KeyWord = query.query
-  queryData.ExamineDate = query.date
-  queryData.DepartmentName = query.department
+async function onSubmit(query?: QueryInfo) {
+  queryData.KeyWord = query?.query ?? ''
+  queryData.ExamineDate = query?.date ?? ''
+  queryData.DepartmentName = query?.department ?? ''
 
   queryPatients(queryData).then((data) => {
-    dataSet.value = data.map(ApiDataConvert.PatientInfoConvert)
-  }).catch(() => { })
+    dataSet.value = data
+  })
 }
+
+onMounted(onSubmit)
 </script>
 
 <template>

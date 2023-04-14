@@ -3,8 +3,7 @@ import RecordItem from './record-item.vue'
 import TransfusionInfoEdit from './transfusion-info-edit.vue'
 import { delTransfusion, getTransfusionList } from '@/utils/api'
 import type { ApiResonseType } from '@/utils/api.help'
-import { dateFormat } from '@/composables/patient-narcotic-detail.composable'
-
+import { dateFormat } from '@/composables'
 const props = defineProps<{ id: string }>()
 const popup = ref<UniHelper.UniPopupProps>()
 const dataSet = ref<ApiResonseType.Transfusion[]>([])

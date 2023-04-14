@@ -3,7 +3,8 @@ import RecordItem from './record-item.vue'
 import TransNarcoticfusionInfoEdit from './transfusion-narcotic-info-edit.vue'
 import type { ApiResonseType } from '@/utils/api.help'
 import { delTransfusion, getTransfusionList } from '@/utils/api'
-import { dateFormat, dictConvertDrugFlag } from '@/composables/patient-narcotic-detail.composable'
+import { dictConvertDrugFlag } from '@/composables/patient-narcotic-detail.composable'
+import { dateFormat } from '@/composables'
 
 const props = defineProps<{ id: string }>()
 const popup = ref<UniHelper.UniPopupProps>()

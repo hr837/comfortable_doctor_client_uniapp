@@ -2,9 +2,9 @@
 import PatientDetailPopup from './components/patient-detail-popup.vue'
 import { ComponentSetting, initSelectOptions } from '@/composables/patient-narcotic-detail.composable'
 import { goToPatientAttchPage } from '@/composables'
-import type { PatientBaseInfo } from '@/types/patient.type'
+import type { ApiResonseType } from '@/utils/api.help'
 
-let pageQueryData: PatientBaseInfo
+let pageQueryData: Pick<ApiResonseType.PatientInfo, 'PatientName' | 'PatientSex' | 'PatientAge' | 'Id'>
 
 const pageData = $ref({
   show: false,
@@ -17,10 +17,15 @@ const pageData = $ref({
 onLoad((query) => {
   if (query === undefined)
     return
-  pageQueryData = query as PatientBaseInfo
-  const { name, sex, age } = pageQueryData
+  const { name, sex, age, id } = query
   const title = `${name} ${sex} ${age}`
-  pageData.id = pageQueryData.id
+  pageData.id = id
+  pageQueryData = {
+    Id: id,
+    PatientName: name,
+    PatientAge: age,
+    PatientSex: sex,
+  }
   uni.setNavigationBarTitle({ title })
 })
 
@@ -29,9 +34,10 @@ onMounted(initSelectOptions)
 onNavigationBarButtonTap(() => pageData.show = true)
 
 function onCommand(command: PopupCommandType) {
+  return
   if (!pageQueryData)
     return
-  goToPatientAttchPage(pageQueryData as any, command)
+  goToPatientAttchPage(pageQueryData as ApiResonseType.PatientInfo, command)
 }
 
 function onClickItem(e: { currentIndex: number }) {

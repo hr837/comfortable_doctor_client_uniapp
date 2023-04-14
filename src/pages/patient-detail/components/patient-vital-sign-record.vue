@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { delPatientMonitorRecord, getMonitorItems, getPatientMonitorRecords } from '@/utils/api'
+import dayJs from 'dayjs'
+import { addMonitorRecord, delPatientMonitorRecord, getMonitorItems, getPatientMonitorRecords } from '@/utils/api'
 import type { ApiResonseType } from '@/utils/api.help'
-import { dateFormat } from '@/composables/patient-narcotic-detail.composable'
+import { dateFormat } from '@/composables'
 
 const props = defineProps<{ id: string }>()
 
@@ -17,13 +18,13 @@ onMounted(() => {
   })
 })
 
-function onDelete(rId: string) {
-  function refreshList() {
-    currentId.value = ''
-    getPatientMonitorRecords(props.id)
-      .then(data => dataSet.value = data)
-  }
+function refreshList() {
+  currentId.value = ''
+  getPatientMonitorRecords(props.id)
+    .then(data => dataSet.value = data)
+}
 
+function onDelete(rId: string) {
   function deleteIt() {
     delPatientMonitorRecord(rId).then(() => {
       uni.showToast({
@@ -42,6 +43,14 @@ function onDelete(rId: string) {
     },
   })
 }
+
+function addRecord() {
+  let nextDate = dayJs(Date.now()).add(5, 'minute')
+  const count = Math.floor(nextDate.minute() / 5)
+  nextDate = nextDate.set('minute', count * 5)
+  const nextDateStr = nextDate.format('YYYY-MM-DD HH:mm:00')
+  addMonitorRecord(props.id, nextDateStr).then(refreshList)
+}
 </script>
 
 <template>
@@ -51,7 +60,7 @@ function onDelete(rId: string) {
         <button type="primary" size="mini">
           检测项目
         </button>
-        <button class="m-l-4" type="primary" size="mini">
+        <button class="m-l-4" type="primary" size="mini" @click="addRecord">
           添加时间
         </button>
       </template>

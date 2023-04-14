@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import type { PreOperativePatientInfo } from '@/types/patient.type'
+import type { ApiResonseType } from '@/utils/api.help'
+import { dateFormat } from '@/composables'
 
 const props = defineProps<{
-  data: PreOperativePatientInfo[]
+  data: ApiResonseType.PatientInfo[]
 }>()
 
 const emits = defineEmits(['rowClick'])
@@ -18,25 +19,25 @@ const genderIcon = (str: string) => str === '女' ? 'icon-nvxing' : 'icon-nanxin
   <view class="component patient-query-list">
     <uni-section :title="title" type="line" />
     <uni-collapse v-if="data.length > 0" accordion>
-      <uni-collapse-item v-for="item of data" :key="item.code" class="patient-query-list-item">
+      <uni-collapse-item v-for="item of data" :key="item.Id" class="patient-query-list-item">
         <!-- 自定义header -->
         <template #title>
           <view class="patient-query-list-item_title">
-            <uni-icons custom-prefix="iconfont" :type="genderIcon(item.sex)" class="mx-4" />
+            <uni-icons custom-prefix="iconfont" :type="genderIcon(item.PatientSex)" class="mx-4" />
             <text class="patient-query-list-item_title_item font-bold">
-              {{ item.name }}
+              {{ item.PatientName }}
             </text>
             <text class="patient-query-list-item_title_item font-bold">
-              {{ item.age }}
+              {{ item.PatientAge }}
             </text>
             <text class="patient-query-list-item_title_item">
-              {{ item.source }}
+              {{ item.PatientSource }}
             </text>
             <text class="patient-query-list-item_title_item">
-              {{ item.dept }}
+              {{ item.PatientDepartmentName }}
             </text>
             <text class="patient-query-list-item_title_item">
-              {{ item.code }}
+              {{ item.PatientNumber }}
             </text>
           </view>
         </template>
@@ -47,7 +48,7 @@ const genderIcon = (str: string) => str === '女' ? 'icon-nvxing' : 'icon-nanxin
               诊断
             </text>
             <text class="text">
-              {{ item.result }}
+              {{ item.DiagnosisName }}
             </text>
           </uni-col>
           <uni-col :span="6" class="flex">
@@ -55,7 +56,7 @@ const genderIcon = (str: string) => str === '女' ? 'icon-nvxing' : 'icon-nanxin
               医保类型
             </text>
             <text class="text">
-              {{ item.expense }}
+              --
             </text>
           </uni-col>
           <uni-col :span="6" class="flex">
@@ -63,7 +64,7 @@ const genderIcon = (str: string) => str === '女' ? 'icon-nvxing' : 'icon-nanxin
               申请医生
             </text>
             <text class="text">
-              {{ item.doctor }}
+              {{ item.DoctorName }}
             </text>
           </uni-col>
           <uni-col :span="6" class="flex">
@@ -71,7 +72,7 @@ const genderIcon = (str: string) => str === '女' ? 'icon-nvxing' : 'icon-nanxin
               特殊感染
             </text>
             <text class="text">
-              {{ item.extend }}
+              {{ item.SpecialInfect }}
             </text>
           </uni-col>
           <uni-col :span="6" class="flex">
@@ -79,7 +80,7 @@ const genderIcon = (str: string) => str === '女' ? 'icon-nvxing' : 'icon-nanxin
               申请日期
             </text>
             <text class="text">
-              {{ item.date }}
+              {{ dateFormat(item.SubscribeDate) }}
             </text>
           </uni-col>
         </uni-row>
