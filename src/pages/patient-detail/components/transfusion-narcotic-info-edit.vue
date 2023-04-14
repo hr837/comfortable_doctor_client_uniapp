@@ -16,12 +16,12 @@ const emits = defineEmits(['close', 'success'])
 
 const modelData = reactive<ApiRequestType.Transfusion>({
   DrugName: '',
-  TypeCode: '2',
+  TypeCode: '3',
   DrugCode: '',
   BeginTime: '',
   EndTime: '',
   PointTime: '',
-  DrugFlag: '1',
+  DrugFlag: '',
   Dose: NaN,
   Unit: '',
   AnesthesiaId: '',
@@ -36,8 +36,8 @@ const rules = {
   BeginTime: {
     rules: [{ required: true, errorMessage: '请选择开始时间' }],
   },
-  DrugType: {
-    rules: [{ required: true, errorMessage: '请选择液体种类' }],
+  DrugFlag: {
+    rules: [{ required: true, errorMessage: '请选择用药时长' }],
   },
   Mode: {
     rules: [{ required: true, errorMessage: '请选择注入方式' }],
@@ -132,28 +132,28 @@ onMounted(() => {
   })
 })
 
-const title = computed(() => props.rid ? '更新输液信息' : '添加输液信息')
+const title = computed(() => props.rid ? '更新麻醉用药信息' : '添加麻醉用药信息')
 </script>
 
 <template>
   <uni-popup-dialog
-    class="component transfusion-info-edit" mode="base" type="info" :title="title" confirm-text="保存"
+    class="component transfusion-narcotic-info-edit" mode="base" type="info" :title="title" confirm-text="保存"
     before-close @close="onClose" @confirm="onConfirm"
   >
     <uni-forms
-      ref="form" :model="modelData" class="transfusion-info-edit-form" label-width="70px" label-align="right"
+      ref="form" :model="modelData" class="transfusion-narcotic-info-edit-form" label-width="70px" label-align="right"
       :rules="rules"
     >
       <uni-forms-item v-if="!rid">
-        <DrugInput type="SY" @selected="onDrugSelected" />
+        <DrugInput type="MZ" @selected="onDrugSelected" />
       </uni-forms-item>
       <uni-forms-item label="药品名称" name="DrugName">
         <view class="row">
           <uni-easyinput :value="modelData.DrugName" :disabled="!!rid" />
         </view>
       </uni-forms-item>
-      <uni-forms-item label="液体种类" name="DrugType">
-        <uni-data-select v-model="modelData.DrugType" :localdata="PatientDetailDict.drugTypeList" />
+      <uni-forms-item label="用药时长" name="DrugFlag">
+        <uni-data-checkbox v-model="modelData.DrugFlag" :localdata="PatientDetailDict.drugFlagList" mode="button" />
       </uni-forms-item>
       <uni-forms-item label="注入方式" name="Mode">
         <uni-data-select v-model="modelData.Mode" :localdata="drugUseModeList" />
@@ -175,7 +175,7 @@ const title = computed(() => props.rid ? '更新输液信息' : '添加输液信
 </template>
 
 <style lang="scss" scoped>
-.transfusion-info-edit {
+.transfusion-narcotic-info-edit {
   width: 400px;
 
   &-form {

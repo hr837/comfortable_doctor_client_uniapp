@@ -1,15 +1,14 @@
 <script lang="ts" setup>
 import RecordItem from './record-item.vue'
-import TransfusionInfoEdit from './transfusion-info-edit.vue'
-import { delTransfusion, getTransfusionList } from '@/utils/api'
+import TransNarcoticfusionInfoEdit from './transfusion-narcotic-info-edit.vue'
 import type { ApiResonseType } from '@/utils/api.help'
-import { dateFormat } from '@/composables/patient-narcotic-detail.composable'
+import { delTransfusion, getTransfusionList } from '@/utils/api'
+import { dateFormat, dictConvertDrugFlag } from '@/composables/patient-narcotic-detail.composable'
 
 const props = defineProps<{ id: string }>()
 const popup = ref<UniHelper.UniPopupProps>()
 const dataSet = ref<ApiResonseType.Transfusion[]>([])
 const rowId = ref<string | undefined>()
-
 function open() {
   popup.value?.open()
 }
@@ -19,7 +18,8 @@ function close() {
 }
 
 function refreshList() {
-  getTransfusionList(props.id, '2').then((data) => {
+  rowId.value = undefined
+  getTransfusionList(props.id, '3').then((data) => {
     dataSet.value = data
   })
 }
@@ -53,8 +53,8 @@ onMounted(refreshList)
 </script>
 
 <template>
-  <view class="component patient-transfusion-record">
-    <uni-section title="输液" type="line">
+  <view class="component patient-narcotic-drug-record">
+    <uni-section title="麻醉用药" type="line">
       <template #right>
         <button type="primary" size="mini" @click="open">
           添加
@@ -63,33 +63,33 @@ onMounted(refreshList)
     </uni-section>
 
     <uni-popup ref="popup" type="dialog">
-      <TransfusionInfoEdit :pid="id" :rid="rowId" @close="close" @success="refreshList" />
+      <TransNarcoticfusionInfoEdit :pid="id" :rid="rowId" @close="close" @success="refreshList" />
     </uni-popup>
 
-    <view class="patient-transfusion-record-container">
-      <RecordItem v-for="item of dataSet" :key="item.Id" @delete="onDelete(item.Id)" @click="onClick(item.Id)">
+    <view class="patient-narcotic-drug-record-container">
+      <RecordItem
+        v-for="item of dataSet" :key="item.Id" :tag="dictConvertDrugFlag(item.DrugFlag)"
+        @delete="onDelete(item.Id)" @click="onClick(item.Id)"
+      >
         <view class="row">
-          <text class="text-gray-900 patient-transfusion-record-text">
+          <text class="text-gray-900 patient-narcotic-drug-record-text">
             {{ item.DrugName }}
           </text>
-          <text class="patient-transfusion-record-text">
+          <text class="patient-narcotic-drug-record-text">
             {{ item.Dose }} / {{ item.Unit }}
           </text>
-          <text class="patient-transfusion-record-text">
-            {{ item.Mode }}
-          </text>
-          <text class="patient-transfusion-record-text">
-            {{ item.DrugType }}
-          </text>
+          <text>{{ item.Mode }}</text>
         </view>
         <view class="row m-t-2">
-          <text class="patient-transfusion-record-text">
-            开始时间： {{ dateFormat(item.BeginTime) }}
+          <text class="patient-narcotic-drug-record-text">
+            时间：{{ dateFormat(item.PointTime) }}
           </text>
-          <text v-if="!!item.EndTime" class="patient-transfusion-record-text">
+          <text class="patient-narcotic-drug-record-text">
+            开始时间：{{ dateFormat(item.BeginTime) }}
+          </text>
+          <text class="patient-narcotic-drug-record-text">
             结束时间：{{ dateFormat(item.EndTime) }}
           </text>
-          <uni-icons v-else type="spinner-cycle" size="22" class="animate-spin" />
         </view>
       </RecordItem>
     </view>
@@ -97,15 +97,11 @@ onMounted(refreshList)
 </template>
 
 <style lang="scss" scoped>
-.patient-transfusion-record-container {
+.patient-narcotic-drug-record-container {
   @apply: p-x-4;
 }
 
-.patient-transfusion-record-text {
+.patient-narcotic-drug-record-text {
   @apply: p-r-6;
-}
-
-.animate-spin {
-  animation-duration: 3s;
 }
 </style>

@@ -25,16 +25,24 @@ body {
 
 .uni-date {
   .uni-date-editor {
-    .uni-date-single{
-      .icon-calendar{
+    .uni-date-single {
+      .icon-calendar {
         padding: 0 5px;
       }
     }
+
     .uni-date__icon-clear {
-      padding-right: 5px!important;
-      .uniui-clear{
+      padding-right: 5px !important;
+
+      .uniui-clear {
         font-size: 24px !important;
       }
     }
+  }
+}
+
+.uni-popup-dialog {
+  .uni-dialog-content {
+    overflow: auto;
   }
 }

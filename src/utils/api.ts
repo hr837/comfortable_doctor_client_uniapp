@@ -68,9 +68,106 @@ export function getDrugWayList() {
 /**
  *  获取药品信息
  */
-export function getDrugList() {
-  return request<ApiResonseType.DrugWayList>({
+export function getDrugList(typeCode: '2' | '3') {
+  return request<ApiResonseType.DrugInfo[]>({
     path: '/api/Drug/GetDrugList',
+    data: { typeCode },
+    method: 'GET',
+  })
+}
+
+/**
+ *  获取病人输液记录
+ * @param anesId 病人ID
+ * @param typeCode 药品类型
+ */
+export function getTransfusionList(anesId: string, typeCode: '2' | '3') {
+  return request<ApiResonseType.Transfusion[]>({
+    path: '/api/Transfusion/GetList',
+    data: { anesId, typeCode },
+    method: 'GET',
+    loading: true,
+  })
+}
+
+/**
+ *  添加麻醉用药、输液信息
+ */
+export function addTransfusionRecord(data: ApiRequestType.Transfusion) {
+  return request<ApiResonseType.DrugInfo[]>({
+    path: '/api/Transfusion/Add',
+    data,
+    method: 'POST',
+    loading: true,
+  })
+}
+
+/**
+ *  添加麻醉用药、输液信息
+ */
+export function updateTransfusionRecord(data: ApiRequestType.Transfusion) {
+  return request<ApiResonseType.DrugInfo[]>({
+    path: '/api/Transfusion/Edit',
+    data,
+    method: 'PUT',
+    loading: true,
+  })
+}
+
+/**
+ *  删除输液、麻醉用药
+ */
+export function delTransfusion(id: string) {
+  return request({
+    path: `/api/Transfusion/Del/${id}`,
+    method: 'DELETE',
+  })
+}
+
+/**
+ *  获取输液、麻醉用药记录数据
+ */
+export function getTransfusionInfo(id: string) {
+  return request<ApiResonseType.Transfusion>({
+    path: `/api/Transfusion/GetModel/${id}`,
+    method: 'GET',
+    loading: true,
+  })
+}
+
+/**
+ *  获取体征数据
+ * @param id 病人ID
+ */
+export function getPatientMonitorRecords(id: string) {
+  return request<ApiResonseType.MonitorInfo[]>({
+    path: '/api/MonitorRecord/GetList',
+    data: { anesId: id },
+    method: 'GET',
+    loading: true,
+  })
+}
+
+/**
+ *  删除体征数据
+ * @param id 监测ID
+ */
+export function delPatientMonitorRecord(id: string) {
+  return request<ApiResonseType.MonitorInfo[]>({
+    path: `/api/MonitorRecord/Del/${id}`,
+    method: 'DELETE',
+    loading: true,
+  })
+}
+
+/**
+ *  获取生命体征配置项目
+ * @param id 病人ID
+ */
+export function getMonitorItems(id: string) {
+  return request<ApiResonseType.MonitorItem[]>({
+    path: '/api/MonitorRecord/GetConfig',
+    data: { anesId: id },
     method: 'GET',
   })
 }

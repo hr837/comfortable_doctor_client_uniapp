@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import PatientDetailPopup from './components/patient-detail-popup.vue'
-import { ComponentSetting } from '@/composables/patient-narcotic-detail.composable'
+import { ComponentSetting, initSelectOptions } from '@/composables/patient-narcotic-detail.composable'
 import { goToPatientAttchPage } from '@/composables'
 import type { PatientBaseInfo } from '@/types/patient.type'
 
@@ -11,7 +11,7 @@ const pageData = $ref({
   current: 0,
   component: '',
   controlItems: ComponentSetting.map(x => x.label),
-  code: '',
+  id: '',
 })
 
 onLoad((query) => {
@@ -20,9 +20,11 @@ onLoad((query) => {
   pageQueryData = query as PatientBaseInfo
   const { name, sex, age } = pageQueryData
   const title = `${name} ${sex} ${age}`
-  pageData.code = pageQueryData.code
+  pageData.id = pageQueryData.id
   uni.setNavigationBarTitle({ title })
 })
+
+onMounted(initSelectOptions)
 
 onNavigationBarButtonTap(() => pageData.show = true)
 
@@ -48,7 +50,7 @@ const component = $computed(() => ComponentSetting[pageData.current].component)
       @click-item="onClickItem"
     />
     <view class="patient-narcotic-detail-container">
-      <component :is="component" :code="pageData.code" />
+      <component :is="component" :id="pageData.id" />
     </view>
   </view>
 </template>

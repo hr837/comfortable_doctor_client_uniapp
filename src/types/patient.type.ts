@@ -12,6 +12,7 @@ export interface PatientBaseInfo {
   expense: string
   /** 身份证号 */
   idCard: string
+  id: string
 }
 
 /** 术前患者信息 */

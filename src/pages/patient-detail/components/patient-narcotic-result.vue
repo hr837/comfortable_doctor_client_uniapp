@@ -1,13 +1,6 @@
 <script lang="ts" setup>
+import { PatientDetailDict } from '@/composables/patient-narcotic-detail.composable'
 const popupRef = ref<UniHelper.UniPopupProps>()
-
-const dict = {
-  has: [{ text: '无', value: 'n', disabled: false }, { text: '有', value: 'y', disabled: false }],
-  comToLifeState: [{ text: '完全清醒', value: 'n', disabled: false }, { text: '对刺激有反应', value: 'y', disabled: false }, { text: '对刺激无反应', value: 'z', disabled: false }],
-  breathActiveState: [{ text: '可按医师吩咐咳嗽', value: 'n', disabled: false }, { text: '可自主维持呼吸道通畅', value: 'y', disabled: false }, { text: '呼吸道需予以支持', value: 'z', disabled: false }],
-  bodyActiveState: [{ text: '肢体活动有意识的活动', value: 'n', disabled: false }, { text: '肢体活动无意识活动', value: 'y', disabled: false }, { text: '肢体无活动', value: 'z', disabled: false }],
-  passTo: [{ text: '恢复室', value: 'n', disabled: false }, { text: '观察室', value: 'y', disabled: false }, { text: '其它', value: 'z', disabled: false }],
-}
 
 const doctors = [{ text: '赵医生', value: '87654321', disable: false }, { text: '李医生', value: '76543210', disable: false }]
 
@@ -45,7 +38,7 @@ function onSelectChange(val: string) {
       <uni-row>
         <uni-col :span="10">
           <uni-forms-item label="术中特殊情况" name="status" class="no-margin">
-            <uni-data-checkbox class="flex-0" :localdata="dict.has" mode="button" />
+            <uni-data-checkbox class="flex-0" :localdata="PatientDetailDict.has" mode="button" />
           </uni-forms-item>
         </uni-col>
         <uni-col :span="14">
@@ -56,13 +49,13 @@ function onSelectChange(val: string) {
       </uni-row>
       <uni-section title="Steward评分：" />
       <uni-forms-item label="清醒程度" class="no-margin">
-        <uni-data-checkbox :localdata="dict.comToLifeState" mode="button" />
+        <uni-data-checkbox :localdata="PatientDetailDict.comToLifeState" mode="button" />
       </uni-forms-item>
       <uni-forms-item label="呼吸通畅程度" class="no-margin">
-        <uni-data-checkbox :localdata="dict.breathActiveState" mode="button" />
+        <uni-data-checkbox :localdata="PatientDetailDict.breathActiveState" mode="button" />
       </uni-forms-item>
       <uni-forms-item label="肢体活动程度" class="no-margin">
-        <uni-data-checkbox :localdata="dict.bodyActiveState" mode="button" />
+        <uni-data-checkbox :localdata="PatientDetailDict.bodyActiveState" mode="button" />
       </uni-forms-item>
       <uni-forms-item label="总分">
         <uni-easyinput type="number" :maxlength="2" class="w-100px" />
@@ -72,7 +65,7 @@ function onSelectChange(val: string) {
         <uni-col :span="10">
           <uni-forms-item label="术后转">
             <div class="row">
-              <uni-data-checkbox :localdata="dict.passTo" mode="button" />
+              <uni-data-checkbox :localdata="PatientDetailDict.passTo" mode="button" />
             </div>
           </uni-forms-item>
         </uni-col>
