@@ -1,5 +1,5 @@
 import { request } from './http'
-import type { ApiRequestType, ApiResonseType } from './api.help'
+import type { ApiRequestType, ApiResonseType, MonitorItem } from './api.help'
 
 /**
  *  登录验证
@@ -162,26 +162,39 @@ export function delPatientMonitorRecord(id: string) {
 
 /**
  *  获取生命体征配置项目
- * @param id 病人ID
+ * @param id 病人ID,可空
  */
-export function getMonitorItems(id: string) {
-  return request<ApiResonseType.MonitorItem[]>({
+export function getMonitorItems(id?: string) {
+  const data = { anesId: id }
+  if (!id)
+    delete data.anesId
+  return request<MonitorItem[]>({
     path: '/api/MonitorRecord/GetConfig',
-    data: { anesId: id },
+    data,
     method: 'GET',
   })
 }
 
 /**
- *  添加一条监控时间
- * @param id 病人ID
- * @param time 时间
+ *  添加病人体征检测数据
  */
-export function addMonitorRecord(id: string, time: string) {
-  return request<ApiResonseType.MonitorItem[]>({
+export function addMonitorRecord(data: ApiRequestType.MonitorInfo) {
+  return request({
     path: '/api/MonitorRecord/Add',
-    data: { AnesthesiaId: id, RecordTime: time },
+    data,
     method: 'POST',
+    loading: true,
+  })
+}
+
+/**
+ *  修改病人体征检测数据
+ */
+export function updateMonitorRecord(data: ApiRequestType.MonitorInfo) {
+  return request({
+    path: '/api/MonitorRecord/Edit',
+    data,
+    method: 'PUT',
     loading: true,
   })
 }

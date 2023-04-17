@@ -1,25 +1,21 @@
 <script lang="ts" setup>
-import dayJs from 'dayjs'
-import { addMonitorRecord, delPatientMonitorRecord, getMonitorItems, getPatientMonitorRecords } from '@/utils/api'
+import PatientVitalSignInfoEdit from './patient-vital-sign-info-edit.vue'
+import { delPatientMonitorRecord, getPatientMonitorRecords } from '@/utils/api'
 import type { ApiResonseType } from '@/utils/api.help'
 import { dateFormat } from '@/composables'
+import { monitorItems } from '@/composables/patient-narcotic-detail.composable'
 
 const props = defineProps<{ id: string }>()
 
 const currentId = ref('')
-
 const dataSet = ref<ApiResonseType.MonitorInfo[]>([])
-const monitorItems = ref<ApiResonseType.MonitorItem[]>([])
+const currentRow = ref<ApiResonseType.MonitorInfo | undefined>(undefined)
+const popup = ref<UniHelper.UniPopupProps>()
 
-onMounted(() => {
-  Promise.all([getMonitorItems(props.id), getPatientMonitorRecords(props.id)]).then(([config, records]) => {
-    monitorItems.value = config
-    dataSet.value = records
-  })
-})
+onMounted(refreshList)
 
 function refreshList() {
-  currentId.value = ''
+  clearRowInfo()
   getPatientMonitorRecords(props.id)
     .then(data => dataSet.value = data)
 }
@@ -36,7 +32,7 @@ function onDelete(rId: string) {
 
   uni.showModal({
     title: '删除提醒',
-    content: '确定删除检测记录吗？',
+    content: '确定删除监测记录吗？',
     success: ({ confirm }) => {
       if (confirm)
         deleteIt()
@@ -44,12 +40,23 @@ function onDelete(rId: string) {
   })
 }
 
-function addRecord() {
-  let nextDate = dayJs(Date.now()).add(5, 'minute')
-  const count = Math.floor(nextDate.minute() / 5)
-  nextDate = nextDate.set('minute', count * 5)
-  const nextDateStr = nextDate.format('YYYY-MM-DD HH:mm:00')
-  addMonitorRecord(props.id, nextDateStr).then(refreshList)
+function clearRowInfo() {
+  currentRow.value = undefined
+  currentId.value = ''
+}
+
+function onAddClick() {
+  clearRowInfo()
+  popup.value?.open()
+}
+
+function closeDialog() {
+  popup.value?.close()
+}
+function onEdit(row: ApiResonseType.MonitorInfo) {
+  row.RecordTime = dateFormat(row.RecordTime)
+  currentRow.value = row
+  popup.value?.open()
 }
 </script>
 
@@ -60,44 +67,22 @@ function addRecord() {
         <button type="primary" size="mini">
           检测项目
         </button>
-        <button class="m-l-4" type="primary" size="mini" @click="addRecord">
+        <button class="m-l-4" type="primary" size="mini" @click="onAddClick">
           添加时间
         </button>
       </template>
     </uni-section>
 
-    <!-- fixed table header -->
-    <!-- <uni-table border stripe class="patient-vital-sign-record-table--fixed">
-      <uni-tr>
-        <uni-th align="center" width="200px">
-          时间
-        </uni-th>
-        <uni-th align="center" width="100px">
-          收缩压
-        </uni-th>
-        <uni-th align="center" width="100px">
-          舒张压
-        </uni-th>
-        <uni-th align="center" width="100px">
-          血氧
-        </uni-th>
-        <uni-th align="center" width="100px">
-          呼吸
-        </uni-th>
-        <uni-th align="center" width="100px">
-          心率
-        </uni-th>
-        <uni-th align="center" width="100px">
-          操作
-        </uni-th>
-      </uni-tr>
-    </uni-table> -->
+    <uni-popup ref="popup" type="dialog">
+      <PatientVitalSignInfoEdit :pid="id" :data="currentRow" @close="closeDialog" @success="refreshList" />
+    </uni-popup>
+
     <uni-table border stripe class="patient-vital-sign-record-table">
       <uni-tr class="patient-vital-sign-record-table-tr-hidden">
-        <uni-th align="center" width="200px">
+        <uni-th align="center" width="120px">
           时间
         </uni-th>
-        <uni-th v-for="item of monitorItems" :key="item.ItemCode" align="center" width="100px">
+        <uni-th v-for="item of monitorItems" :key="item.ItemCode" align="center" width="80px">
           {{ item.ItemName }}
         </uni-th>
         <uni-th align="center" width="80px">
@@ -112,40 +97,16 @@ function addRecord() {
           {{ record.ItemValues.find(x => x.ItemCode === item.ItemCode)?.ItemValue }}
         </uni-td>
         <uni-td align="center">
-          <view v-show="currentId === record.Id" @click="onDelete(record.Id)">
-            <uni-icons class="leading-none" type="trash" size="20" color="#d9001b" />
+          <view v-show="currentId === record.Id" class="row justify-between">
+            <view @click="onEdit(record)">
+              <uni-icons class="leading-none" type="settings-filled" size="20" color="#007aff" />
+            </view>
+            <view @click="onDelete(record.Id)">
+              <uni-icons class="leading-none" type="trash" size="20" color="#d9001b" />
+            </view>
           </view>
         </uni-td>
       </uni-tr>
     </uni-table>
   </view>
 </template>
-
-<!-- <style lang="scss" scoped>
-.patient-vital-sign-record {
-  @apply page h-full;
-
-  &-table {
-    @apply flex-1 overflow-auto;
-    // &-tr-hidden{
-    //   visibility: hidden;
-    //   th{
-    //     height: 0;
-    //     overflow: hidden;
-    //     padding: 0;
-    //   }
-    //   ::v-deep .uni-table-th-content{
-    //     display: block;
-    //     height: 0px;
-    //     overflow: hidden;
-    //   }
-    // }
-
-    // &--fixed {
-    //   ::v-deep .uni-table-loading {
-    //     display: none;
-    //   }
-    // }
-  }
-}
-</style> -->

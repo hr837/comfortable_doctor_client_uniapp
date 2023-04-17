@@ -3,8 +3,8 @@ import PatientNarcoticDrugRecord from '@/pages/patient-detail/components/patient
 import PatientNarcoticResult from '@/pages/patient-detail/components/patient-narcotic-result.vue'
 import PatientTransfusionRecord from '@/pages/patient-detail/components/patient-transfusion-record.vue'
 import PatientVitalsignRecord from '@/pages/patient-detail/components/patient-vital-sign-record.vue'
-import { getDrugList, getDrugUnitList, getDrugWayList } from '@/utils/api'
-import type { ApiResonseType } from '@/utils/api.help'
+import { getDrugList, getDrugUnitList, getDrugWayList, getMonitorItems } from '@/utils/api'
+import type { ApiResonseType, MonitorItem } from '@/utils/api.help'
 
 export const ComponentSetting = [
   { label: '基本信息', name: 'patient-base-info-form', component: PatientBaseInfoForm },
@@ -47,6 +47,9 @@ export const drugNarcoticList = ref<ApiResonseType.DrugInfo[]>([])
 /** 输液用药列表 */
 export const drugTransfusionList = ref<ApiResonseType.DrugInfo[]>([])
 
+/** 体征项目 */
+export const monitorItems = ref<MonitorItem[]>([])
+
 /** 初始化下拉框的数据 */
 export function initSelectOptions() {
   getDrugUnitList().then((data) => {
@@ -72,6 +75,8 @@ export function initSelectOptions() {
   getDrugList('3').then((data) => {
     drugNarcoticList.value = data
   })
+
+  getMonitorItems().then(data => monitorItems.value = data)
 }
 
 /** 用药方式格式化 */

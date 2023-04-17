@@ -104,8 +104,10 @@ function onSuccess() {
     title: '操作成功',
     icon: 'success',
   })
-  emits('success')
-  emits('close')
+  setTimeout(() => {
+    emits('success')
+    emits('close')
+  }, 1500)
 }
 
 function onClose() {

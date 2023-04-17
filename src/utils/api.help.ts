@@ -89,6 +89,28 @@ export namespace ApiRequestType {
     Id?: string
   }
 
+  /** 体征检测数据 */
+  export interface MonitorInfo {
+    /**
+     * ID，数据主键
+     */
+    Id?: string
+    /** 患者ID */
+    AnesthesiaId: string
+    /**
+     * 体征项目值
+     */
+    ItemValues: Array<MonitorItem & {
+      /** 体征值 */
+      ItemValue: string
+    }>
+    /**
+     * 数据时间
+     */
+    RecordTime: string
+
+  }
+
 }
 
 export namespace ApiResonseType {
@@ -450,29 +472,12 @@ export namespace ApiResonseType {
   export type Transfusion = Required<ApiRequestType.Transfusion>
 
   /** 体征检测数据 */
-  export interface MonitorInfo {
-    /**
-     * ID，数据主键
-     */
-    Id: string
-    /**
-     * 体征项目值
-     */
-    ItemValues: Array<MonitorItem & {
-      /** 体征值 */
-      ItemValue: string
-    }>
-    /**
-     * 数据时间
-     */
-    RecordTime: string
-
-  }
-
-  /** 体征检测项目 */
-  export type MonitorItem = Omit<ItemInfo, 'Spell'>
+  export type MonitorInfo = Required<ApiRequestType.MonitorInfo>
 
 }
+
+/** 体征检测项目 */
+export type MonitorItem = Omit<ItemInfo, 'Spell'>
 
 /** 项目 */
 export interface ItemInfo {

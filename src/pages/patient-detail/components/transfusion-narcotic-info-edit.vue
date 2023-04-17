@@ -104,8 +104,10 @@ function onSuccess() {
     title: '操作成功',
     icon: 'success',
   })
-  emits('success')
-  emits('close')
+  setTimeout(() => {
+    emits('success')
+    emits('close')
+  }, 1500)
 }
 
 function onClose() {
@@ -137,12 +139,12 @@ const title = computed(() => props.rid ? '更新麻醉用药信息' : '添加麻
 
 <template>
   <uni-popup-dialog
-    class="component transfusion-narcotic-info-edit" mode="base" type="info" :title="title" confirm-text="保存"
-    before-close @close="onClose" @confirm="onConfirm"
+    class="component transfusion-narcotic-info-edit" mode="base" type="info" :title="title"
+    confirm-text="保存" before-close @close="onClose" @confirm="onConfirm"
   >
     <uni-forms
-      ref="form" :model="modelData" class="transfusion-narcotic-info-edit-form" label-width="70px" label-align="right"
-      :rules="rules"
+      ref="form" :model="modelData" class="transfusion-narcotic-info-edit-form" label-width="70px"
+      label-align="right" :rules="rules"
     >
       <uni-forms-item v-if="!rid">
         <DrugInput type="MZ" @selected="onDrugSelected" />

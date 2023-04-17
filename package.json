@@ -85,5 +85,6 @@
     "rules": {
       "no-console": "warn"
     }
-  }
+  },
+  "eslintIgnore": ["src/uni_modules/*"]
 }

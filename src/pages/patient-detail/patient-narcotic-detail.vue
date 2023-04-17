@@ -29,12 +29,15 @@ onLoad((query) => {
   uni.setNavigationBarTitle({ title })
 })
 
-onMounted(initSelectOptions)
+onMounted(() => {
+  nextTick(initSelectOptions)
+})
 
 onNavigationBarButtonTap(() => pageData.show = true)
 
 function onCommand(command: PopupCommandType) {
   return
+  // eslint-disable-next-line no-unreachable
   if (!pageQueryData)
     return
   goToPatientAttchPage(pageQueryData as ApiResonseType.PatientInfo, command)
