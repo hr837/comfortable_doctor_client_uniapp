@@ -13,6 +13,16 @@ export function login(data: ApiRequestType.Login) {
 }
 
 /**
+ *  获取手术间信息
+ */
+export function getOperateRooms() {
+  return request<ApiResonseType.OperateRoomInfo[]>({
+    path: '/api/OperatingRoom/GetList',
+    method: 'GET',
+  })
+}
+
+/**
  *  科室信息
  */
 export function getDeptList() {

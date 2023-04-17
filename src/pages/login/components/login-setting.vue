@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { STORE_KEY_SERVER } from '@/utils/app.constant'
 
+const emits = defineEmits(['settinged'])
 const defaultValue = ref('')
 const inputDialog = ref()
-
 onMounted(() => {
   defaultValue.value = uni.getStorageSync(STORE_KEY_SERVER) ?? ''
 })
@@ -32,6 +32,7 @@ function dialogInputConfirm(val: any) {
       data: val,
       success: () => {
         defaultValue.value = val
+        emits('settinged')
         onDialogClose()
       },
     })

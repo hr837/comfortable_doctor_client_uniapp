@@ -3,6 +3,7 @@ export namespace ApiRequestType {
   export interface Login {
     LoginName: string
     Password: string
+    RoomCode: string
   }
 
   /** 查询病人 */
@@ -148,6 +149,20 @@ export namespace ApiResonseType {
 
   /** 部门查询返回列表 */
   export type DepartmentList = ItemInfo[]
+
+  /**
+   *  手术间
+   */
+  export interface OperateRoomInfo {
+    /**
+     * 手术间编码，查询时需要用编码
+     */
+    RoomCode: string
+    /**
+     * 手术间名称
+     */
+    RoomName: string
+  }
 
   /** 查询返回病人列表 */
   export interface PatientInfo {

@@ -1,12 +1,13 @@
 <script lang="ts" setup>
 import LoginSetting from './components/login-setting.vue'
-import { getDeptList, login } from '@/utils/api'
+import { getDeptList, getOperateRooms, login } from '@/utils/api'
 import type { ApiRequestType } from '@/utils/api.help'
 import { STORE_KEY_USER } from '@/utils/app.constant'
 
 const loginModel = reactive<ApiRequestType.Login>({
   LoginName: '',
   Password: '',
+  RoomCode: '',
 })
 
 const rules = {
@@ -22,6 +23,19 @@ const formRef = ref<UniForm>()
 const goToIndex = () => uni.redirectTo({
   url: '/pages/index/index',
 })
+const roomList = ref<UniHelper.UniDataSelectLocaldata[]>([])
+
+function refreshRoomList() {
+  getOperateRooms().then((data) => {
+    roomList.value = data.map(item => ({
+      text: item.RoomName,
+      value: item.RoomCode,
+      disable: false,
+    }))
+  })
+}
+
+onMounted(refreshRoomList)
 
 const toLogin = () => login(loginModel).then((data) => {
   uni.setStorage({
@@ -44,7 +58,7 @@ function submitForm() {
 <template>
   <view class="page login">
     <view class="login-setting">
-      <LoginSetting />
+      <LoginSetting @settinged="refreshRoomList" />
     </view>
     <view class="login-title">
       舒适化治疗医生客户端
@@ -57,6 +71,9 @@ function submitForm() {
         </uni-forms-item>
         <uni-forms-item name="Password">
           <uni-easyinput v-model="loginModel.Password" prefix-icon="locked" type="password" placeholder="密码" />
+        </uni-forms-item>
+        <uni-forms-item name="RoomCode">
+          <uni-data-select v-model="loginModel.RoomCode" :localdata="roomList" placeholder="请选择手术间" />
         </uni-forms-item>
       </uni-forms>
 
@@ -74,7 +91,7 @@ function submitForm() {
 
   @apply absolute top-0 right-0 bottom-0 left-0 items-center;
 
-  .login-setting{
+  .login-setting {
     @apply absolute top-8 right-8;
   }
 
