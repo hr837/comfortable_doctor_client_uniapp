@@ -474,6 +474,17 @@ export namespace ApiResonseType {
   /** 体征检测数据 */
   export type MonitorInfo = Required<ApiRequestType.MonitorInfo>
 
+  /** 模板内容 */
+  export interface TemplateInfo {
+    /**
+     * 模板内容
+     */
+    TemplateContent: string
+    /**
+     * 模板名称
+     */
+    TemplateName: string
+  }
 }
 
 /** 体征检测项目 */

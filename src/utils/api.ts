@@ -198,3 +198,19 @@ export function updateMonitorRecord(data: ApiRequestType.MonitorInfo) {
     loading: true,
   })
 }
+
+/** 麻醉小结中获取术中特殊情况模板 */
+export function getTempOperating() {
+  return request<ApiResonseType.TemplateInfo[]>({
+    path: '/api/AnesCustom/GetTempOperating',
+    method: 'GET',
+  })
+}
+
+/** 麻醉小结获取恢复室内情况模板 */
+export function GetTempPacu() {
+  return request<ApiResonseType.TemplateInfo[]>({
+    path: '/api/AnesCustom/GetTempPacu',
+    method: 'GET',
+  })
+}

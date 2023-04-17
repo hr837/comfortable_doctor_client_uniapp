@@ -105,7 +105,7 @@ const title = computed(() => props.data ? '更新监测信息' : '添加监测�
 
 <template>
   <uni-popup-dialog
-    class="component patient-vital-sign-info-edit" mode="base" type="info" :title="title"
+    class="component vital-sign-info-edit" mode="base" type="info" :title="title"
     confirm-text="保存" before-close @close="onClose" @confirm="onConfirm"
   >
     <uni-forms
@@ -127,7 +127,7 @@ const title = computed(() => props.data ? '更新监测信息' : '添加监测�
 </template>
 
 <style lang="scss" scoped>
-.patient-vital-sign-info-edit {
+.vital-sign-info-edit {
   width: 600px;
 
   &-form {

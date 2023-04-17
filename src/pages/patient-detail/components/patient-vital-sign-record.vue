@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import PatientVitalSignInfoEdit from './patient-vital-sign-info-edit.vue'
+import VitalSignInfoEdit from './vital-sign-info-edit.vue'
 import { delPatientMonitorRecord, getPatientMonitorRecords } from '@/utils/api'
 import type { ApiResonseType } from '@/utils/api.help'
 import { dateFormat } from '@/composables'
@@ -74,7 +74,7 @@ function onEdit(row: ApiResonseType.MonitorInfo) {
     </uni-section>
 
     <uni-popup ref="popup" type="dialog">
-      <PatientVitalSignInfoEdit :pid="id" :data="currentRow" @close="closeDialog" @success="refreshList" />
+      <VitalSignInfoEdit :pid="id" :data="currentRow" @close="closeDialog" @success="refreshList" />
     </uni-popup>
 
     <uni-table border stripe class="patient-vital-sign-record-table">
