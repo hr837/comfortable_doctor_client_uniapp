@@ -36,6 +36,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/files': 'http://localhost:801',
+      '/api': 'http://172.16.1.28:8088',
     },
   },
 })

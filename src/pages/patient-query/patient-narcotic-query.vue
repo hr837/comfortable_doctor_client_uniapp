@@ -15,12 +15,14 @@ const queryData = reactive<ApiRequestType.Patient>({
   DepartmentName: '',
   PatientSource: '全部',
   OperateState: -1,
+  RoomCode: '',
 })
 
 async function onSubmit(query?: QueryInfo) {
   queryData.KeyWord = query?.query ?? ''
   queryData.ExamineDate = query?.date ?? ''
   queryData.DepartmentName = query?.department ?? ''
+  queryData.RoomCode = query?.roomCode ?? ''
 
   queryPatients(queryData).then((data) => {
     dataSet.value = data
@@ -32,7 +34,7 @@ onMounted(onSubmit)
 
 <template>
   <view class="page  patient-narcotic-query">
-    <PatientQueryForm @submit="onSubmit">
+    <PatientQueryForm show-room-item @submit="onSubmit">
       <template #append>
         <uni-row>
           <uni-col :offset="2" :xs="22" :sm="10">

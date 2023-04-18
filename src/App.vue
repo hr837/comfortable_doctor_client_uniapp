@@ -1,10 +1,11 @@
 <script  lang="ts">
 import { STORE_KEY_SERVER } from './utils/app.constant'
-import { getDeptList } from '@/utils/api'
+import { getDeptList, getOperateRooms } from '@/utils/api'
 
 export default defineComponent({
   globalData: {
     deptList: [],
+    roomList: [],
   },
   onLaunch() {
     if (!uni.getStorageSync(STORE_KEY_SERVER)) {
@@ -13,6 +14,13 @@ export default defineComponent({
     else {
       getDeptList().then((data) => {
         getApp().globalData!.deptList = data
+      })
+      getOperateRooms().then((data) => {
+        getApp().globalData!.roomList = data.map(item => ({
+          text: item.RoomName,
+          value: item.RoomCode,
+          disable: false,
+        }))
       })
     }
   },

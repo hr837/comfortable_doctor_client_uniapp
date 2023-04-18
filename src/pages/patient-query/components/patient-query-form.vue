@@ -1,11 +1,16 @@
 <script lang="ts" setup>
-import type { Department } from '@/types/department.type'
+import type { ItemInfo } from '@/utils/api.help'
+import { STORE_KEY_ROOM } from '@/utils/app.constant'
 
 export interface QueryInfo {
   query: string
   date: string
   department: string
+  roomCode: string
 }
+
+const props = withDefaults(defineProps<{ showRoomItem: boolean }>(), { showRoomItem: false })
+
 const emits = defineEmits(['submit'])
 
 const formRef = ref<UniForm>()
@@ -14,15 +19,25 @@ const model = $ref<QueryInfo>({
   query: '',
   date: '',
   department: '',
+  roomCode: '',
 })
 
-const departmentList = computed(() => getApp().globalData!.deptList.map((item: Department) => ({
+const departmentList = computed(() => getApp().globalData!.deptList.map((item: ItemInfo) => ({
   text: item.ItemName,
   value: item.ItemCode,
 })))
 
+const roomList = computed(() => getApp().globalData?.roomList ?? [])
+
 // 提交事件回调
 const onSubmit = () => emits('submit', { ...model })
+
+onMounted(() => {
+  if (props.showRoomItem) {
+    const roomCode = uni.getStorageSync(STORE_KEY_ROOM)
+    model.roomCode = roomCode ?? ''
+  }
+})
 </script>
 
 <template>
@@ -37,14 +52,19 @@ const onSubmit = () => emits('submit', { ...model })
         </view>
       </uni-forms-item>
       <uni-row>
-        <uni-col :xs="24" :sm="12">
-          <uni-forms-item label="手术日期" name="date">
+        <uni-col :xs="24" :sm="showRoomItem ? 8 : 12">
+          <uni-forms-item label="检查日期" name="date">
             <uni-datetime-picker v-model="model.date" type="date" />
           </uni-forms-item>
         </uni-col>
-        <uni-col :xs="24" :sm="12">
+        <uni-col :xs="24" :sm="showRoomItem ? 8 : 12">
           <uni-forms-item label="科室" name="department">
             <uni-data-select v-model="model.department" :localdata="departmentList" popup-title="请选择科室" />
+          </uni-forms-item>
+        </uni-col>
+        <uni-col v-if="showRoomItem" :xs="24" :sm="8">
+          <uni-forms-item label="手术间" name="roomCode">
+            <uni-data-select v-model="model.roomCode" :localdata="roomList" popup-title="请选择手术间" />
           </uni-forms-item>
         </uni-col>
       </uni-row>

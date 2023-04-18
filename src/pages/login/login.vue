@@ -2,7 +2,7 @@
 import LoginSetting from './components/login-setting.vue'
 import { getDeptList, getOperateRooms, login } from '@/utils/api'
 import type { ApiRequestType } from '@/utils/api.help'
-import { STORE_KEY_USER } from '@/utils/app.constant'
+import { STORE_KEY_ROOM, STORE_KEY_USER } from '@/utils/app.constant'
 
 const loginModel = reactive<ApiRequestType.Login & { RoomCode: string }>({
   LoginName: '',
@@ -38,10 +38,22 @@ function refreshRoomList() {
 onMounted(refreshRoomList)
 
 const toLogin = () => login(loginModel).then((data) => {
+  if (!data) {
+    uni.showToast({
+      title: '用户名或密码错误',
+      icon: 'error',
+    })
+    return
+  }
   uni.setStorage({
     key: STORE_KEY_USER,
     data,
     success: goToIndex,
+  })
+  uni.setStorage({
+    key: STORE_KEY_ROOM,
+    data: loginModel.RoomCode,
+    success: () => getApp().globalData!.roomList = roomList.value,
   })
   getDeptList().then((dataDept) => {
     getApp().globalData!.deptList = dataDept
@@ -60,8 +72,9 @@ function submitForm() {
     <view class="login-setting">
       <LoginSetting @settinged="refreshRoomList" />
     </view>
+    <image class="login-logo" src="/static/login-logo.png" />
     <view class="login-title">
-      舒适化治疗医生客户端
+      麻醉舒适化管理信息系统
     </view>
 
     <view class="login-form-container">
@@ -73,7 +86,10 @@ function submitForm() {
           <uni-easyinput v-model="loginModel.Password" prefix-icon="locked" type="password" placeholder="密码" />
         </uni-forms-item>
         <uni-forms-item name="RoomCode">
-          <uni-data-select v-model="loginModel.RoomCode" :localdata="roomList" placeholder="请选择手术间" />
+          <uni-data-select
+            v-model="loginModel.RoomCode" class="login-form-select" :localdata="roomList"
+            placeholder="请选择手术间"
+          />
         </uni-forms-item>
       </uni-forms>
 
@@ -91,16 +107,27 @@ function submitForm() {
 
   @apply absolute top-0 right-0 bottom-0 left-0 items-center;
 
+  .login-logo{
+    height: 300px;
+    width: 350px;
+  }
+
   .login-setting {
     @apply absolute top-8 right-8;
   }
 
   .login-title {
-    @apply m-y-150px text-4xl font-bold text-gray-600;
+    @apply m-b-60px text-4xl font-bold text-gray-600;
   }
 
   .login-form-container {
     width: 400px;
+  }
+
+  .login-form-select {
+    ::v-deep .uni-select {
+      background-color: #fff;
+    }
   }
 }
 </style>

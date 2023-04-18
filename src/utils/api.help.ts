@@ -27,6 +27,8 @@ export namespace ApiRequestType {
      * 患者来源，参数为字符串”门诊”或”住院”或”全部”
      */
     PatientSource: string
+    /** 手术间编码 */
+    RoomCode: string
   }
 
   /** 输液、麻醉用药 */
