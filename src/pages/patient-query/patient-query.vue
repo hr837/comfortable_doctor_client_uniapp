@@ -17,7 +17,7 @@ const queryData = reactive<ApiRequestType.Patient>({
   KeyWord: '',
   ExamineDate: '',
   DepartmentName: '',
-  PatientSource: '全部',
+  PatientSource: '',
   OperateState: -1,
   RoomCode: '',
 })
@@ -43,8 +43,6 @@ function onPopupCommand(command: PopupCommandType) {
   else
     goToPatientAttchPage(pageData.row as ApiResonseType.PatientInfo, command)
 }
-
-onMounted(onSubmit)
 </script>
 
 <template>

@@ -68,7 +68,12 @@ export function goToPatientAttchPage(data: ApiResonseType.PatientInfo, command: 
   })
 }
 
-/** 时间格式化 */
-export function dateFormat(date: string, fmt = 'YYYY-MM-DD HH:mm:ss') {
+/** 日期格式化 */
+export function dateFormat(date: string, fmt = 'YYYY-MM-DD') {
   return dayJs(date).format(fmt)
+}
+
+/** 时间r格式化 */
+export function dateTimeFormat(date: string) {
+  return dateFormat(date, 'YYYY-MM-DD HH:mm:ss')
 }

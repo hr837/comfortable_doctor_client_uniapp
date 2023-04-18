@@ -13,7 +13,7 @@ const queryData = reactive<ApiRequestType.Patient>({
   KeyWord: '',
   ExamineDate: '',
   DepartmentName: '',
-  PatientSource: '全部',
+  PatientSource: '',
   OperateState: -1,
   RoomCode: '',
 })
@@ -28,8 +28,6 @@ async function onSubmit(query?: QueryInfo) {
     dataSet.value = data
   })
 }
-
-onMounted(onSubmit)
 </script>
 
 <template>

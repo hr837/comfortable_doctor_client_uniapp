@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import dayJs from 'dayjs'
 import type { ItemInfo } from '@/utils/api.help'
 import { STORE_KEY_ROOM } from '@/utils/app.constant'
 
@@ -9,7 +10,7 @@ export interface QueryInfo {
   roomCode: string
 }
 
-const props = withDefaults(defineProps<{ showRoomItem: boolean }>(), { showRoomItem: false })
+const props = withDefaults(defineProps<{ showRoomItem?: boolean }>(), { showRoomItem: false })
 
 const emits = defineEmits(['submit'])
 
@@ -37,6 +38,10 @@ onMounted(() => {
     const roomCode = uni.getStorageSync(STORE_KEY_ROOM)
     model.roomCode = roomCode ?? ''
   }
+  nextTick(() => {
+    model.date = dayJs(Date.now()).format('YYYY-MM-DD')
+    onSubmit()
+  })
 })
 </script>
 
@@ -54,7 +59,7 @@ onMounted(() => {
       <uni-row>
         <uni-col :xs="24" :sm="showRoomItem ? 8 : 12">
           <uni-forms-item label="检查日期" name="date">
-            <uni-datetime-picker v-model="model.date" type="date" />
+            <uni-datetime-picker v-model="model.date" type="date" :clear-icon="false" />
           </uni-forms-item>
         </uni-col>
         <uni-col :xs="24" :sm="showRoomItem ? 8 : 12">

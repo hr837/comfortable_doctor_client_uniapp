@@ -2,7 +2,7 @@
 import VitalSignInfoEdit from './vital-sign-info-edit.vue'
 import { delPatientMonitorRecord, getPatientMonitorRecords } from '@/utils/api'
 import type { ApiResonseType } from '@/utils/api.help'
-import { dateFormat } from '@/composables'
+import { dateFormat, dateTimeFormat } from '@/composables'
 import { monitorItems } from '@/composables/patient-narcotic-detail.composable'
 
 const props = defineProps<{ id: string }>()
@@ -54,7 +54,7 @@ function closeDialog() {
   popup.value?.close()
 }
 function onEdit(row: ApiResonseType.MonitorInfo) {
-  row.RecordTime = dateFormat(row.RecordTime)
+  row.RecordTime = dateTimeFormat(row.RecordTime)
   currentRow.value = row
   popup.value?.open()
 }

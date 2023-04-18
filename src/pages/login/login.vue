@@ -38,13 +38,6 @@ function refreshRoomList() {
 onMounted(refreshRoomList)
 
 const toLogin = () => login(loginModel).then((data) => {
-  if (!data) {
-    uni.showToast({
-      title: '用户名或密码错误',
-      icon: 'error',
-    })
-    return
-  }
   uni.setStorage({
     key: STORE_KEY_USER,
     data,
@@ -58,7 +51,11 @@ const toLogin = () => login(loginModel).then((data) => {
   getDeptList().then((dataDept) => {
     getApp().globalData!.deptList = dataDept
   })
-})
+}).catch(() => uni.showToast({
+  title: '用户名或密码错误',
+  icon: 'error',
+}))
+
 function submitForm() {
   formRef.value?.validate([], (err) => {
     if (!err)
@@ -107,7 +104,7 @@ function submitForm() {
 
   @apply absolute top-0 right-0 bottom-0 left-0 items-center;
 
-  .login-logo{
+  .login-logo {
     height: 300px;
     width: 350px;
   }

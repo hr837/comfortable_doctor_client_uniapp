@@ -55,9 +55,9 @@ export function request<T>(params: RequestParam) {
         else {
           // HTTP 状态码正常就通过业务结构状态判断业务是否成功
           if (res.data === null)
-            throw new Error('Server Error')
-          else
-            resolve(res.data)
+            // eslint-disable-next-line prefer-promise-reject-errors
+            return reject(null)
+          else resolve(res.data)
         }
       },
       fail(err) {

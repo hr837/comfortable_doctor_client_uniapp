@@ -7,11 +7,11 @@ const emits = defineEmits(['update:modelValue'])
 
 const Values = ['全部', '住院', '门诊']
 
-const current = computed(() => Values.indexOf(props.modelValue))
+const current = computed(() => Values.indexOf(props.modelValue || '全部'))
 
 function onClickItem(e: { currentIndex: number }) {
   const value = Values.at(e.currentIndex)
-  emits('update:modelValue', value)
+  emits('update:modelValue', value === '全部' ? '' : value)
 }
 </script>
 

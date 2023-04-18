@@ -179,7 +179,7 @@ export function narcoticItemsConvert(data: any) {
       case 'narcoticDoctorDate':
         items.push({
           ItemName: '麻醉医师签名1#DATE#',
-          ItemValue: dateFormat(value as string, 'YYYY-MM-DD'),
+          ItemValue: dateFormat(value as string),
           ControlType: 'InputDatePicker',
         }, {
           ItemName: '麻醉医师签名1#TIME#',
@@ -204,7 +204,7 @@ export function narcoticItemsConvert(data: any) {
       case 'narcoticDoctor2Date':
         items.push({
           ItemName: '麻醉医师签名2#DATE#',
-          ItemValue: dateFormat(value as string, 'YYYY-MM-DD'),
+          ItemValue: dateFormat(value as string),
           ControlType: 'InputDatePicker',
         }, {
           ItemName: '麻醉医师签名2#TIME#',
@@ -229,7 +229,7 @@ export function narcoticItemsConvert(data: any) {
       case 'nurseDate':
         items.push({
           ItemName: '护士签名1#DATE#',
-          ItemValue: dateFormat(value as string, 'YYYY-MM-DD'),
+          ItemValue: dateFormat(value as string),
           ControlType: 'InputDatePicker',
         }, {
           ItemName: '护士签名1#TIME#',

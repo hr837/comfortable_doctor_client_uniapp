@@ -4,7 +4,7 @@ import TransNarcoticfusionInfoEdit from './transfusion-narcotic-info-edit.vue'
 import type { ApiResonseType } from '@/utils/api.help'
 import { delTransfusion, getTransfusionList } from '@/utils/api'
 import { dictConvertDrugFlag } from '@/composables/patient-narcotic-detail.composable'
-import { dateFormat } from '@/composables'
+import { dateTimeFormat } from '@/composables'
 
 const props = defineProps<{ id: string }>()
 const popup = ref<UniHelper.UniPopupProps>()
@@ -83,13 +83,13 @@ onMounted(refreshList)
         </view>
         <view class="row m-t-2">
           <text class="patient-narcotic-drug-record-text">
-            时间：{{ dateFormat(item.PointTime) }}
+            时间：{{ dateTimeFormat(item.PointTime) }}
           </text>
           <text class="patient-narcotic-drug-record-text">
-            开始时间：{{ dateFormat(item.BeginTime) }}
+            开始时间：{{ dateTimeFormat(item.BeginTime) }}
           </text>
           <text class="patient-narcotic-drug-record-text">
-            结束时间：{{ dateFormat(item.EndTime) }}
+            结束时间：{{ dateTimeFormat(item.EndTime) }}
           </text>
         </view>
       </RecordItem>
