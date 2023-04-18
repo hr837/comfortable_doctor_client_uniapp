@@ -5,7 +5,7 @@ import type { ApiRequestType, ApiResonseType, MonitorItem } from './api.help'
  *  登录验证
  */
 export function login(data: ApiRequestType.Login) {
-  return request<ApiResonseType.Login>({
+  return request<ApiResonseType.UserInfo>({
     path: '/api/User/UserLogin',
     data,
     method: 'POST',
@@ -18,6 +18,28 @@ export function login(data: ApiRequestType.Login) {
 export function getOperateRooms() {
   return request<ApiResonseType.OperateRoomInfo[]>({
     path: '/api/OperatingRoom/GetList',
+    method: 'GET',
+  })
+}
+
+/**
+ *  获取用户列表
+ */
+export function getUserList(roleCode: ApiRequestType.RoleCode) {
+  return request<ApiResonseType.UserInfo[]>({
+    path: '/api/User/UserList',
+    data: { roleCode },
+    method: 'GET',
+  })
+}
+
+/**
+ *  获取用户签名图片
+ */
+export function getUserSign(loginName: string) {
+  return request({
+    path: '/api/User/UserSign',
+    data: { loginName },
     method: 'GET',
   })
 }
@@ -222,5 +244,18 @@ export function GetTempPacu() {
   return request<ApiResonseType.TemplateInfo[]>({
     path: '/api/AnesCustom/GetTempPacu',
     method: 'GET',
+  })
+}
+
+/** 保存麻醉小结项目内容 */
+export function saveNarcoticResult(id: string, items: ApiRequestType.NarcoticItemInfo[]) {
+  return request({
+    path: '/api/AnesCustom/Save',
+    data: {
+      AnesthesiaId: id,
+      Items: items,
+    },
+    method: 'POST',
+    loading: true,
   })
 }

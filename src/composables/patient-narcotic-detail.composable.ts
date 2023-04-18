@@ -1,10 +1,11 @@
+import { dateFormat } from '.'
 import PatientBaseInfoForm from '@/pages/patient-detail/components/patient-base-info-form.vue'
 import PatientNarcoticDrugRecord from '@/pages/patient-detail/components/patient-narcotic-drug-record.vue'
 import PatientNarcoticResult from '@/pages/patient-detail/components/patient-narcotic-result.vue'
 import PatientTransfusionRecord from '@/pages/patient-detail/components/patient-transfusion-record.vue'
 import PatientVitalsignRecord from '@/pages/patient-detail/components/patient-vital-sign-record.vue'
 import { getDrugList, getDrugUnitList, getDrugWayList, getMonitorItems } from '@/utils/api'
-import type { ApiResonseType, MonitorItem } from '@/utils/api.help'
+import type { ApiRequestType, ApiResonseType, MonitorItem } from '@/utils/api.help'
 
 export const ComponentSetting = [
   { label: '基本信息', name: 'patient-base-info-form', component: PatientBaseInfoForm },
@@ -96,4 +97,210 @@ export function dictConvertDrugFlag(type?: string) {
     default:
       return ''
   }
+}
+
+export function narcoticItemsConvert(data: any) {
+  const items: ApiRequestType.NarcoticItemInfo[] = []
+  Object.entries(data).forEach(([key, value]) => {
+    if (!value)
+      return
+    switch (key) {
+      // 术中特殊情况：
+      case 'specific':
+        PatientDetailDict.has.forEach((item) => {
+          items.push({
+            ItemName: `术中特殊情况${item.text}`,
+            ItemValue: item.value === value,
+            ControlType: 'InputTextBox',
+          })
+        })
+        if (value === '有') {
+          items.push({
+            ItemName: '术中特殊情况',
+            ItemValue: data.specificText,
+            ControlType: 'InputTextBox',
+          })
+        }
+        break
+      // Steward评分：
+      case 'comToLifeState':
+        items.push({
+          ItemName: 'Steward1',
+          ItemValue: PatientDetailDict.comToLifeState.find(x => x.value === value)?.text ?? '',
+          ControlType: 'InputCheckBox',
+        })
+        break
+      case 'breathActiveState':
+        items.push({
+          ItemName: 'Steward2',
+          ItemValue: PatientDetailDict.breathActiveState.find(x => x.value === value)?.text ?? '',
+          ControlType: 'InputCheckBox',
+        })
+        break
+      case 'bodyActiveState':
+        items.push({
+          ItemName: 'Steward3',
+          ItemValue: PatientDetailDict.bodyActiveState.find(x => x.value === value)?.text ?? '',
+          ControlType: 'InputCheckBox',
+        })
+        break
+      // 术后转：
+      case 'passTo':
+        PatientDetailDict.passTo.forEach((item) => {
+          items.push({
+            ItemName: `术后转${item.text}`,
+            ItemValue: item.value === value,
+            ControlType: 'InputTextBox',
+          })
+        })
+        if (value === '其他') {
+          items.push({
+            ItemName: '术后转其他内容',
+            ItemValue: data.passToText,
+            ControlType: 'InputTextBox',
+          })
+        }
+        break
+      // 签名
+      case 'narcoticDoctorName':
+        items.push({
+          ItemName: '麻醉医师签名1#BTN#',
+          ItemValue: value as string,
+          ControlType: 'InputComboBox',
+        })
+        break
+      case 'narcoticDoctorSign':
+        items.push({
+          ItemName: '麻醉医师签名1#IMG#',
+          ItemValue: value as string,
+          ControlType: 'InputImage',
+        })
+        break
+      case 'narcoticDoctorDate':
+        items.push({
+          ItemName: '麻醉医师签名1#DATE#',
+          ItemValue: dateFormat(value as string, 'YYYY-MM-DD'),
+          ControlType: 'InputDatePicker',
+        }, {
+          ItemName: '麻醉医师签名1#TIME#',
+          ItemValue: dateFormat(value as string, 'HH:mm:ss'),
+          ControlType: 'InputTimePicker',
+        })
+        break
+      case 'narcoticDoctor2Name':
+        items.push({
+          ItemName: '麻醉医师签名2#BTN#',
+          ItemValue: value as string,
+          ControlType: 'InputComboBox',
+        })
+        break
+      case 'narcoticDoctor2Sign':
+        items.push({
+          ItemName: '麻醉医师签名2#IMG#',
+          ItemValue: value as string,
+          ControlType: 'InputImage',
+        })
+        break
+      case 'narcoticDoctor2Date':
+        items.push({
+          ItemName: '麻醉医师签名2#DATE#',
+          ItemValue: dateFormat(value as string, 'YYYY-MM-DD'),
+          ControlType: 'InputDatePicker',
+        }, {
+          ItemName: '麻醉医师签名2#TIME#',
+          ItemValue: dateFormat(value as string, 'HH:mm:ss'),
+          ControlType: 'InputTimePicker',
+        })
+        break
+      case 'nurseName':
+        items.push({
+          ItemName: '护士签名1#BTN#',
+          ItemValue: value as string,
+          ControlType: 'InputComboBox',
+        })
+        break
+      case 'nurseSign':
+        items.push({
+          ItemName: '护士签名1#IMG#',
+          ItemValue: value as string,
+          ControlType: 'InputImage',
+        })
+        break
+      case 'nurseDate':
+        items.push({
+          ItemName: '护士签名1#DATE#',
+          ItemValue: dateFormat(value as string, 'YYYY-MM-DD'),
+          ControlType: 'InputDatePicker',
+        }, {
+          ItemName: '护士签名1#TIME#',
+          ItemValue: dateFormat(value as string, 'HH:mm:ss'),
+          ControlType: 'InputTimePicker',
+        })
+        break
+      // 恢复室内情况：
+      case 'recoverySpecific':
+        PatientDetailDict.has.forEach((item) => {
+          items.push({
+            ItemName: `恢复室内情况${item.text}`,
+            ItemValue: item.value === value,
+            ControlType: 'InputTextBox',
+          })
+        })
+        if (value === '有') {
+          items.push({
+            ItemName: '恢复室内情况',
+            ItemValue: data.specificText,
+            ControlType: 'InputTextBox',
+          })
+        }
+        break
+      // PADS
+      case 'vitalsignState':
+        items.push({
+          ItemName: 'PADS1',
+          ItemValue: PatientDetailDict.vitalsignState.find(x => x.value === value)?.text ?? '',
+          ControlType: 'InputCheckBox',
+        })
+        break
+      case 'activeState':
+        items.push({
+          ItemName: 'PADS1',
+          ItemValue: PatientDetailDict.activeState.find(x => x.value === value)?.text ?? '',
+          ControlType: 'InputCheckBox',
+        })
+        break
+      case 'nauseaState':
+        items.push({
+          ItemName: 'PADS1',
+          ItemValue: PatientDetailDict.nauseaState.find(x => x.value === value)?.text ?? '',
+          ControlType: 'InputCheckBox',
+        })
+        break
+      case 'painState':
+        items.push({
+          ItemName: 'PADS1',
+          ItemValue: PatientDetailDict.painState.find(x => x.value === value)?.text ?? '',
+          ControlType: 'InputCheckBox',
+        })
+        break
+      case 'bleedingState':
+        items.push({
+          ItemName: 'PADS1',
+          ItemValue: PatientDetailDict.bleedingState.find(x => x.value === value)?.text ?? '',
+          ControlType: 'InputCheckBox',
+        })
+        break
+      // 可否出科：
+      case 'canLeave':
+        PatientDetailDict.canLeave.forEach((item) => {
+          items.push({
+            ItemName: `离院${item.text}`,
+            ItemValue: item.value === value,
+            ControlType: 'InputTextBox',
+          })
+        })
+        break
+    }
+  })
+  return items
 }

@@ -19,7 +19,8 @@
               "width": "130px"
             }
           ]
-        }
+        },
+        "disableScroll":true
       }
     },
     {
@@ -65,7 +66,8 @@
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "舒适化治疗医生客户端",
     "navigationBarBackgroundColor": "#F8F8F8",
-    "backgroundColor": "#F8F8F8"
+    "backgroundColor": "#F8F8F8",
+    "enablePullDownRefresh":false
   },
   "easycom": {
     "autoscan": true,

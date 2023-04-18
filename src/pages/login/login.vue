@@ -4,7 +4,7 @@ import { getDeptList, getOperateRooms, login } from '@/utils/api'
 import type { ApiRequestType } from '@/utils/api.help'
 import { STORE_KEY_USER } from '@/utils/app.constant'
 
-const loginModel = reactive<ApiRequestType.Login>({
+const loginModel = reactive<ApiRequestType.Login & { RoomCode: string }>({
   LoginName: '',
   Password: '',
   RoomCode: '',

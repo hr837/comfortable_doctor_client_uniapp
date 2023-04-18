@@ -3,7 +3,6 @@ export namespace ApiRequestType {
   export interface Login {
     LoginName: string
     Password: string
-    RoomCode: string
   }
 
   /** 查询病人 */
@@ -112,11 +111,40 @@ export namespace ApiRequestType {
 
   }
 
+  /** 医生类型
+  * @description Anesthetist 麻醉医生
+  * @description OpDoctor 手术医生
+  * @description OpNurse 手术护士
+  */
+  export type RoleCode = 'Anesthetist' | 'OpDoctor' | 'OpNurse'
+
+  /** 麻醉小结项 */
+  export interface NarcoticItemInfo {
+    /**
+     * 控件类型名称
+     * InputLabel
+     * InputImage
+     * InputDatePicker
+     * InputCheckBox
+     * InputTextBox
+     * InputComboBox
+     * InputTimePicker
+     */
+    ControlType: string
+    /**
+     * 项目名称
+     */
+    ItemName: string
+    /**
+     * 项目值
+     */
+    ItemValue: string | boolean
+  }
 }
 
 export namespace ApiResonseType {
-  /**  登录返回数据 */
-  export interface Login {
+  /**  用户信息 */
+  export interface UserInfo {
     /**
      * 科室编码
      */
