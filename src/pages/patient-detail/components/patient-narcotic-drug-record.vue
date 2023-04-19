@@ -55,7 +55,7 @@ onMounted(refreshList)
 
 <template>
   <view class="component patient-narcotic-drug-record">
-    <uni-section title="麻醉用药" type="line">
+    <uni-section class="patient-narcotic-drug-record-header" title="麻醉用药" type="line">
       <template #right>
         <button type="primary" size="mini" @click="open">
           添加
@@ -68,6 +68,9 @@ onMounted(refreshList)
     </uni-popup>
 
     <view class="patient-narcotic-drug-record-container">
+      <view v-if="!dataSet.length" class="no-data">
+        暂无数据
+      </view>
       <RecordItem
         v-for="item of dataSet" :key="item.Id" :tag="dictConvertDrugFlag(item.DrugFlag)"
         @delete="onDelete(item.Id)" @click="onClick(item.Id)"
@@ -98,11 +101,17 @@ onMounted(refreshList)
 </template>
 
 <style lang="scss" scoped>
-.patient-narcotic-drug-record-container {
-  @apply: p-x-4;
-}
+.patient-narcotic-drug-record {
+  &-header {
+    @apply fixed w-full z-1;
+  }
 
-.patient-narcotic-drug-record-text {
-  @apply: p-r-6;
+  &-container {
+    @apply: p-x-4 p-t-60px;
+  }
+
+  &-text {
+    @apply: p-r-6;
+  }
 }
 </style>

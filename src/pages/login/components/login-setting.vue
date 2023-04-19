@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { STORE_KEY_SERVER } from '@/utils/app.constant'
+import { getOperateRooms } from '@/utils/api'
+import { STORE_KEY_SERVER, STORE_ROOM_LIST } from '@/utils/app.constant'
 
 const emits = defineEmits(['settinged'])
 const defaultValue = ref('')
@@ -16,9 +17,33 @@ function onDialogClose() {
   inputDialog.value?.close()
 }
 
+function resetOperateRooms() {
+  getOperateRooms().then((data) => {
+    const localData = data.map(item => ({
+      text: item.RoomName,
+      value: item.RoomCode,
+      disable: false,
+    }))
+    uni.setStorage({
+      key: STORE_ROOM_LIST,
+      data: localData,
+      success: () => {
+        emits('settinged')
+        onDialogClose()
+      },
+    })
+  }).catch(() => {
+    uni.showToast({
+      title: '获取操作间列表失败',
+      icon: 'error',
+    })
+  })
+}
+
 function dialogInputConfirm(val: any) {
   if (!val)
     return
+  // 验证Server
   const reg = /(http|https):\/\/([\w.]+\/?)\S*/ig
   if (!reg.test(val)) {
     uni.showToast({
@@ -27,15 +52,9 @@ function dialogInputConfirm(val: any) {
     })
   }
   else {
-    uni.setStorage({
-      key: STORE_KEY_SERVER,
-      data: val,
-      success: () => {
-        defaultValue.value = val
-        emits('settinged')
-        onDialogClose()
-      },
-    })
+    uni.setStorageSync(STORE_KEY_SERVER, val)
+    defaultValue.value = val
+    resetOperateRooms()
   }
 }
 </script>

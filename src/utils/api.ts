@@ -19,6 +19,7 @@ export function getOperateRooms() {
   return request<ApiResonseType.OperateRoomInfo[]>({
     path: '/api/OperatingRoom/GetList',
     method: 'GET',
+    loading: true,
   })
 }
 
@@ -197,12 +198,9 @@ export function delPatientMonitorRecord(id: string) {
  * @param id 病人ID,可空
  */
 export function getMonitorItems(id?: string) {
-  const data = { anesId: id }
-  if (!id)
-    delete data.anesId
   return request<MonitorItem[]>({
     path: '/api/MonitorRecord/GetConfig',
-    data,
+    data: { anesId: id },
     method: 'GET',
   })
 }
@@ -249,7 +247,7 @@ export function GetTempPacu() {
 
 /** 保存麻醉小结项目内容 */
 export function saveNarcoticResult(id: string, items: ApiRequestType.NarcoticItemInfo[]) {
-  return request({
+  return request<boolean>({
     path: '/api/AnesCustom/Save',
     data: {
       AnesthesiaId: id,

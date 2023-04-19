@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 import LoginSetting from './components/login-setting.vue'
-import { getDeptList, getOperateRooms, login } from '@/utils/api'
+import { getDeptList, login } from '@/utils/api'
 import type { ApiRequestType } from '@/utils/api.help'
-import { STORE_KEY_ROOM, STORE_KEY_USER } from '@/utils/app.constant'
+import { STORE_KEY_ROOM, STORE_KEY_USER, STORE_ROOM_LIST } from '@/utils/app.constant'
 
 const loginModel = reactive<ApiRequestType.Login & { RoomCode: string }>({
   LoginName: '',
@@ -26,28 +26,32 @@ const goToIndex = () => uni.redirectTo({
 const roomList = ref<UniHelper.UniDataSelectLocaldata[]>([])
 
 function refreshRoomList() {
-  getOperateRooms().then((data) => {
-    roomList.value = data.map(item => ({
-      text: item.RoomName,
-      value: item.RoomCode,
-      disable: false,
-    }))
-  })
+  const localData = uni.getStorageSync(STORE_ROOM_LIST)
+  if (!localData) {
+    uni.showToast({
+      title: '或许还没有设置服务器地址',
+      icon: 'none',
+    })
+  }
+  else {
+    roomList.value = localData
+    const localCode = uni.getStorageSync(STORE_KEY_ROOM)
+    nextTick(() => loginModel.RoomCode = localCode ?? '')
+  }
 }
 
 onMounted(refreshRoomList)
 
 const toLogin = () => login(loginModel).then((data) => {
+  // 缓存默认手术间
+  uni.setStorageSync(STORE_KEY_ROOM, loginModel.RoomCode)
+  // 缓存用户信息
   uni.setStorage({
     key: STORE_KEY_USER,
     data,
     success: goToIndex,
   })
-  uni.setStorage({
-    key: STORE_KEY_ROOM,
-    data: loginModel.RoomCode,
-    success: () => getApp().globalData!.roomList = roomList.value,
-  })
+  // 全局存放部门数据
   getDeptList().then((dataDept) => {
     getApp().globalData!.deptList = dataDept
   })

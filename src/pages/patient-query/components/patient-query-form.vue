@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import dayJs from 'dayjs'
 import type { ItemInfo } from '@/utils/api.help'
-import { STORE_KEY_ROOM } from '@/utils/app.constant'
+import { STORE_KEY_ROOM, STORE_ROOM_LIST } from '@/utils/app.constant'
 
 export interface QueryInfo {
   query: string
@@ -28,15 +28,17 @@ const departmentList = computed(() => getApp().globalData!.deptList.map((item: I
   value: item.ItemCode,
 })))
 
-const roomList = computed(() => getApp().globalData?.roomList ?? [])
+const roomList = ref<UniHelper.UniDataSelectLocaldata[]>([])
 
 // 提交事件回调
 const onSubmit = () => emits('submit', { ...model })
 
 onMounted(() => {
   if (props.showRoomItem) {
-    const roomCode = uni.getStorageSync(STORE_KEY_ROOM)
-    model.roomCode = roomCode ?? ''
+    const localCode = uni.getStorageSync(STORE_KEY_ROOM)
+    const localRooms = uni.getStorageSync(STORE_ROOM_LIST)
+    roomList.value = localRooms
+    model.roomCode = localCode ?? ''
   }
   nextTick(() => {
     model.date = dayJs(Date.now()).format('YYYY-MM-DD')

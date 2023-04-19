@@ -133,7 +133,12 @@ function dialogInputConfirm(pwd: any) {
   login({
     LoginName: verifyInfo.loginName,
     Password: pwd,
-  }).then(() => getUserSign(verifyInfo.loginName).then(setSignInfo))
+  }).then(() => getUserSign(verifyInfo.loginName).then(setSignInfo)).catch(() => {
+    uni.showToast({
+      title: '验证失败',
+      icon: 'none',
+    })
+  })
 }
 
 function setSignInfo(sign: any) {
@@ -167,7 +172,7 @@ function onSubmit() {
 }
 
 function saveData() {
-  const items = narcoticItemsConvert(toRefs(modelData))
+  const items = narcoticItemsConvert(modelData)
   items.push({
     ItemName: 'Steward总分',
     ItemValue: StewardCount.value.toString(),
@@ -178,11 +183,19 @@ function saveData() {
     ControlType: 'InputComboBox',
   })
 
-  saveNarcoticResult(props.id, items).then(() => {
-    uni.showToast({
-      title: '保存成功',
-      icon: 'success',
-    })
+  saveNarcoticResult(props.id, items).then((result) => {
+    if (result) {
+      uni.showToast({
+        title: '保存成功',
+        icon: 'success',
+      })
+    }
+    else {
+      uni.showToast({
+        title: '保存失败，请重试',
+        icon: 'error',
+      })
+    }
   })
 }
 </script>
@@ -204,14 +217,14 @@ function saveData() {
   </uni-popup>
 
   <view class="component patient-narcotic-result">
-    <uni-section title="麻醉情况" type="line">
+    <uni-section class="patient-narcotic-result-header" title="麻醉情况" type="line">
       <template #right>
         <button type="primary" size="mini" @click="onSubmit">
           保存
         </button>
       </template>
     </uni-section>
-    <uni-forms ref="formRef" :rules="rules" :model="modelData" label-width="100px" label-align="right" class="p-4 p-t-0">
+    <uni-forms ref="formRef" :rules="rules" :model="modelData" label-width="100px" label-align="right" class="patient-narcotic-result-form">
       <uni-forms-item label="术中特殊情况" class="no-margin">
         <uni-data-checkbox v-model="modelData.specific" :localdata="PatientDetailDict.has" mode="button" />
       </uni-forms-item>
@@ -340,6 +353,15 @@ function saveData() {
 
 <style lang="scss" scoped>
 .component.patient-narcotic-result {
+  .patient-narcotic-result{
+    &-header{
+      @apply fixed w-full z-1;
+    }
+    &-form{
+      @apply p-4 p-t-60px;
+    }
+  }
+
   .form-item-doctor {
     position: relative;
 

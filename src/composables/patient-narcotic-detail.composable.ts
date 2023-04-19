@@ -33,7 +33,7 @@ export const PatientDetailDict = {
   painState: [{ text: 'VAS 0~3分，离院前疼痛轻微或无疼痛-2分', value: 2, disabled: false }, { text: 'VAS 4~6分，中度疼痛-1分', value: 1, disabled: false }, { text: 'VAS 7~10分，重度疼痛-0分', value: 0, disabled: false }],
   bleedingState: [{ text: '轻度，不需要换药-2分', value: 2, disabled: false }, { text: '中度，最多换2次药，无继续出血-1分', value: 1, disabled: false }, { text: '重度，需换药3次以上，持续出血-0分', value: 0, disabled: false }],
 
-  source: [{ text: '门诊', value: 'mz', disable: false }, { text: '住院', value: 'zy', disable: false }],
+  source: [{ text: '门诊', value: '门诊', disable: false }, { text: '住院', value: '住院', disable: false }],
   bloodType: [{ text: '未检测', value: '', disable: false }, { text: 'A型', value: 'a', disable: false }, { text: 'B型', value: 'b', disable: false }, { text: 'AB型', value: 'ab', disable: false }, { text: 'O型', value: 'o', disable: false }],
   bolldRH: [{ text: '未检测', value: '', disable: false }, { text: '阳性', value: '+', disable: false }, { text: '阴性', value: '-', disable: false }],
   operation: [{ text: '宫腔镜', value: 'gqj', disable: false }, { text: '气管检查镜', value: 'qgjcj', disable: false }, { text: '人流', value: 'rl', disable: false }],
@@ -83,8 +83,11 @@ export function initSelectOptions() {
   getDrugList('3').then((data) => {
     drugNarcoticList.value = data
   })
+}
 
-  getMonitorItems().then(data => monitorItems.value = data)
+/** 初始化体征监测数据 */
+export function initMonitorItems(patientId: string) {
+  getMonitorItems(patientId).then(data => monitorItems.value = data)
 }
 
 /** 用药方式格式化 */

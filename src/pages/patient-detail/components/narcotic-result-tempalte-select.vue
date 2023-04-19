@@ -59,7 +59,6 @@ onMounted(() => {
 .narcotic-result-tempalte-select {
   &-selectd-item {
     background-color: #d4e4ff !important;
-    ;
   }
 }
 </style>

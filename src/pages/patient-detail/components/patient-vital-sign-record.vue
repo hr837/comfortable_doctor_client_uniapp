@@ -62,7 +62,7 @@ function onEdit(row: ApiResonseType.MonitorInfo) {
 
 <template>
   <view class="component patient-vital-sign-record">
-    <uni-section title="生命体征" type="line">
+    <uni-section class="patient-vital-sign-record-header" title="生命体征" type="line">
       <template #right>
         <button type="primary" size="mini">
           检测项目
@@ -110,3 +110,15 @@ function onEdit(row: ApiResonseType.MonitorInfo) {
     </uni-table>
   </view>
 </template>
+
+<style lang="scss" scoped>
+.patient-vital-sign-record {
+  &-header {
+    @apply fixed w-full z-1;
+  }
+
+  &-table {
+    @apply p-t-60px;
+  }
+}
+</style>

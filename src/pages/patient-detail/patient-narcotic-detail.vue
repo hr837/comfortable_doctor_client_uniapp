@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import PatientDetailPopup from './components/patient-detail-popup.vue'
-import { ComponentSetting, initSelectOptions } from '@/composables/patient-narcotic-detail.composable'
-import { goToPatientAttchPage } from '@/composables'
+// import PatientDetailPopup from './components/patient-detail-popup.vue'
+import { ComponentSetting, initMonitorItems, initSelectOptions } from '@/composables/patient-narcotic-detail.composable'
+// import { goToPatientAttchPage } from '@/composables'
 import type { ApiResonseType } from '@/utils/api.help'
 
 let pageQueryData: Pick<ApiResonseType.PatientInfo, 'PatientName' | 'PatientSex' | 'PatientAge' | 'Id'>
@@ -30,18 +30,21 @@ onLoad((query) => {
 })
 
 onMounted(() => {
-  nextTick(initSelectOptions)
+  setTimeout(() => {
+    initSelectOptions()
+    initMonitorItems(pageData.id)
+  }, 1000)
 })
 
-onNavigationBarButtonTap(() => pageData.show = true)
+// onNavigationBarButtonTap(() => pageData.show = true)
 
-function onCommand(command: PopupCommandType) {
-  return
-  // eslint-disable-next-line no-unreachable
-  if (!pageQueryData)
-    return
-  goToPatientAttchPage(pageQueryData as ApiResonseType.PatientInfo, command)
-}
+// function onCommand(command: PopupCommandType) {
+//   return
+//   // eslint-disable-next-line no-unreachable
+//   if (!pageQueryData)
+//     return
+//   goToPatientAttchPage(pageQueryData as ApiResonseType.PatientInfo, command)
+// }
 
 function onClickItem(e: { currentIndex: number }) {
   if (pageData.current !== e.currentIndex)
@@ -52,12 +55,15 @@ const component = $computed(() => ComponentSetting[pageData.current].component)
 </script>
 
 <template>
-  <PatientDetailPopup v-model:show="pageData.show" @command="onCommand" />
-  <view class="page patient-narcotic-detail ">
-    <uni-segmented-control
-      :current="pageData.current" :values="pageData.controlItems" style-type="button"
-      @click-item="onClickItem"
-    />
+  <!-- <PatientDetailPopup v-model:show="pageData.show" @command="onCommand" /> -->
+  <view class="page patient-narcotic-detail">
+    <view class="patient-narcotic-detail-header">
+      <uni-segmented-control
+        :current="pageData.current" :values="pageData.controlItems" style-type="button"
+        @click-item="onClickItem"
+      />
+    </view>
+
     <view class="patient-narcotic-detail-container">
       <component :is="component" :id="pageData.id" />
     </view>
@@ -65,19 +71,16 @@ const component = $computed(() => ComponentSetting[pageData.current].component)
 </template>
 
 <style lang="scss" scoped>
-page {
-  // display: flex;
-  // flex-flow: column nowrap;
-  // height: 100%;
-  @apply page h-full;
-}
+.patient-narcotic-detail {
+  &-header {
+    position: fixed;
+    background-color: #fff;
+    width: 100%;
+    z-index: 1;
+  }
 
-.patient-narcotic-detail,
-{
-@apply flex-1 overflow-hidden;
-}
-
-.patient-narcotic-detail-container {
-  @apply flex-1 overflow-auto;
+  &-container {
+    padding-top: 36px;
+  }
 }
 </style>

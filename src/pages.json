@@ -45,14 +45,14 @@
       "path": "pages/patient-detail/patient-narcotic-detail",
       "style": {
         "navigationBarTitleText": "麻醉详情",
-        "titleNView": {
-          "buttons": [
-            {
-              "type": "menu",
-              "width": "60px"
-            }
-          ]
-        }
+        // "titleNView": {
+        //   "buttons": [
+        //     {
+        //       "type": "menu",
+        //       "width": "60px"
+        //     }
+        //   ]
+        // }
       }
     },
     {

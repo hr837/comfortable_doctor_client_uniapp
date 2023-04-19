@@ -17,5 +17,3 @@ onLoad((query) => {
     <web-view :src="src" />
   </view>
 </template>
-
-<style lang="scss" scoped></style>

@@ -53,7 +53,7 @@ onMounted(refreshList)
 
 <template>
   <view class="component patient-transfusion-record">
-    <uni-section title="输液" type="line">
+    <uni-section class="patient-transfusion-record-header" title="输液" type="line">
       <template #right>
         <button type="primary" size="mini" @click="open">
           添加
@@ -66,6 +66,9 @@ onMounted(refreshList)
     </uni-popup>
 
     <view class="patient-transfusion-record-container">
+      <view v-if="!dataSet.length" class="no-data">
+        暂无数据
+      </view>
       <RecordItem v-for="item of dataSet" :key="item.Id" @delete="onDelete(item.Id)" @click="onClick(item.Id)">
         <view class="row">
           <text class="text-gray-900 patient-transfusion-record-text">
@@ -96,15 +99,21 @@ onMounted(refreshList)
 </template>
 
 <style lang="scss" scoped>
-.patient-transfusion-record-container {
-  @apply: p-x-4;
-}
+.patient-transfusion-record {
+  &-header {
+    @apply fixed w-full z-1;
+  }
 
-.patient-transfusion-record-text {
-  @apply: p-r-6;
-}
+  &-container {
+    @apply: p-x-4 p-t-60px;
+  }
 
-.animate-spin {
-  animation-duration: 3s;
+  &-text {
+    @apply: p-r-6;
+  }
+
+  .animate-spin {
+    animation-duration: 3s;
+  }
 }
 </style>

@@ -48,13 +48,13 @@ export function request<T>(params: RequestParam) {
       data: params.data,
       header: getHeader(),
       timeout: params.timeout ?? 60 * 1000,
-      success(res: any) {
+      success: (res: any) => {
         if (res.statusCode < 200 || res.statusCode > 399) {
           reject(res.data)
         }
         else {
           // HTTP 状态码正常就通过业务结构状态判断业务是否成功
-          if (res.data === null)
+          if (!res.data)
             // eslint-disable-next-line prefer-promise-reject-errors
             return reject(null)
           else resolve(res.data)
