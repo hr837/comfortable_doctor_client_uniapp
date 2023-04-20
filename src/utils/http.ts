@@ -24,6 +24,7 @@ interface RequestParam {
   timeout?: number
   /** 接口请求loading文字 */
   loadingMsg?: string
+  responseType?: 'text' | 'arraybuffer'
 }
 
 /**
@@ -47,6 +48,7 @@ export function request<T>(params: RequestParam) {
       method: params.method,
       data: params.data,
       header: getHeader(),
+      responseType: params.responseType ?? 'text',
       timeout: params.timeout ?? 60 * 1000,
       success: (res: any) => {
         if (res.statusCode < 200 || res.statusCode > 399) {

@@ -55,10 +55,16 @@
         // }
       }
     },
+    // {
+    //   "path": "pages/patient-detail/patient-attach-file",
+    //   "style": {
+    //     "navigationBarTitleText": "术前附件查看"
+    //   }
+    // },
     {
-      "path": "pages/patient-detail/patient-attach-file",
+      "path": "pages/test/test",
       "style": {
-        "navigationBarTitleText": "术前附件查看"
+        "navigationBarTitleText": "测试页面"
       }
     }
   ],

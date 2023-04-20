@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import dayJs from 'dayjs'
 import DrugInput from './drug-input.vue'
 import type { ApiRequestType, ApiResonseType } from '@/utils/api.help'
 import { addTransfusionRecord, getTransfusionInfo, updateTransfusionRecord } from '@/utils/api'
 import { PatientDetailDict, drugUnitList, drugUseModeList } from '@/composables/patient-narcotic-detail.composable'
+import { dateTimeFormat } from '@/composables'
 
 const props = defineProps<{
   /** 病人ID */
@@ -45,6 +45,9 @@ const rules = {
   Dose: {
     rules: [{ required: true, errorMessage: '请输入使用剂量' }, { validateFunction: doseValidator }],
   },
+  PointTime: {
+    rules: [{ required: true, errorMessage: '请选择时间' }],
+  },
 }
 
 const form = ref<UniForm>()
@@ -83,13 +86,6 @@ function onConfirm() {
     if (err)
       return
 
-    if (modelData.EndTime) {
-      const diff = dayJs(modelData.EndTime).diff(modelData.BeginTime)
-      modelData.PointTime = dayJs(diff).format('YYYY-MM-DD HH:mm:ss')
-    }
-    else {
-      modelData.PointTime = modelData.BeginTime
-    }
     modelData.AnesthesiaId = props.pid
     if (props.rid) {
       modelData.Id = props.rid
@@ -119,15 +115,15 @@ onMounted(() => {
     return
   getTransfusionInfo(props.rid).then((data) => {
     modelData.AnesthesiaId = data.AnesthesiaId
-    modelData.BeginTime = data.BeginTime
+    modelData.BeginTime = dateTimeFormat(data.BeginTime)
     modelData.Dose = data.Dose
     modelData.DrugCode = data.DrugCode
     modelData.DrugName = data.DrugName
     modelData.DrugFlag = data.DrugFlag
-    modelData.EndTime = data.EndTime
+    modelData.EndTime = dateTimeFormat(data.EndTime)
     modelData.Id = data.Id
     modelData.Mode = data.Mode
-    modelData.PointTime = data.PointTime
+    modelData.PointTime = dateTimeFormat(data.PointTime)
     modelData.Spect = data.Spect
     modelData.TypeCode = data.TypeCode
     modelData.Unit = data.Unit
@@ -135,6 +131,7 @@ onMounted(() => {
 })
 
 const title = computed(() => props.rid ? '更新麻醉用药信息' : '添加麻醉用药信息')
+const showDateRange = computed(() => modelData.DrugFlag === '1')
 </script>
 
 <template>
@@ -166,12 +163,19 @@ const title = computed(() => props.rid ? '更新麻醉用药信息' : '添加麻
           <uni-data-select v-model="modelData.Unit" :localdata="drugUnitList" placeholder="单位" />
         </view>
       </uni-forms-item>
-      <uni-forms-item label="开始时间" name="BeginTime">
-        <uni-datetime-picker v-model="modelData.BeginTime" type="datetime" />
-      </uni-forms-item>
-      <uni-forms-item label="结束时间" name="EndTime">
-        <uni-datetime-picker v-model="modelData.EndTime" type="datetime" />
-      </uni-forms-item>
+      <template v-if="showDateRange">
+        <uni-forms-item label="开始时间" name="BeginTime">
+          <uni-datetime-picker v-model="modelData.BeginTime" type="datetime" />
+        </uni-forms-item>
+        <uni-forms-item label="结束时间" name="EndTime">
+          <uni-datetime-picker v-model="modelData.EndTime" type="datetime" />
+        </uni-forms-item>
+      </template>
+      <template v-else>
+        <uni-forms-item label="时间" name="PointTime">
+          <uni-datetime-picker v-model="modelData.PointTime" type="datetime" />
+        </uni-forms-item>
+      </template>
     </uni-forms>
   </uni-popup-dialog>
 </template>

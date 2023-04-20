@@ -4,6 +4,7 @@ import DrugInput from './drug-input.vue'
 import type { ApiRequestType, ApiResonseType } from '@/utils/api.help'
 import { addTransfusionRecord, getTransfusionInfo, updateTransfusionRecord } from '@/utils/api'
 import { PatientDetailDict, drugUnitList, drugUseModeList } from '@/composables/patient-narcotic-detail.composable'
+import { dateTimeFormat } from '@/composables'
 
 const props = defineProps<{
   /** 病人ID */
@@ -119,15 +120,15 @@ onMounted(() => {
     return
   getTransfusionInfo(props.rid).then((data) => {
     modelData.AnesthesiaId = data.AnesthesiaId
-    modelData.BeginTime = data.BeginTime
+    modelData.BeginTime = dateTimeFormat(data.BeginTime)
     modelData.Dose = data.Dose
     modelData.DrugCode = data.DrugCode
     modelData.DrugName = data.DrugName
     modelData.DrugFlag = data.DrugFlag
-    modelData.EndTime = data.EndTime
+    modelData.EndTime = dateTimeFormat(data.EndTime)
     modelData.Id = data.Id
     modelData.Mode = data.Mode
-    modelData.PointTime = data.PointTime
+    modelData.PointTime = dateTimeFormat(data.PointTime)
     modelData.Spect = data.Spect
     modelData.TypeCode = data.TypeCode
     modelData.Unit = data.Unit

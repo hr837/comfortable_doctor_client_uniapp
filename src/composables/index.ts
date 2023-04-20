@@ -74,6 +74,6 @@ export function dateFormat(date: string, fmt = 'YYYY-MM-DD') {
 }
 
 /** 时间r格式化 */
-export function dateTimeFormat(date: string) {
-  return dateFormat(date, 'YYYY-MM-DD HH:mm:ss')
+export function dateTimeFormat(date: string, fmt = 'YYYY-MM-DD HH:mm:ss') {
+  return dateFormat(date, fmt)
 }

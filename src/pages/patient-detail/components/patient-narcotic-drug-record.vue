@@ -85,15 +85,17 @@ onMounted(refreshList)
           <text>{{ item.Mode }}</text>
         </view>
         <view class="row m-t-2">
-          <text class="patient-narcotic-drug-record-text">
-            时间：{{ dateTimeFormat(item.PointTime) }}
+          <text v-if="item.DrugFlag === '0'" class="patient-narcotic-drug-record-text">
+            时间：{{ dateTimeFormat(item.PointTime, 'YYYY-MM-DD HH:mm') }}
           </text>
-          <text class="patient-narcotic-drug-record-text">
-            开始时间：{{ dateTimeFormat(item.BeginTime) }}
-          </text>
-          <text class="patient-narcotic-drug-record-text">
-            结束时间：{{ dateTimeFormat(item.EndTime) }}
-          </text>
+          <template v-else>
+            <text class="patient-narcotic-drug-record-text">
+              开始时间：{{ dateTimeFormat(item.BeginTime) }}
+            </text>
+            <text class="patient-narcotic-drug-record-text">
+              结束时间：{{ dateTimeFormat(item.EndTime) }}
+            </text>
+          </template>
         </view>
       </RecordItem>
     </view>

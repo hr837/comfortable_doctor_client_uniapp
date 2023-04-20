@@ -38,10 +38,11 @@ export function getUserList(roleCode: ApiRequestType.RoleCode) {
  *  获取用户签名图片
  */
 export function getUserSign(loginName: string) {
-  return request({
+  return request<ArrayBuffer>({
     path: '/api/User/UserSign',
     data: { loginName },
     method: 'GET',
+    responseType: 'arraybuffer',
   })
 }
 
@@ -56,13 +57,14 @@ export function getDeptList() {
 }
 
 /**
- *  科室信息
+ *  查询患者列表
  */
 export function queryPatients(data: ApiRequestType.Patient) {
   return request<ApiResonseType.PatientInfo[]>({
     path: '/api/Patient/GetPatientList',
     data,
     method: 'POST',
+    loading: true,
   })
 }
 

@@ -3,7 +3,7 @@ import RecordItem from './record-item.vue'
 import TransfusionInfoEdit from './transfusion-info-edit.vue'
 import { delTransfusion, getTransfusionList } from '@/utils/api'
 import type { ApiResonseType } from '@/utils/api.help'
-import { dateFormat } from '@/composables'
+import { dateTimeFormat } from '@/composables'
 const props = defineProps<{ id: string }>()
 const popup = ref<UniHelper.UniPopupProps>()
 const dataSet = ref<ApiResonseType.Transfusion[]>([])
@@ -86,10 +86,10 @@ onMounted(refreshList)
         </view>
         <view class="row m-t-2">
           <text class="patient-transfusion-record-text">
-            开始时间： {{ dateFormat(item.BeginTime) }}
+            开始时间： {{ dateTimeFormat(item.BeginTime) }}
           </text>
           <text v-if="!!item.EndTime" class="patient-transfusion-record-text">
-            结束时间：{{ dateFormat(item.EndTime) }}
+            结束时间：{{ dateTimeFormat(item.EndTime) }}
           </text>
           <uni-icons v-else type="spinner-cycle" size="22" class="animate-spin" />
         </view>
