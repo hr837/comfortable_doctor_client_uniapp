@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import dayJs from 'dayjs'
 import DrugInput from './drug-input.vue'
 import type { ApiRequestType, ApiResonseType } from '@/utils/api.help'
 import { addTransfusionRecord, getTransfusionInfo, updateTransfusionRecord } from '@/utils/api'
@@ -84,14 +83,10 @@ function onConfirm() {
     if (err)
       return
 
-    if (modelData.EndTime) {
-      const diff = dayJs(modelData.EndTime).diff(modelData.BeginTime)
-      modelData.PointTime = dayJs(diff).format('YYYY-MM-DD HH:mm:ss')
-    }
-    else {
-      modelData.PointTime = modelData.BeginTime
-    }
     modelData.AnesthesiaId = props.pid
+    if (!modelData.EndTime)
+      modelData.EndTime = null
+
     if (props.rid) {
       modelData.Id = props.rid
       updateTransfusionRecord(modelData).then(onSuccess)
@@ -125,13 +120,14 @@ onMounted(() => {
     modelData.DrugCode = data.DrugCode
     modelData.DrugName = data.DrugName
     modelData.DrugFlag = data.DrugFlag
-    modelData.EndTime = dateTimeFormat(data.EndTime)
     modelData.Id = data.Id
     modelData.Mode = data.Mode
     modelData.PointTime = dateTimeFormat(data.PointTime)
     modelData.Spect = data.Spect
     modelData.TypeCode = data.TypeCode
     modelData.Unit = data.Unit
+    if (data.EndTime)
+      modelData.EndTime = dateTimeFormat(data.EndTime)
   })
 })
 

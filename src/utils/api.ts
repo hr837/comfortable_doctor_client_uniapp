@@ -259,3 +259,13 @@ export function saveNarcoticResult(id: string, items: ApiRequestType.NarcoticIte
     loading: true,
   })
 }
+
+/** 更新节点信息 */
+export function updateState(data: ApiRequestType.FlowStateInfo) {
+  return request<boolean>({
+    path: '/api/Patient/UpdateState',
+    data,
+    method: 'POST',
+    loading: true,
+  })
+}

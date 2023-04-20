@@ -4,6 +4,7 @@ import PatientNarcoticDrugRecord from '@/pages/patient-detail/components/patient
 import PatientNarcoticResult from '@/pages/patient-detail/components/patient-narcotic-result.vue'
 import PatientTransfusionRecord from '@/pages/patient-detail/components/patient-transfusion-record.vue'
 import PatientVitalsignRecord from '@/pages/patient-detail/components/patient-vital-sign-record.vue'
+import PatientDetailStateTime from '@/pages/patient-detail/components/patient-detail-state-time.vue'
 import { getDrugList, getDrugUnitList, getDrugWayList, getMonitorItems } from '@/utils/api'
 import type { ApiRequestType, ApiResonseType, MonitorItem } from '@/utils/api.help'
 
@@ -13,6 +14,7 @@ export const ComponentSetting = [
   { label: '输液', name: 'patient-transfusion-record', component: PatientTransfusionRecord },
   { label: '生命体征', name: 'patient-vital-sign-record', component: PatientVitalsignRecord },
   { label: '麻醉小结', name: 'patient-narcotic-result', component: PatientNarcoticResult },
+  { label: '时间节点', name: 'patient-detail-state-time', component: PatientDetailStateTime },
 ]
 
 export const PatientDetailDict = {

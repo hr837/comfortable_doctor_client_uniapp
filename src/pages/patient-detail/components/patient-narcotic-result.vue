@@ -1,14 +1,12 @@
 <script lang="ts" setup>
 import dayjs from 'dayjs'
-import DoctorInput from './doctor-input.vue'
 import NarcoticResultTempalteSelect from './narcotic-result-tempalte-select.vue'
-import type { ApiResonseType } from '@/utils/api.help'
+import DoctorSign from './doctor-sign.vue'
 import { PatientDetailDict, narcoticItemsConvert } from '@/composables/patient-narcotic-detail.composable'
-import { getUserSign, login, saveNarcoticResult } from '@/utils/api'
+import { saveNarcoticResult } from '@/utils/api'
+
 const props = defineProps<{ id: string }>()
-const popupInputRef = ref<UniHelper.UniPopupProps>()
 const popupSelectRef = ref<UniHelper.UniPopupProps>()
-const popupTitle = ref('签名')
 // true手术室情况模板 false 恢复室情况模板
 const templateOperate = ref(true)
 const templateDialogTitle = computed(() => templateOperate.value ? '术中特殊情况模板选择' : '恢复室内容情况模板')
@@ -86,6 +84,7 @@ const PADSCount = computed(() => modelData.vitalsignState + modelData.activeStat
 const showSpecific = computed(() => modelData.specific === '有')
 const showRecoverySpecific = computed(() => modelData.recoverySpecific === '有')
 const showPassToText = computed(() => modelData.passTo === '其它')
+const showCanLeaveText = computed(() => modelData.canLeave === '可')
 
 /**
  * 打开模板选择弹窗
@@ -110,58 +109,27 @@ function onTempalteClose() {
   popupSelectRef.value?.close()
 }
 
-/** 选中的医生 */
-const verifyInfo = reactive({
-  key: '',
-  userName: '',
-  loginName: '',
-})
+const doctorKey = ref('')
 
-/** 选中医生后密码验证 */
-function onDoctorSelect(key: string, user?: ApiResonseType.UserInfo) {
-  verifyInfo.key = key
-  if (!user)
-    return
-  verifyInfo.userName = user.UserName
-  verifyInfo.loginName = user.LoginName
-  popupTitle.value = `签名-${user.UserName}【${user.LoginName}】`
-  popupInputRef.value?.open()
-}
-
-/** 校验密码后获取签名 */
-function dialogInputConfirm(pwd: any) {
-  login({
-    LoginName: verifyInfo.loginName,
-    Password: pwd,
-  }).then(() => getUserSign(verifyInfo.loginName).then(setSignInfo)).catch(() => {
-    uni.showToast({
-      title: '验证失败',
-      icon: 'none',
-    })
-  })
-}
-
-function setSignInfo(sign: any) {
+function setSignInfo(data?: any) {
   const dateStr = dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss')
-  switch (verifyInfo.key) {
+  switch (doctorKey.value) {
     case 'narcoticDoctor':
-      modelData.narcoticDoctorName = verifyInfo.userName
-      modelData.narcoticDoctorSign = sign
-      modelData.narcoticDoctorDate = dateStr
+      modelData.narcoticDoctorName = data?.userName ?? ''
+      modelData.narcoticDoctorSign = data?.userSign ?? ''
+      modelData.narcoticDoctorDate = data ? dateStr : ''
       break
     case 'narcoticDoctor2':
-      modelData.narcoticDoctor2Name = verifyInfo.userName
-      modelData.narcoticDoctor2Sign = sign
-      modelData.narcoticDoctor2Date = dateStr
+      modelData.narcoticDoctor2Name = data?.userName ?? ''
+      modelData.narcoticDoctor2Sign = data?.userSign ?? ''
+      modelData.narcoticDoctor2Date = data ? dateStr : ''
       break
     default:
-      modelData.nurseName = verifyInfo.userName
-      modelData.nurseSign = sign
-      modelData.nurseDate = dateStr
+      modelData.nurseName = data?.userName ?? ''
+      modelData.nurseSign = data?.userSign ?? ''
+      modelData.nurseDate = data ? dateStr : ''
       break
   }
-
-  verifyInfo.key = ''
 }
 
 function onSubmit() {
@@ -201,13 +169,6 @@ function saveData() {
 </script>
 
 <template>
-  <!-- 密码弹窗 -->
-  <uni-popup ref="popupInputRef" type="dialog">
-    <uni-popup-dialog
-      ref="inputDialogRef" mode="input" :title="popupTitle" input-type="password" value=""
-      placeholder="请输入密码验证" @confirm="dialogInputConfirm"
-    />
-  </uni-popup>
   <!-- 模板弹窗 -->
   <uni-popup ref="popupSelectRef" type="dialog">
     <NarcoticResultTempalteSelect
@@ -224,7 +185,10 @@ function saveData() {
         </button>
       </template>
     </uni-section>
-    <uni-forms ref="formRef" :rules="rules" :model="modelData" label-width="100px" label-align="right" class="patient-narcotic-result-form">
+    <uni-forms
+      ref="formRef" :rules="rules" :model="modelData" label-width="100px" label-align="right"
+      class="patient-narcotic-result-form"
+    >
       <uni-forms-item label="术中特殊情况" class="no-margin">
         <uni-data-checkbox v-model="modelData.specific" :localdata="PatientDetailDict.has" mode="button" />
       </uni-forms-item>
@@ -268,16 +232,18 @@ function saveData() {
         </div>
       </uni-forms-item>
 
-      <uni-forms-item label="麻醉医师" class="form-item-doctor" name="narcoticDoctorName">
-        <view class="row">
-          <DoctorInput
-            role-code="Anesthetist" class="form-item-doctor-name"
-            @selected="d => onDoctorSelect('narcoticDoctor', d)"
-          />
-          <image src="/static/sign.png" alt="sign" class="form-item-doctor-img" />
-          <uni-datetime-picker v-model="modelData.narcoticDoctorDate" type="datetime" class="form-item-doctor-date" />
-        </view>
-      </uni-forms-item>
+      <uni-row>
+        <uni-col :span="10">
+          <uni-forms-item label="麻醉医师" class="form-item-doctor" name="narcoticDoctorName">
+            <DoctorSign role-code="Anesthetist" @click="() => doctorKey = 'narcoticDoctor'" @signed="setSignInfo" />
+          </uni-forms-item>
+        </uni-col>
+        <uni-col :span="14">
+          <uni-forms-item label="时间" class="form-item-doctor" name="narcoticDoctorDate">
+            <uni-datetime-picker v-model="modelData.narcoticDoctorDate" type="datetime" class="form-item-doctor-date" />
+          </uni-forms-item>
+        </uni-col>
+      </uni-row>
 
       <uni-forms-item label="恢复室内情况" name="recoverySpecific" class="no-margin">
         <uni-data-checkbox v-model="modelData.recoverySpecific" :localdata="PatientDetailDict.has" mode="button" />
@@ -311,72 +277,68 @@ function saveData() {
         <uni-data-checkbox v-model="modelData.bleedingState" :localdata="PatientDetailDict.bleedingState" mode="button" />
       </uni-forms-item>
       <uni-row>
-        <uni-col :span="12">
-          <uni-forms-item label="PDSA评分" class="no-margin">
+        <uni-col :span="10">
+          <uni-forms-item label="PDSA评分">
             <view class="leading-8">
               {{ PADSCount }} 分
             </view>
           </uni-forms-item>
         </uni-col>
-        <uni-col :span="12">
-          <uni-forms-item label="可否出科" class="no-margin">
+        <uni-col :span="14">
+          <uni-forms-item label="可否出科">
             <uni-data-checkbox v-model="modelData.canLeave" :localdata="PatientDetailDict.canLeave" mode="button" />
           </uni-forms-item>
         </uni-col>
       </uni-row>
 
-      <view class="p-b-4 font-600 text-center">
+      <view v-if="showCanLeaveText" class="p-b-10 font-600 text-center">
         经复苏后，患者已达出室标准，麻醉医师已向患者及家属交代麻醉后注意事项，家属知晓并理解。
       </view>
 
-      <uni-forms-item label="麻醉医师" class="form-item-doctor" name="narcoticDoctor2Name">
-        <view class="row">
-          <DoctorInput
-            role-code="Anesthetist" class="form-item-doctor-name"
-            @selected="d => onDoctorSelect('narcoticDoctor2', d)"
-          />
-          <image src="/static/sign.png" alt="sign" class="form-item-doctor-img" />
-          <uni-datetime-picker v-model="modelData.narcoticDoctor2Date" type="datetime" class="form-item-doctor-date" />
-        </view>
-      </uni-forms-item>
+      <uni-row>
+        <uni-col :span="10">
+          <uni-forms-item label="麻醉医师" class="form-item-doctor" name="narcoticDoctor2Name">
+            <DoctorSign role-code="Anesthetist" @click="() => doctorKey = 'narcoticDoctor2'" @signed="setSignInfo" />
+          </uni-forms-item>
+        </uni-col>
+        <uni-col :span="14">
+          <uni-forms-item label="时间" class="form-item-doctor" name="narcoticDoctorDate">
+            <uni-datetime-picker v-model="modelData.narcoticDoctor2Date" type="datetime" class="form-item-doctor-date" />
+          </uni-forms-item>
+        </uni-col>
+      </uni-row>
 
-      <uni-forms-item label="恢复室护士" class="form-item-doctor" name="nurseName">
-        <view class="row">
-          <DoctorInput role-code="OpNurse" class="form-item-doctor-name" @selected="d => onDoctorSelect('nurse', d)" />
-          <image src="/static/sign.png" alt="sign" class="form-item-doctor-img" />
-          <uni-datetime-picker v-model="modelData.nurseDate" type="datetime" class="form-item-doctor-date" />
-        </view>
-      </uni-forms-item>
+      <uni-row>
+        <uni-col :span="10">
+          <uni-forms-item label="恢复室护士" class="form-item-doctor" name="nurseName">
+            <DoctorSign role-code="Anesthetist" @click="() => doctorKey = 'nurse'" @signed="setSignInfo" />
+          </uni-forms-item>
+        </uni-col>
+        <uni-col :span="14">
+          <uni-forms-item label="时间" class="form-item-doctor" name="narcoticDoctorDate">
+            <uni-datetime-picker v-model="modelData.nurseDate" type="datetime" class="form-item-doctor-date" />
+          </uni-forms-item>
+        </uni-col>
+      </uni-row>
     </uni-forms>
   </view>
 </template>
 
 <style lang="scss" scoped>
 .component.patient-narcotic-result {
-  .patient-narcotic-result{
-    &-header{
+  .patient-narcotic-result {
+    &-header {
       @apply fixed w-full z-1;
     }
-    &-form{
+
+    &-form {
       @apply p-4 p-t-60px;
     }
   }
 
-  .form-item-doctor {
-    position: relative;
-
-    &-img {
-      @apply: w-130px h-35px p-x-4;
-    }
-
-    &-date {
-      width: 310px;
-      flex: unset;
-
-      ::v-deep .uni-date__x-input {
-        height: 32px;
-      }
-    }
+  .form-item-doctor-date {
+    width: 310px;
+    flex: unset;
   }
 
   .no-flex {

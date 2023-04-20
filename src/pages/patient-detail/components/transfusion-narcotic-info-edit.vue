@@ -87,6 +87,8 @@ function onConfirm() {
       return
 
     modelData.AnesthesiaId = props.pid
+    if (!modelData.EndTime)
+      modelData.EndTime = null
     if (props.rid) {
       modelData.Id = props.rid
       updateTransfusionRecord(modelData).then(onSuccess)
@@ -120,13 +122,14 @@ onMounted(() => {
     modelData.DrugCode = data.DrugCode
     modelData.DrugName = data.DrugName
     modelData.DrugFlag = data.DrugFlag
-    modelData.EndTime = dateTimeFormat(data.EndTime)
     modelData.Id = data.Id
     modelData.Mode = data.Mode
     modelData.PointTime = dateTimeFormat(data.PointTime)
     modelData.Spect = data.Spect
     modelData.TypeCode = data.TypeCode
     modelData.Unit = data.Unit
+    if (data.EndTime)
+      modelData.EndTime = dateTimeFormat(data.EndTime)
   })
 })
 

@@ -72,7 +72,7 @@ export namespace ApiRequestType {
     /**
      * 持续用药结束时间，单次用药时该值为Min
      */
-    EndTime: string
+    EndTime: string | null
     /**
      * 用药方式
      */
@@ -141,6 +141,22 @@ export namespace ApiRequestType {
      * 项目值
      */
     ItemValue: string | boolean
+  }
+
+  /** 流程节点信息 */
+  export interface FlowStateInfo {
+    /**
+     * 手术患者ID
+     */
+    AnesthesiaId: string
+    /**
+     * 状态中文名称，手术开始时间、手术结束时间、麻醉开始时间、麻醉结束时间、插管时间、拔管时间、入室时间、出室时间、入恢复室时间、出恢复室时间
+     */
+    StateName: string
+    /**
+     * 时间
+     */
+    StateTime: string
   }
 }
 
