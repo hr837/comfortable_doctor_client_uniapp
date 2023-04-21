@@ -17,7 +17,12 @@ const pageData = $ref({
 onLoad((query) => {
   if (query === undefined)
     return
-  const { name, sex, age, id } = query
+
+  const name = decodeURIComponent(query.name)
+  const sex = decodeURIComponent(query.sex)
+  const age = decodeURIComponent(query.age)
+  const id = decodeURIComponent(query.id)
+
   const title = `${name} ${sex} ${age}`
   pageData.id = id
   pageQueryData = {

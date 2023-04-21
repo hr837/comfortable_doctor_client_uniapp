@@ -18,10 +18,6 @@ const showDoctorSelect = ref(false)
 const popupTitle = ref('签名')
 const popupPwdRef = ref<UniHelper.UniPopupProps>()
 
-onBeforeUnmount(() => {
-  URL.revokeObjectURL(imageSrc.value)
-})
-
 const currentUser = reactive({
   userCode: '',
   userName: '',
@@ -53,8 +49,8 @@ function dialogInputConfirm(pwd: any) {
 
 function onSigned(data: ArrayBuffer) {
   currentUser.userSign = data as any
-  const blobData = new Blob([data], { type: 'image/*' })
-  imageSrc.value = URL.createObjectURL(blobData)
+  const baseStr = uni.arrayBufferToBase64(data)
+  imageSrc.value = `data:image/*;base64,${baseStr}`
   // 隐藏用户选择框
   showDoctorSelect.value = false
   emits('signed', currentUser)
@@ -73,10 +69,8 @@ function onImageClick() {
         if (!confirm) {
           showDoctorSelect.value = true
           emits('signed', null)
-          if (imageSrc.value !== DEFAULT_SRC) {
-            URL.revokeObjectURL(imageSrc.value)
+          if (imageSrc.value !== DEFAULT_SRC)
             imageSrc.value = '/static/sign.png'
-          }
         }
         else {
           onUserSelectd(uni.getStorageSync(STORE_KEY_USER))

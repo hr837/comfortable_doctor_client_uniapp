@@ -3,32 +3,18 @@ import { updateState } from '@/utils/api'
 import type { ApiRequestType } from '@/utils/api.help'
 const props = defineProps<{ id: string }>()
 
-const list = ref([{
-  title: '入室时间',
-  desc: '-',
-}, {
-  title: '麻醉开始',
-  desc: '-',
-}, {
-  title: '手术开始',
-  desc: '-',
-}, {
-  title: '手术结束',
-  desc: '-',
-},
-{
-  title: '麻醉结束',
-  desc: '-',
-}, {
-  title: '出室时间',
-  desc: '-',
-}, {
-  title: '入PACU',
-  desc: '-',
-}, {
-  title: '出PACU',
-  desc: '-',
-}])
+const list = ref([
+  { title: '入室时间', desc: '-' },
+  { title: '插管时间', desc: '-' },
+  { title: '麻醉开始时间', desc: '-' },
+  { title: '手术开始时间', desc: '-' },
+  { title: '手术结束时间', desc: '-' },
+  { title: '麻醉结束时间', desc: '-' },
+  { title: '拔管时间', desc: '-' },
+  { title: '出室时间', desc: '-' },
+  { title: '入恢复室时间', desc: '-' },
+  { title: '出恢复室时间', desc: '-' },
+])
 
 const localdata = computed<UniHelper.UniDataSelectLocaldata[]>(() => list.value.map(x => ({
   text: x.title,
@@ -60,7 +46,10 @@ function onSave() {
 
   modelData.AnesthesiaId = props.id
 
-  updateState(modelData).then(data => data && changeList()).catch(() => {
+  updateState(modelData).then((data) => {
+    if (data)
+      changeList()
+  }).catch(() => {
     uni.showToast({
       title: '保存失败，请稍后重试',
       icon: 'none',
@@ -82,42 +71,55 @@ function changeList() {
     <uni-section title="时间节点" type="line">
       <template #right>
         <view class="patient-detail-state-time-form row">
-          <uni-data-select v-model="modelData.StateName" class="patient-detail-state-time-form-state" :localdata="localdata" label="节点" />
-          <uni-datetime-picker v-model="modelData.StateTime" class="patient-detail-state-time-form-time" type="datetime" placeholder="请选择节点完成时间" />
+          <uni-data-select
+            v-model="modelData.StateName" class="patient-detail-state-time-form-state"
+            :localdata="localdata" label="节点"
+          />
+          <uni-datetime-picker
+            v-model="modelData.StateTime" class="patient-detail-state-time-form-time" type="datetime"
+            placeholder="请选择节点完成时间"
+          />
           <button size="mini" type="primary" @click="onSave">
             保存
           </button>
         </view>
       </template>
     </uni-section>
-    <uni-steps class="patient-detail-state-time-steps" :options="list" active-color="#007AFF" :active="active" direction="column" />
+    <uni-steps
+      class="patient-detail-state-time-steps" :options="list" active-color="#007AFF" :active="active"
+      direction="column"
+    />
   </view>
 </template>
 
 <style lang="scss" scoped>
-.patient-detail-state-time-form{
-  &-state{
+.patient-detail-state-time-form {
+  &-state {
     width: 180px;
   }
-  &-time{
+
+  &-time {
     width: 220px;
     flex: unset;
     margin-right: 8px;
-    ::v-deep .uni-date-editor--x{
+
+    ::v-deep .uni-date-editor--x {
       height: 35px;
-      .uni-date__x-input{
+
+      .uni-date__x-input {
         height: auto;
       }
     }
   }
 }
 
-.patient-detail-state-time-steps{
+.patient-detail-state-time-steps {
   padding: 32px;
+
   // margin: 30px 0 0 50px;
   // width: 400px;
-  ::v-deep .uni-steps__column{
-    .uni-steps__column-text{
+  ::v-deep .uni-steps__column {
+    .uni-steps__column-text {
       padding: 12px 0;
     }
   }

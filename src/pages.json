@@ -44,7 +44,7 @@
     {
       "path": "pages/patient-detail/patient-narcotic-detail",
       "style": {
-        "navigationBarTitleText": "麻醉详情",
+        "navigationBarTitleText": "麻醉详情"
         // "titleNView": {
         //   "buttons": [
         //     {
