@@ -81,20 +81,17 @@ function submitForm() {
     <view class="login-form-container">
       <uni-forms ref="formRef" class="login-form" :model="loginModel" :rules="rules">
         <uni-forms-item name="LoginName">
-          <uni-easyinput v-model="loginModel.LoginName" prefix-icon="person" placeholder="账号" />
+          <uni-easyinput v-model="loginModel.LoginName" prefix-icon="person" placeholder="账号" confirm-type="next" />
         </uni-forms-item>
         <uni-forms-item name="Password">
-          <uni-easyinput v-model="loginModel.Password" prefix-icon="locked" type="password" placeholder="密码" />
+          <uni-easyinput ref="inputPwdRef" v-model="loginModel.Password" prefix-icon="locked" type="password" placeholder="密码" />
         </uni-forms-item>
         <uni-forms-item name="RoomCode">
-          <uni-data-select
-            v-model="loginModel.RoomCode" class="login-form-select" :localdata="roomList"
-            placeholder="请选择手术间"
-          />
+          <uni-data-select v-model="loginModel.RoomCode" class="login-form-select" :localdata="roomList" placeholder="请选择手术间" />
         </uni-forms-item>
       </uni-forms>
 
-      <button type="primary" @click="submitForm">
+      <button type="primary" class="login-submit" @click="submitForm">
         立即登录
       </button>
     </view>
@@ -109,8 +106,8 @@ function submitForm() {
   @apply absolute top-0 right-0 bottom-0 left-0 items-center;
 
   .login-logo {
-    height: 300px;
-    width: 350px;
+    height: 400px;
+    width: 450px;
   }
 
   .login-setting {
@@ -129,6 +126,10 @@ function submitForm() {
     ::v-deep .uni-select {
       background-color: #fff;
     }
+  }
+
+  .login-submit{
+    padding: 12px;
   }
 }
 </style>

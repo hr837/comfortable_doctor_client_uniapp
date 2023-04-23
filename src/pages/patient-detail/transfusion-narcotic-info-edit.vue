@@ -1,18 +1,17 @@
 <script lang="ts" setup>
-import DrugInput from './drug-input.vue'
+import DrugInput from './components/drug-input.vue'
 import type { ApiRequestType, ApiResonseType } from '@/utils/api.help'
 import { addTransfusionRecord, getTransfusionInfo, updateTransfusionRecord } from '@/utils/api'
 import { PatientDetailDict, drugUnitList, drugUseModeList } from '@/composables/patient-narcotic-detail.composable'
 import { dateTimeFormat } from '@/composables'
 
 const props = defineProps<{
-  /** 病人ID */
-  pid: string
   /** 输液/麻醉用药ID */
   rid?: string
 }>()
-
 const emits = defineEmits(['close', 'success'])
+
+const pid = inject<string>('id')
 
 const modelData = reactive<ApiRequestType.Transfusion>({
   DrugName: '',
@@ -86,7 +85,7 @@ function onConfirm() {
     if (err)
       return
 
-    modelData.AnesthesiaId = props.pid
+    modelData.AnesthesiaId = pid!
     if (!modelData.EndTime)
       modelData.EndTime = null
     if (props.rid) {

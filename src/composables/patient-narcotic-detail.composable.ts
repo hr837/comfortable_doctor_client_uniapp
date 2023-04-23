@@ -1,20 +1,13 @@
 import { dateFormat } from '.'
-import PatientBaseInfoForm from '@/pages/patient-detail/components/patient-base-info-form.vue'
-import PatientNarcoticDrugRecord from '@/pages/patient-detail/components/patient-narcotic-drug-record.vue'
-import PatientNarcoticResult from '@/pages/patient-detail/components/patient-narcotic-result.vue'
-import PatientTransfusionRecord from '@/pages/patient-detail/components/patient-transfusion-record.vue'
-import PatientVitalsignRecord from '@/pages/patient-detail/components/patient-vital-sign-record.vue'
-import PatientDetailStateTime from '@/pages/patient-detail/components/patient-detail-state-time.vue'
 import { getDrugList, getDrugUnitList, getDrugWayList, getMonitorItems } from '@/utils/api'
 import type { ApiRequestType, ApiResonseType, MonitorItem } from '@/utils/api.help'
 
 export const ComponentSetting = [
-  { label: '基本信息', name: 'patient-base-info-form', component: PatientBaseInfoForm },
-  { label: '麻醉用药', name: 'patient-narcotic-drug-record', component: PatientNarcoticDrugRecord },
-  { label: '输液', name: 'patient-transfusion-record', component: PatientTransfusionRecord },
-  { label: '生命体征', name: 'patient-vital-sign-record', component: PatientVitalsignRecord },
-  { label: '麻醉小结', name: 'patient-narcotic-result', component: PatientNarcoticResult },
-  { label: '时间节点', name: 'patient-detail-state-time', component: PatientDetailStateTime },
+  { label: '基本信息', name: 'patient-base-info-form' },
+  { label: '麻醉用药', name: 'patient-narcotic-drug-record' },
+  { label: '输液', name: 'patient-transfusion-record' },
+  { label: '生命体征', name: 'patient-vital-sign-record' },
+  { label: '麻醉小结', name: 'patient-narcotic-result' },
 ]
 
 export const PatientDetailDict = {

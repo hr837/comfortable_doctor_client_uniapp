@@ -5,13 +5,14 @@ import { addMonitorRecord, updateMonitorRecord } from '@/utils/api'
 import { monitorItems } from '@/composables/patient-narcotic-detail.composable'
 
 const props = defineProps<{
-  /** 病人ID */
-  pid: string
+
   /** 检测记录ID */
   data?: ApiResonseType.MonitorInfo
 }>()
 
 const emits = defineEmits(['close', 'success'])
+
+const pid = inject<string>('id')
 
 interface ModelType {
   RecordTime: string
@@ -48,7 +49,7 @@ function onConfirm() {
       return
 
     const obj: ApiRequestType.MonitorInfo = {
-      AnesthesiaId: props.pid,
+      AnesthesiaId: pid!,
       RecordTime: modelData.RecordTime,
       ItemValues: [],
     }
@@ -85,7 +86,7 @@ function onClose() {
 }
 
 onMounted(() => {
-  modelData.AnesthesiaId = props.pid
+  modelData.AnesthesiaId = pid!
   nextTick(() => {
     if (!props.data) {
       modelData.RecordTime = getNextTime()

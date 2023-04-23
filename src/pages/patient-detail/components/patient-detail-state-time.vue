@@ -1,54 +1,34 @@
 <script lang="ts" setup>
-import { updateState } from '@/utils/api'
-import type { ApiRequestType } from '@/utils/api.help'
-const props = defineProps<{ id: string }>()
+import type { Ref } from 'vue'
+import StateTimePicker from './state-time-picker.vue'
+import { getPatientDetail, updateState } from '@/utils/api'
+const id = inject<Ref<string>>('id')
 
-const list = ref([
-  { title: '入室时间', desc: '-' },
-  { title: '插管时间', desc: '-' },
-  { title: '麻醉开始时间', desc: '-' },
-  { title: '手术开始时间', desc: '-' },
-  { title: '手术结束时间', desc: '-' },
-  { title: '麻醉结束时间', desc: '-' },
-  { title: '拔管时间', desc: '-' },
-  { title: '出室时间', desc: '-' },
-  { title: '入恢复室时间', desc: '-' },
-  { title: '出恢复室时间', desc: '-' },
-])
+const list = [
+  { title: '入室时间', label: '入室时间', key: 'AccessTime' },
+  { title: '麻醉开始时间', label: '麻醉开始', key: 'AnesthesiaBeginTime' },
+  { title: '麻醉结束时间', label: '麻醉结束', key: 'AnesthesiaEndTime' },
+  { title: '手术开始时间', label: '手术开始', key: 'OperationBeginTime' },
+  { title: '手术结束时间', label: '手术结束', key: 'OperationEndTime' },
+  { title: '出室时间', label: '出室时间', key: 'LeaveTime' },
+  { title: '入恢复室时间', label: '入PACU', key: 'AccessPacuTime' },
+  { title: '出恢复室时间', label: '出PACU', key: 'LeavePacuTime' },
+]
 
-const localdata = computed<UniHelper.UniDataSelectLocaldata[]>(() => list.value.map(x => ({
-  text: x.title,
-  value: x.title,
-  disable: false,
-})))
-
-const modelData = reactive<ApiRequestType.FlowStateInfo>({
-  StateName: '',
-  StateTime: '',
-  AnesthesiaId: '',
+const modelData = reactive<any>({})
+list.forEach((item) => {
+  modelData[item.key] = ''
 })
 
-const active = ref(-1)
-
-function onSave() {
-  if (!modelData.StateName) {
-    return uni.showToast({
-      title: '请选择节点',
-      icon: 'none',
-    })
-  }
-  if (!modelData.StateTime) {
-    return uni.showToast({
-      title: '请选择节点完成时间',
-      icon: 'none',
-    })
-  }
-
-  modelData.AnesthesiaId = props.id
-
-  updateState(modelData).then((data) => {
-    if (data)
-      changeList()
+function onChange(key: string, val: string) {
+  modelData[key] = val
+  const item = list.find(x => x.key === key)
+  if (!item)
+    return
+  updateState({
+    StateName: item.title,
+    StateTime: val,
+    AnesthesiaId: id!.value,
   }).catch(() => {
     uni.showToast({
       title: '保存失败，请稍后重试',
@@ -57,70 +37,43 @@ function onSave() {
   })
 }
 
-function changeList() {
-  const index = list.value.findIndex(x => x.title === modelData.StateName)
-  if (index > -1) {
-    list.value[index].desc = modelData.StateTime
-    active.value = list.value.findLastIndex(x => x.desc !== '-')
-  }
-}
+onMounted(() => {
+  getPatientDetail(id!.value).then((data) => {
+    modelData.AccessPacuTime = data.AccessPacuTime
+    modelData.AnesthesiaBeginTime = data.AnesthesiaBeginTime
+    modelData.LeavePacuTime = data.LeavePacuTime
+    modelData.LeaveTime = data.LeaveTime
+    modelData.AccessTime = data.AccessTime
+    modelData.AnesthesiaEndTime = data.AnesthesiaEndTime
+    modelData.OperationBeginTime = data.OperationBeginTime
+    modelData.OperationEndTime = data.OperationEndTime
+  })
+})
 </script>
 
 <template>
   <view class="component patient-detail-state-time">
-    <uni-section title="时间节点" type="line">
-      <template #right>
-        <view class="patient-detail-state-time-form row">
-          <uni-data-select
-            v-model="modelData.StateName" class="patient-detail-state-time-form-state"
-            :localdata="localdata" label="节点"
-          />
-          <uni-datetime-picker
-            v-model="modelData.StateTime" class="patient-detail-state-time-form-time" type="datetime"
-            placeholder="请选择节点完成时间"
-          />
-          <button size="mini" type="primary" @click="onSave">
-            保存
-          </button>
-        </view>
-      </template>
-    </uni-section>
-    <uni-steps
-      class="patient-detail-state-time-steps" :options="list" active-color="#007AFF" :active="active"
-      direction="column"
-    />
+    <uni-forms :model="modelData" label-width="70px">
+      <uni-row>
+        <uni-col v-for="(item) of list" :key="item.key" :span="6">
+          <uni-forms-item :label="item.label">
+            <StateTimePicker :date="modelData[item.key]" @change="val => onChange(item.key, val)" />
+          </uni-forms-item>
+        </uni-col>
+      </uni-row>
+    </uni-forms>
   </view>
 </template>
 
 <style lang="scss" scoped>
-.patient-detail-state-time-form {
-  &-state {
-    width: 180px;
-  }
+.patient-detail-state-time {
+  padding-left: 8px;
 
-  &-time {
-    width: 220px;
-    flex: unset;
-    margin-right: 8px;
+  .uni-forms-item {
+    margin-bottom: 4px !important;
 
-    ::v-deep .uni-date-editor--x {
-      height: 35px;
-
-      .uni-date__x-input {
-        height: auto;
-      }
-    }
-  }
-}
-
-.patient-detail-state-time-steps {
-  padding: 32px;
-
-  // margin: 30px 0 0 50px;
-  // width: 400px;
-  ::v-deep .uni-steps__column {
-    .uni-steps__column-text {
-      padding: 12px 0;
+    ::v-deep .uni-forms-item__content {
+      padding-right: 12px;
     }
   }
 }

@@ -25,16 +25,18 @@ export const GridMenuSetting: GridMenuInfo[] = [
   },
 ]
 
+export type DetailPageQueryType = Pick<ApiResonseType.PatientInfo, 'PatientName' | 'PatientSex' | 'PatientAge' | 'Id'>
+
 /**
  * 跳转到病人麻醉详情页面
  * @param data 含有病人基本信息的数据
  */
 export function goToNarcoticDetailPage(data: ApiResonseType.PatientInfo) {
-  const query = {
-    name: data.PatientName,
-    age: data.PatientAge,
-    sex: data.PatientSex,
-    id: data.Id,
+  const query: DetailPageQueryType = {
+    PatientName: data.PatientName,
+    PatientSex: data.PatientAge,
+    PatientAge: data.PatientSex,
+    Id: data.Id,
   }
   const url = queryString.stringifyUrl({
     url: '/pages/patient-detail/patient-narcotic-detail',

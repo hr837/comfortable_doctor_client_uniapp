@@ -1,9 +1,9 @@
 <script lang="ts" setup>
+import type { Ref } from 'vue'
 import { PatientDetailDict } from '@/composables/patient-narcotic-detail.composable'
 import type { ApiResonseType, ItemInfo } from '@/utils/api.help'
 import { getPatientDetail } from '@/utils/api'
 import { dateFormat } from '@/composables'
-const props = defineProps<{ id: string }>()
 const patientInfo = reactive<ApiResonseType.PatientDetailInfo>({
   AccessPacuTime: '',
   AccessTime: '',
@@ -63,8 +63,9 @@ const patientInfo = reactive<ApiResonseType.PatientDetailInfo>({
   SubscribeId: '',
 })
 const deptList = ref<UniHelper.UniDataSelectLocaldata[]>([])
+const id = inject<Ref<string>>('id')
 
-const refreshPatientInfo = () => getPatientDetail(props.id).then((data) => {
+const refreshPatientInfo = () => getPatientDetail(id!.value).then((data) => {
   patientInfo.AccessPacuTime = data.AccessPacuTime
   patientInfo.AccessTime = data.AccessTime
   patientInfo.AnesthesiaBeginTime = data.AnesthesiaBeginTime
@@ -146,99 +147,97 @@ onMounted(() => {
     </uni-section>
     <uni-forms ref="formRef" label-width="100px" label-align="right" class="p-4 p-t-0">
       <uni-row>
-        <uni-col :xs="24" :sm="12" :md="8">
+        <uni-col :xs="24" :sm="12">
           <uni-forms-item label="姓名">
             <uni-easyinput :value="patientInfo.PatientName" disabled />
           </uni-forms-item>
         </uni-col>
-        <uni-col :xs="24" :sm="12" :md="8">
+        <uni-col :xs="24" :sm="12">
           <uni-forms-item label="就诊号">
             <uni-easyinput type="number" :value="patientInfo.PatientNumber" disabled />
           </uni-forms-item>
         </uni-col>
 
-        <uni-col :xs="24" :sm="12" :md="8">
+        <uni-col :xs="24" :sm="12">
           <uni-forms-item label="性别">
             <uni-easyinput :value="patientInfo.PatientSex" disabled />
           </uni-forms-item>
         </uni-col>
-        <uni-col :xs="24" :sm="12" :md="8">
+        <uni-col :xs="24" :sm="12">
           <uni-forms-item label="身份证号">
             <uni-easyinput type="idcard" :value="patientInfo.PatientIdCard" disabled />
           </uni-forms-item>
         </uni-col>
 
-        <uni-col :xs="24" :sm="12" :md="8">
+        <uni-col :xs="24" :sm="12">
           <uni-forms-item label="出生日期">
             <uni-datetime-picker v-model="patientInfo.PatientBirthday" type="date" disabled />
           </uni-forms-item>
         </uni-col>
-        <uni-col :xs="24" :sm="12" :md="8">
+        <uni-col :xs="24" :sm="12">
           <uni-forms-item label="年龄">
             <uni-easyinput :value="patientInfo.PatientAge" disabled />
           </uni-forms-item>
         </uni-col>
 
-        <uni-col :xs="24" :sm="12" :md="8">
+        <uni-col :xs="24" :sm="12">
           <uni-forms-item label="患者来源">
             <uni-data-select v-model="patientInfo.PatientSource" :localdata="PatientDetailDict.source" disabled />
           </uni-forms-item>
         </uni-col>
-        <uni-col :xs="24" :sm="12" :md="8">
+        <uni-col :xs="24" :sm="12">
           <uni-forms-item label="科室">
             <uni-data-select v-model="patientInfo.PatientDepartmentCode" :localdata="deptList" disabled />
           </uni-forms-item>
         </uni-col>
 
-        <uni-col :xs="24" :sm="12" :md="8">
+        <uni-col :xs="24" :sm="12">
           <uni-forms-item label="病区">
             <uni-easyinput :value="patientInfo.PatientWardName" disabled />
           </uni-forms-item>
         </uni-col>
-        <uni-col :xs="24" :sm="12" :md="8">
+        <uni-col :xs="24" :sm="12">
           <uni-forms-item label="床号">
             <uni-easyinput :value="patientInfo.PatientBedCode" disabled />
           </uni-forms-item>
         </uni-col>
 
-        <uni-col :xs="24" :sm="12" :md="8">
+        <uni-col :xs="24" :sm="12">
           <uni-forms-item label="体重">
             <uni-easyinput type="digit" disabled />
           </uni-forms-item>
         </uni-col>
-        <uni-col :xs="24" :sm="12" :md="8">
+        <uni-col :xs="24" :sm="12">
           <uni-forms-item label="身高">
             <uni-easyinput type="number" disabled />
           </uni-forms-item>
         </uni-col>
 
-        <uni-col :xs="24" :sm="12" :md="8">
+        <uni-col :xs="24" :sm="12">
           <uni-forms-item label="血型">
             <uni-data-select :localdata="PatientDetailDict.bloodType" disabled />
           </uni-forms-item>
         </uni-col>
-        <uni-col :xs="24" :sm="12" :md="8">
+        <uni-col :xs="24" :sm="12">
           <uni-forms-item label="Rh血型">
             <uni-data-select :localdata="PatientDetailDict.bolldRH" disabled />
           </uni-forms-item>
         </uni-col>
 
-        <uni-col :xs="24" :sm="12" :md="8">
+        <uni-col :xs="24" :sm="12">
           <uni-forms-item label="申请日期">
             <uni-datetime-picker v-model="patientInfo.SubscribeDate" type="date" disabled />
           </uni-forms-item>
         </uni-col>
-        <uni-col :xs="24" :sm="12" :md="8">
+        <uni-col :xs="24" :sm="12">
           <uni-forms-item label="手术操作">
             <uni-data-select :localdata="PatientDetailDict.operation" :value="patientInfo.OperationCode" disabled />
           </uni-forms-item>
         </uni-col>
-        <uni-col :xs="24" :sm="12" :md="8">
-          <uni-forms-item label="特殊感染">
-            <uni-easyinput :value="patientInfo.SpecialInfect" disabled />
-          </uni-forms-item>
-        </uni-col>
       </uni-row>
+      <uni-forms-item label="特殊感染">
+        <uni-easyinput :value="patientInfo.SpecialInfect" disabled />
+      </uni-forms-item>
       <uni-forms-item label="初步诊断">
         <uni-easyinput type="textarea" :value="patientInfo.DiagnosisName" disabled />
       </uni-forms-item>

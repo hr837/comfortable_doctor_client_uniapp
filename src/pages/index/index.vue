@@ -7,15 +7,18 @@ const goToLogin = () =>
     url: '/pages/login/login',
   })
 
-onMounted(() => {
+onLoad(() => {
   const userInfo = uni.getStorageSync(STORE_KEY_USER)
   if (!userInfo) {
-    setTitleButtonText('未登录')
+    uni.setNavigationBarTitle({
+      title: '未登录',
+    })
     goToLogin()
   }
   else {
-    const { UserName } = userInfo
-    setTitleButtonText(UserName)
+    const { UserName, UserId, UserRole } = userInfo
+    const title = `${UserName} (${UserId}) ${UserRole}`
+    uni.setNavigationBarTitle({ title })
   }
 })
 
@@ -23,27 +26,6 @@ onNavigationBarButtonTap(({ index }) => {
   if (index === 0)
     goToLogin()
 })
-
-function setTitleButtonText(text: string) {
-  // #ifdef APP-PLUS
-  const [page] = getCurrentPages().slice(-1)
-  if (!page)
-    return
-  if (!page.$getAppWebview)
-    return
-  const webView = page.$getAppWebview()
-  webView.setTitleNViewButtonStyle(1, { text })
-  // #endif
-
-  // #ifdef H5
-  const headft = document.querySelector('.uni-page-head-ft')
-  if (!headft)
-    return
-  const nameEl = headft.lastChild?.lastChild
-  if (nameEl)
-    nameEl.textContent = text
-  // #endif
-}
 
 function onChagne(e: UniEvent<{ index: number }>) {
   const index = e.detail?.index
@@ -58,7 +40,7 @@ function onChagne(e: UniEvent<{ index: number }>) {
 
 <template>
   <view class="page">
-    <uni-grid class="px-6 py-4" :column="5" :show-border="false" @change="onChagne">
+    <uni-grid class="px-6 py-4" :column="4" :show-border="false" @change="onChagne">
       <uni-grid-item v-for="(item, index) of GridMenuSetting" :key="`grid-item-${index + 1}`" :index="index">
         <uni-icons custom-prefix="iconfont" :type="item.icon" />
         <text>{{ item.text }}</text>

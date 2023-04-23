@@ -1,11 +1,12 @@
 <script lang="ts" setup>
+import type { Ref } from 'vue'
 import VitalSignInfoEdit from './vital-sign-info-edit.vue'
 import { delPatientMonitorRecord, getPatientMonitorRecords } from '@/utils/api'
 import type { ApiResonseType } from '@/utils/api.help'
 import { dateFormat, dateTimeFormat } from '@/composables'
 import { monitorItems } from '@/composables/patient-narcotic-detail.composable'
 
-const props = defineProps<{ id: string }>()
+const id = inject<Ref<string>>('id')
 
 const currentId = ref('')
 const dataSet = ref<ApiResonseType.MonitorInfo[]>([])
@@ -16,7 +17,7 @@ onMounted(refreshList)
 
 function refreshList() {
   clearRowInfo()
-  getPatientMonitorRecords(props.id)
+  getPatientMonitorRecords(id!.value)
     .then(data => dataSet.value = data)
 }
 
@@ -74,7 +75,7 @@ function onEdit(row: ApiResonseType.MonitorInfo) {
     </uni-section>
 
     <uni-popup ref="popup" type="dialog">
-      <VitalSignInfoEdit :pid="id" :data="currentRow" @close="closeDialog" @success="refreshList" />
+      <VitalSignInfoEdit :data="currentRow" @close="closeDialog" @success="refreshList" />
     </uni-popup>
 
     <uni-table border stripe class="patient-vital-sign-record-table">
@@ -110,15 +111,3 @@ function onEdit(row: ApiResonseType.MonitorInfo) {
     </uni-table>
   </view>
 </template>
-
-<style lang="scss" scoped>
-.patient-vital-sign-record {
-  &-header {
-    @apply fixed w-full z-1;
-  }
-
-  &-table {
-    @apply p-t-60px;
-  }
-}
-</style>

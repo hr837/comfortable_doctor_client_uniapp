@@ -12,11 +12,6 @@
               "width": "60px",
               "color": "#60a5fa",
               "colorPressed": "#3b82f6"
-            },
-            {
-              "text": "姓名",
-              "fontSize": "16px",
-              "width": "130px"
             }
           ]
         },
@@ -55,16 +50,27 @@
         // }
       }
     },
-    // {
-    //   "path": "pages/patient-detail/patient-attach-file",
-    //   "style": {
-    //     "navigationBarTitleText": "术前附件查看"
-    //   }
-    // },
     {
-      "path": "pages/test/test",
+      "path": "pages/patient-detail/transfusion-info-edit",
       "style": {
-        "navigationBarTitleText": "测试页面"
+        "navigationBarTitleText": "输液记录详情",
+        "titleNView": {
+          "buttons": [
+            {
+              "text": "保存",
+              "fontSize": "16px",
+              "width": "60px",
+              "color": "#60a5fa",
+              "colorPressed": "#3b82f6"
+            }
+          ]
+        },
+      }
+    },
+    {
+      "path": "pages/patient-detail/transfusion-narcotic-info-edit",
+      "style": {
+        "navigationBarTitleText": "麻醉记录详情"
       }
     }
   ],

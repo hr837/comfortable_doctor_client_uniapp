@@ -1,12 +1,13 @@
 <script lang="ts" setup>
+import type { Ref } from 'vue'
 import RecordItem from './record-item.vue'
-import TransNarcoticfusionInfoEdit from './transfusion-narcotic-info-edit.vue'
 import type { ApiResonseType } from '@/utils/api.help'
 import { delTransfusion, getTransfusionList } from '@/utils/api'
 import { dictConvertDrugFlag } from '@/composables/patient-narcotic-detail.composable'
 import { dateTimeFormat } from '@/composables'
 
-const props = defineProps<{ id: string }>()
+const id = inject<Ref<string>>('id')
+
 const popup = ref<UniHelper.UniPopupProps>()
 const dataSet = ref<ApiResonseType.Transfusion[]>([])
 const rowId = ref<string | undefined>()
@@ -20,7 +21,7 @@ function close() {
 
 function refreshList() {
   rowId.value = undefined
-  getTransfusionList(props.id, '3').then((data) => {
+  getTransfusionList(id!.value, '3').then((data) => {
     dataSet.value = data
   })
 }
@@ -63,11 +64,7 @@ onMounted(refreshList)
       </template>
     </uni-section>
 
-    <uni-popup ref="popup" type="dialog">
-      <TransNarcoticfusionInfoEdit :pid="id" :rid="rowId" @close="close" @success="refreshList" />
-    </uni-popup>
-
-    <view class="patient-narcotic-drug-record-container">
+    <view class="patient-narcotic-drug-record-container p-x-4">
       <view v-if="!dataSet.length" class="no-data">
         暂无数据
       </view>
@@ -93,7 +90,7 @@ onMounted(refreshList)
               开始时间：{{ dateTimeFormat(item.BeginTime) }}
             </text>
             <text class="patient-narcotic-drug-record-text">
-              结束时间：{{ dateTimeFormat(item.EndTime) }}
+              结束时间：{{ dateTimeFormat(item.EndTime ?? '') }}
             </text>
           </template>
         </view>
@@ -101,19 +98,3 @@ onMounted(refreshList)
     </view>
   </view>
 </template>
-
-<style lang="scss" scoped>
-.patient-narcotic-drug-record {
-  &-header {
-    @apply fixed w-full z-1;
-  }
-
-  &-container {
-    @apply: p-x-4 p-t-60px;
-  }
-
-  &-text {
-    @apply: p-r-6;
-  }
-}
-</style>

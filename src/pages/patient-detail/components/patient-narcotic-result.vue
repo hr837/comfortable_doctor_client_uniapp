@@ -1,11 +1,13 @@
 <script lang="ts" setup>
 import dayjs from 'dayjs'
+import type { Ref } from 'vue'
 import NarcoticResultTempalteSelect from './narcotic-result-tempalte-select.vue'
 import DoctorSign from './doctor-sign.vue'
 import { PatientDetailDict, narcoticItemsConvert } from '@/composables/patient-narcotic-detail.composable'
 import { saveNarcoticResult } from '@/utils/api'
 
-const props = defineProps<{ id: string }>()
+const id = inject<Ref<string>>('id')
+
 const popupSelectRef = ref<UniHelper.UniPopupProps>()
 // true手术室情况模板 false 恢复室情况模板
 const templateOperate = ref(true)
@@ -151,7 +153,7 @@ function saveData() {
     ControlType: 'InputComboBox',
   })
 
-  saveNarcoticResult(props.id, items).then((result) => {
+  saveNarcoticResult(id!.value, items).then((result) => {
     if (result) {
       uni.showToast({
         title: '保存成功',
@@ -169,15 +171,15 @@ function saveData() {
 </script>
 
 <template>
-  <!-- 模板弹窗 -->
-  <uni-popup ref="popupSelectRef" type="dialog">
-    <NarcoticResultTempalteSelect
-      :title="templateDialogTitle" :type="templateOperate ? 'OPERATE' : 'PACU'"
-      @close="onTempalteClose" @confirm="onTemplateSelectd"
-    />
-  </uni-popup>
+  <view class="component patient-narcotic-result p-x-4">
+    <!-- 模板弹窗 -->
+    <uni-popup ref="popupSelectRef" type="dialog">
+      <NarcoticResultTempalteSelect
+        :title="templateDialogTitle" :type="templateOperate ? 'OPERATE' : 'PACU'"
+        @close="onTempalteClose" @confirm="onTemplateSelectd"
+      />
+    </uni-popup>
 
-  <view class="component patient-narcotic-result">
     <uni-section class="patient-narcotic-result-header" title="麻醉情况" type="line">
       <template #right>
         <button type="primary" size="mini" @click="onSubmit">
@@ -326,15 +328,6 @@ function saveData() {
 
 <style lang="scss" scoped>
 .component.patient-narcotic-result {
-  .patient-narcotic-result {
-    &-header {
-      @apply fixed w-full z-1;
-    }
-
-    &-form {
-      @apply p-4 p-t-60px;
-    }
-  }
 
   .form-item-doctor-date {
     width: 310px;

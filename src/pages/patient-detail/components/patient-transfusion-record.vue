@@ -1,24 +1,16 @@
 <script lang="ts" setup>
+import type { Ref } from 'vue'
 import RecordItem from './record-item.vue'
-import TransfusionInfoEdit from './transfusion-info-edit.vue'
 import { delTransfusion, getTransfusionList } from '@/utils/api'
 import type { ApiResonseType } from '@/utils/api.help'
 import { dateTimeFormat } from '@/composables'
-const props = defineProps<{ id: string }>()
-const popup = ref<UniHelper.UniPopupProps>()
 const dataSet = ref<ApiResonseType.Transfusion[]>([])
-const rowId = ref<string | undefined>()
+const id = inject<Ref<string>>('id')
 
-function open() {
-  popup.value?.open()
-}
-
-function close() {
-  popup.value?.close()
-}
+const editUrl = '/pages/patient-detail/transfusion-info-edit'
 
 function refreshList() {
-  getTransfusionList(props.id, '2').then((data) => {
+  getTransfusionList(id!.value, '2').then((data) => {
     dataSet.value = data
   })
 }
@@ -43,9 +35,16 @@ function onDelete(id: string) {
   })
 }
 
+function addRecord() {
+  uni.navigateTo({
+    url: `${editUrl}?pId=${id!.value}`,
+  })
+}
+
 function onClick(id: string) {
-  rowId.value = id
-  open()
+  uni.navigateTo({
+    url: `${editUrl}?rId=${id!}`,
+  })
 }
 
 onMounted(refreshList)
@@ -55,17 +54,13 @@ onMounted(refreshList)
   <view class="component patient-transfusion-record">
     <uni-section class="patient-transfusion-record-header" title="输液" type="line">
       <template #right>
-        <button type="primary" size="mini" @click="open">
+        <button type="primary" size="mini" @click="addRecord">
           添加
         </button>
       </template>
     </uni-section>
 
-    <uni-popup ref="popup" type="dialog">
-      <TransfusionInfoEdit :pid="id" :rid="rowId" @close="close" @success="refreshList" />
-    </uni-popup>
-
-    <view class="patient-transfusion-record-container">
+    <view class="patient-transfusion-record-container p-x-4">
       <view v-if="!dataSet.length" class="no-data">
         暂无数据
       </view>
@@ -100,13 +95,6 @@ onMounted(refreshList)
 
 <style lang="scss" scoped>
 .patient-transfusion-record {
-  &-header {
-    @apply fixed w-full z-1;
-  }
-
-  &-container {
-    @apply: p-x-4 p-t-60px;
-  }
 
   &-text {
     @apply: p-r-6;

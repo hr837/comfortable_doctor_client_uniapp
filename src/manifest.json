@@ -10,7 +10,7 @@
         "usingComponents" : true,
         "nvueStyleCompiler" : "uni-app",
         "compilerVersion" : 3,
-        "screenOrientation" : [ "landscape-primary", "landscape-secondary" ],
+        "screenOrientation" : [ "portrait-primary", "portrait-secondary" ],
         "splashscreen" : {
             "alwaysShowBeforeRender" : true,
             "waiting" : true,
