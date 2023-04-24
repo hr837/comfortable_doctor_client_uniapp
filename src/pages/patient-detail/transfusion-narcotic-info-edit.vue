@@ -5,14 +5,6 @@ import { addTransfusionRecord, getTransfusionInfo, updateTransfusionRecord } fro
 import { PatientDetailDict, drugUnitList, drugUseModeList } from '@/composables/patient-narcotic-detail.composable'
 import { dateTimeFormat } from '@/composables'
 
-const props = defineProps<{
-  /** 输液/麻醉用药ID */
-  rid?: string
-}>()
-const emits = defineEmits(['close', 'success'])
-
-const pid = inject<string>('id')
-
 const modelData = reactive<ApiRequestType.Transfusion>({
   DrugName: '',
   TypeCode: '3',
@@ -26,6 +18,22 @@ const modelData = reactive<ApiRequestType.Transfusion>({
   AnesthesiaId: '',
   DrugType: '晶体液',
   Mode: '',
+})
+
+onLoad((query: any) => {
+  const { rId, pId } = query
+  if (pId && !rId) {
+    uni.setNavigationBarTitle({
+      title: '添加麻醉用药记录',
+    })
+    modelData.AnesthesiaId = pId
+  }
+  if (rId) {
+    uni.setNavigationBarTitle({
+      title: '编辑添加麻醉用药记录',
+    })
+    fetchModelInfo(rId)
+  }
 })
 
 const rules = {
@@ -80,21 +88,23 @@ function onDrugSelected(item?: ApiResonseType.DrugInfo) {
   modelData.Mode = item?.InjectionMode ?? ''
 }
 
-function onConfirm() {
+onNavigationBarButtonTap(({ index }) => {
+  if (index !== 0)
+    return
+
   form.value?.validate([], (err) => {
     if (err)
       return
 
-    modelData.AnesthesiaId = pid!
     if (!modelData.EndTime)
       modelData.EndTime = null
-    if (props.rid) {
-      modelData.Id = props.rid
+
+    if (modelData.Id)
       updateTransfusionRecord(modelData).then(onSuccess)
-    }
-    else { addTransfusionRecord(modelData).then(onSuccess) }
+
+    else addTransfusionRecord(modelData).then(onSuccess)
   })
-}
+})
 
 function onSuccess() {
   uni.showToast({
@@ -102,19 +112,14 @@ function onSuccess() {
     icon: 'success',
   })
   setTimeout(() => {
-    emits('success')
-    emits('close')
-  }, 1500)
+    // eslint-disable-next-line vue/custom-event-name-casing
+    uni.$emit('refreshList:patient-narcotic-drug-record')
+    uni.navigateBack()
+  }, 1000)
 }
 
-function onClose() {
-  emits('close')
-}
-
-onMounted(() => {
-  if (!props.rid)
-    return
-  getTransfusionInfo(props.rid).then((data) => {
+function fetchModelInfo(id: string) {
+  getTransfusionInfo(id).then((data) => {
     modelData.AnesthesiaId = data.AnesthesiaId
     modelData.BeginTime = dateTimeFormat(data.BeginTime)
     modelData.Dose = data.Dose
@@ -130,64 +135,48 @@ onMounted(() => {
     if (data.EndTime)
       modelData.EndTime = dateTimeFormat(data.EndTime)
   })
-})
+}
 
-const title = computed(() => props.rid ? '更新麻醉用药信息' : '添加麻醉用药信息')
 const showDateRange = computed(() => modelData.DrugFlag === '1')
 </script>
 
 <template>
-  <uni-popup-dialog
-    class="component transfusion-narcotic-info-edit" mode="base" type="info" :title="title"
-    confirm-text="保存" before-close @close="onClose" @confirm="onConfirm"
+  <uni-forms
+    ref="form" :model="modelData" class="transfusion-narcotic-info-edit-form p-4" label-width="70px"
+    label-align="right" :rules="rules"
   >
-    <uni-forms
-      ref="form" :model="modelData" class="transfusion-narcotic-info-edit-form" label-width="70px"
-      label-align="right" :rules="rules"
-    >
-      <uni-forms-item v-if="!rid">
-        <DrugInput type="MZ" @selected="onDrugSelected" />
+    <uni-forms-item v-if="!modelData.Id">
+      <DrugInput type="MZ" @selected="onDrugSelected" />
+    </uni-forms-item>
+    <uni-forms-item label="药品名称" name="DrugName">
+      <view class="row">
+        <uni-easyinput :value="modelData.DrugName" :disabled="!!modelData.Id" />
+      </view>
+    </uni-forms-item>
+    <uni-forms-item label="用药时长" name="DrugFlag">
+      <uni-data-checkbox v-model="modelData.DrugFlag" :localdata="PatientDetailDict.drugFlagList" mode="button" />
+    </uni-forms-item>
+    <uni-forms-item label="注入方式" name="Mode">
+      <uni-data-select v-model="modelData.Mode" :localdata="drugUseModeList" />
+    </uni-forms-item>
+    <uni-forms-item label="剂量" name="Dose">
+      <view class="row">
+        <uni-easyinput v-model="modelData.Dose" type="number" placeholder="剂量" />
+        <uni-data-select v-model="modelData.Unit" :localdata="drugUnitList" placeholder="单位" />
+      </view>
+    </uni-forms-item>
+    <template v-if="showDateRange">
+      <uni-forms-item label="开始时间" name="BeginTime">
+        <uni-datetime-picker v-model="modelData.BeginTime" type="datetime" />
       </uni-forms-item>
-      <uni-forms-item label="药品名称" name="DrugName">
-        <view class="row">
-          <uni-easyinput :value="modelData.DrugName" :disabled="!!rid" />
-        </view>
+      <uni-forms-item label="结束时间" name="EndTime">
+        <uni-datetime-picker v-model="modelData.EndTime" type="datetime" />
       </uni-forms-item>
-      <uni-forms-item label="用药时长" name="DrugFlag">
-        <uni-data-checkbox v-model="modelData.DrugFlag" :localdata="PatientDetailDict.drugFlagList" mode="button" />
+    </template>
+    <template v-else>
+      <uni-forms-item label="时间" name="PointTime">
+        <uni-datetime-picker v-model="modelData.PointTime" type="datetime" />
       </uni-forms-item>
-      <uni-forms-item label="注入方式" name="Mode">
-        <uni-data-select v-model="modelData.Mode" :localdata="drugUseModeList" />
-      </uni-forms-item>
-      <uni-forms-item label="剂量" name="Dose">
-        <view class="row">
-          <uni-easyinput v-model="modelData.Dose" type="number" placeholder="剂量" />
-          <uni-data-select v-model="modelData.Unit" :localdata="drugUnitList" placeholder="单位" />
-        </view>
-      </uni-forms-item>
-      <template v-if="showDateRange">
-        <uni-forms-item label="开始时间" name="BeginTime">
-          <uni-datetime-picker v-model="modelData.BeginTime" type="datetime" />
-        </uni-forms-item>
-        <uni-forms-item label="结束时间" name="EndTime">
-          <uni-datetime-picker v-model="modelData.EndTime" type="datetime" />
-        </uni-forms-item>
-      </template>
-      <template v-else>
-        <uni-forms-item label="时间" name="PointTime">
-          <uni-datetime-picker v-model="modelData.PointTime" type="datetime" />
-        </uni-forms-item>
-      </template>
-    </uni-forms>
-  </uni-popup-dialog>
+    </template>
+  </uni-forms>
 </template>
-
-<style lang="scss" scoped>
-.transfusion-narcotic-info-edit {
-  width: 400px;
-
-  &-form {
-    width: 100%;
-  }
-}
-</style>

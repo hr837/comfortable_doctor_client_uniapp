@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { GridMenuSetting } from '@/composables'
+import { GridMenuSetting, roleFormat } from '@/composables'
 import { STORE_KEY_USER } from '@/utils/app.constant'
 
 const goToLogin = () =>
@@ -17,7 +17,8 @@ onLoad(() => {
   }
   else {
     const { UserName, UserId, UserRole } = userInfo
-    const title = `${UserName} (${UserId}) ${UserRole}`
+    const roleName = roleFormat(UserRole)
+    const title = `${UserName} (${UserId}) ${roleName}`
     uni.setNavigationBarTitle({ title })
   }
 })

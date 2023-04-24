@@ -250,8 +250,12 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .patient-base-info {
-  ::v-deep .is-disabled {
-    color: inherit;
+
+  .uni-easyinput {
+    ::v-deep .is-disabled {
+      color: inherit;
+    }
   }
+
 }
 </style>

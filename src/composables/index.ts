@@ -79,3 +79,19 @@ export function dateFormat(date: string, fmt = 'YYYY-MM-DD') {
 export function dateTimeFormat(date: string, fmt = 'YYYY-MM-DD HH:mm:ss') {
   return dateFormat(date, fmt)
 }
+
+export function roleFormat(roleName: string) {
+  let name = '管理员'
+  switch (roleName) {
+    case 'Anesthetist':
+      name = '麻醉医生'
+      break
+    case 'OpDoctor':
+      name = '手术医生'
+      break
+    case 'OpNurse':
+      name = '护士'
+      break
+  }
+  return name
+}

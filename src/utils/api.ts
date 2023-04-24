@@ -1,5 +1,5 @@
 import { request } from './http'
-import type { ApiRequestType, ApiResonseType, MonitorItem } from './api.help'
+import type { ApiRequestType, ApiResonseType } from './api.help'
 
 /**
  *  登录验证
@@ -200,7 +200,7 @@ export function delPatientMonitorRecord(id: string) {
  * @param id 病人ID,可空
  */
 export function getMonitorItems(id?: string) {
-  return request<MonitorItem[]>({
+  return request<ApiResonseType.MonitorConfigInfo[]>({
     path: '/api/MonitorRecord/GetConfig',
     data: { anesId: id },
     method: 'GET',

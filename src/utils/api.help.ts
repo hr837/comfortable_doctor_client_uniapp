@@ -546,6 +546,13 @@ export namespace ApiResonseType {
      */
     TemplateName: string
   }
+
+  /** 配置信息 */
+  export type MonitorConfigInfo = MonitorItem & {
+    /** 默认值 */
+    DefaultValue: string
+  }
+
 }
 
 /** 体征检测项目 */

@@ -7,17 +7,10 @@ import { dictConvertDrugFlag } from '@/composables/patient-narcotic-detail.compo
 import { dateTimeFormat } from '@/composables'
 
 const id = inject<Ref<string>>('id')
+const editUrl = '/pages/patient-detail/transfusion-narcotic-info-edit'
 
-const popup = ref<UniHelper.UniPopupProps>()
 const dataSet = ref<ApiResonseType.Transfusion[]>([])
 const rowId = ref<string | undefined>()
-function open() {
-  popup.value?.open()
-}
-
-function close() {
-  popup.value?.close()
-}
 
 function refreshList() {
   rowId.value = undefined
@@ -46,9 +39,22 @@ function onDelete(id: string) {
   })
 }
 
+function addRecord() {
+  uni.navigateTo({
+    url: `${editUrl}?pId=${id!.value}`,
+    success: () => {
+      uni.$once('refreshList:patient-narcotic-drug-record', refreshList)
+    },
+  })
+}
+
 function onClick(id: string) {
-  rowId.value = id
-  open()
+  uni.navigateTo({
+    url: `${editUrl}?rId=${id!}`,
+    success: () => {
+      uni.$once('refreshList:patient-narcotic-drug-record', refreshList)
+    },
+  })
 }
 
 onMounted(refreshList)
@@ -58,7 +64,7 @@ onMounted(refreshList)
   <view class="component patient-narcotic-drug-record">
     <uni-section class="patient-narcotic-drug-record-header" title="麻醉用药" type="line">
       <template #right>
-        <button type="primary" size="mini" @click="open">
+        <button type="primary" size="mini" @click="addRecord">
           添加
         </button>
       </template>
@@ -89,12 +95,26 @@ onMounted(refreshList)
             <text class="patient-narcotic-drug-record-text">
               开始时间：{{ dateTimeFormat(item.BeginTime) }}
             </text>
-            <text class="patient-narcotic-drug-record-text">
-              结束时间：{{ dateTimeFormat(item.EndTime ?? '') }}
+            <text v-if="!!item.EndTime" class="patient-narcotic-drug-record-text">
+              结束时间：{{ dateTimeFormat(item.EndTime) }}
             </text>
+            <uni-icons v-else type="spinner-cycle" size="22" class="animate-spin" />
           </template>
         </view>
       </RecordItem>
     </view>
   </view>
 </template>
+
+<style lang="scss" scoped>
+.patient-narcotic-drug-record {
+
+  &-text {
+    @apply: p-r-6;
+  }
+
+  .animate-spin {
+    animation-duration: 3s;
+  }
+}
+</style>

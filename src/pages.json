@@ -70,7 +70,18 @@
     {
       "path": "pages/patient-detail/transfusion-narcotic-info-edit",
       "style": {
-        "navigationBarTitleText": "麻醉记录详情"
+        "navigationBarTitleText": "麻醉记录详情",
+        "titleNView": {
+          "buttons": [
+            {
+              "text": "保存",
+              "fontSize": "16px",
+              "width": "60px",
+              "color": "#60a5fa",
+              "colorPressed": "#3b82f6"
+            }
+          ]
+        },
       }
     }
   ],

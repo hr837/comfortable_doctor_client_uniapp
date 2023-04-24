@@ -1,6 +1,6 @@
 import { dateFormat } from '.'
 import { getDrugList, getDrugUnitList, getDrugWayList, getMonitorItems } from '@/utils/api'
-import type { ApiRequestType, ApiResonseType, MonitorItem } from '@/utils/api.help'
+import type { ApiRequestType, ApiResonseType } from '@/utils/api.help'
 
 export const ComponentSetting = [
   { label: '基本信息', name: 'patient-base-info-form' },
@@ -51,7 +51,7 @@ export const drugNarcoticList = ref<ApiResonseType.DrugInfo[]>([])
 export const drugTransfusionList = ref<ApiResonseType.DrugInfo[]>([])
 
 /** 体征项目 */
-export const monitorItems = ref<MonitorItem[]>([])
+export const monitorItems = ref<ApiResonseType.MonitorConfigInfo[]>([])
 
 /** 初始化下拉框的数据 */
 export function initSelectOptions() {

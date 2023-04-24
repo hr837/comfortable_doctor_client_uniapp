@@ -5,8 +5,6 @@ import { addTransfusionRecord, getTransfusionInfo, updateTransfusionRecord } fro
 import { PatientDetailDict, drugUnitList, drugUseModeList } from '@/composables/patient-narcotic-detail.composable'
 import { dateTimeFormat } from '@/composables'
 
-const emits = defineEmits(['close', 'success'])
-
 const modelData = reactive<ApiRequestType.Transfusion>({
   DrugName: '',
   TypeCode: '2',
@@ -34,21 +32,7 @@ onLoad((query: any) => {
     uni.setNavigationBarTitle({
       title: '编辑输液记录',
     })
-    getTransfusionInfo(rId).then((data) => {
-      modelData.AnesthesiaId = data.AnesthesiaId
-      modelData.DrugName = data.DrugName
-      modelData.TypeCode = data.TypeCode
-      modelData.DrugCode = data.DrugCode
-      modelData.BeginTime = dateTimeFormat(data.BeginTime)
-      modelData.EndTime = dateTimeFormat(data.EndTime ?? '')
-      modelData.PointTime = ''
-      modelData.DrugFlag = data.DrugFlag
-      modelData.Dose = data.Dose
-      modelData.Unit = data.Unit
-      modelData.DrugType = data.DrugType
-      modelData.Mode = data.Mode
-      modelData.Id = data.Id
-    })
+    fetchModelInfo(rId)
   }
 })
 
@@ -101,6 +85,26 @@ function onDrugSelected(item?: ApiResonseType.DrugInfo) {
   modelData.Mode = item?.InjectionMode ?? ''
 }
 
+function fetchModelInfo(id: string) {
+  getTransfusionInfo(id).then((data) => {
+    modelData.AnesthesiaId = data.AnesthesiaId
+    modelData.DrugName = data.DrugName
+    modelData.TypeCode = data.TypeCode
+    modelData.DrugCode = data.DrugCode
+    modelData.BeginTime = dateTimeFormat(data.BeginTime)
+
+    modelData.PointTime = ''
+    modelData.DrugFlag = data.DrugFlag
+    modelData.Dose = data.Dose
+    modelData.Unit = data.Unit
+    modelData.DrugType = data.DrugType
+    modelData.Mode = data.Mode
+    modelData.Id = data.Id
+    if (data.EndTime)
+      modelData.EndTime = dateTimeFormat(data.EndTime)
+  })
+}
+
 onNavigationBarButtonTap(({ index }) => {
   if (index !== 0)
     return
@@ -124,6 +128,8 @@ function onSuccess() {
     icon: 'success',
   })
   setTimeout(() => {
+    // eslint-disable-next-line vue/custom-event-name-casing
+    uni.$emit('refreshList:patient-transfusion-record')
     uni.navigateBack()
   }, 1000)
 }

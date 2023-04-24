@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import dayJs from 'dayjs'
+import type { Ref } from 'vue'
 import type { ApiRequestType, ApiResonseType } from '@/utils/api.help'
 import { addMonitorRecord, updateMonitorRecord } from '@/utils/api'
 import { monitorItems } from '@/composables/patient-narcotic-detail.composable'
@@ -12,7 +13,7 @@ const props = defineProps<{
 
 const emits = defineEmits(['close', 'success'])
 
-const pid = inject<string>('id')
+const pid = inject<Ref<string>>('id')
 
 interface ModelType {
   RecordTime: string
@@ -49,7 +50,7 @@ function onConfirm() {
       return
 
     const obj: ApiRequestType.MonitorInfo = {
-      AnesthesiaId: pid!,
+      AnesthesiaId: pid!.value,
       RecordTime: modelData.RecordTime,
       ItemValues: [],
     }
@@ -86,10 +87,13 @@ function onClose() {
 }
 
 onMounted(() => {
-  modelData.AnesthesiaId = pid!
+  modelData.AnesthesiaId = pid!.value
   nextTick(() => {
     if (!props.data) {
       modelData.RecordTime = getNextTime()
+      monitorItems.value.forEach((item) => {
+        modelData[item.ItemCode] = item.DefaultValue
+      })
     }
     else {
       modelData.Id = props.data.Id
@@ -119,7 +123,7 @@ const title = computed(() => props.data ? '更新监测信息' : '添加监测�
       <uni-row>
         <uni-col v-for="item of monitorItems" :key="item.ItemCode" :span="12">
           <uni-forms-item :label="item.ItemName">
-            <uni-easyinput v-model="modelData[item.ItemCode]" />
+            <uni-easyinput v-model="modelData[item.ItemCode]" type="digit" />
           </uni-forms-item>
         </uni-col>
       </uni-row>

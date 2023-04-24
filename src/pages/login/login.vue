@@ -71,13 +71,13 @@ function submitForm() {
 <template>
   <view class="page login">
     <view class="login-setting">
+      <uni-data-select v-model="loginModel.RoomCode" class="login-setting-room" :localdata="roomList" placeholder="手术间" />
       <LoginSetting @settinged="refreshRoomList" />
     </view>
     <image class="login-logo" src="/static/login-logo.png" />
     <view class="login-title">
       麻醉舒适化管理信息系统
     </view>
-
     <view class="login-form-container">
       <uni-forms ref="formRef" class="login-form" :model="loginModel" :rules="rules">
         <uni-forms-item name="LoginName">
@@ -85,9 +85,6 @@ function submitForm() {
         </uni-forms-item>
         <uni-forms-item name="Password">
           <uni-easyinput ref="inputPwdRef" v-model="loginModel.Password" prefix-icon="locked" type="password" placeholder="密码" />
-        </uni-forms-item>
-        <uni-forms-item name="RoomCode">
-          <uni-data-select v-model="loginModel.RoomCode" class="login-form-select" :localdata="roomList" placeholder="请选择手术间" />
         </uni-forms-item>
       </uni-forms>
 
@@ -111,25 +108,35 @@ function submitForm() {
   }
 
   .login-setting {
-    @apply absolute top-8 right-8;
+    @apply row items-center absolute top-8 right-8;
+    &-room {
+      margin-right: 8px;
+    ::v-deep .uni-select {
+      background-color: transparent;
+      border: none;
+      .uni-select__input-text,.uni-icons{
+        color: #fff ;
+        margin-right: 4px;
+      }
+      .uni-icons{
+        color: #fff !important;
+      }
+    }
+  }
   }
 
   .login-title {
-    @apply m-b-60px text-4xl font-bold text-gray-600;
+    @apply m-b-80px text-4xl font-bold text-gray-600;
   }
 
   .login-form-container {
     width: 400px;
   }
 
-  .login-form-select {
-    ::v-deep .uni-select {
-      background-color: #fff;
-    }
-  }
-
+  // #ifdef APP-PLUS
   .login-submit{
     padding: 12px;
   }
+  // #endif
 }
 </style>
