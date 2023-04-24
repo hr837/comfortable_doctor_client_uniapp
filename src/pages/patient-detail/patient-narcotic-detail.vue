@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 // import PatientDetailPopup from './components/patient-detail-popup.vue'
 import PatientDetailStateTime from './components/patient-detail-state-time.vue'
+import DoctorTemplateSelect from './components/doctor-template-select.vue'
 import { ComponentSetting, initMonitorItems, initSelectOptions } from '@/composables/patient-narcotic-detail.composable'
 // import { goToPatientAttchPage } from '@/composables'
 import PatientBaseInfoForm from '@/pages/patient-detail/components/patient-base-info-form.vue'
@@ -18,6 +19,7 @@ const pageData = reactive({
 })
 
 const id = ref('')
+const packageRef = ref<UniHelper.UniPopupProps>()
 
 provide('id', id)
 
@@ -62,10 +64,6 @@ function onClickItem(e: { currentIndex: number }) {
   }
 }
 
-function getTemplate() {
-  //
-}
-
 let pageScrollTop = 0
 onPageScroll((data) => {
   pageScrollTop = data.scrollTop
@@ -80,17 +78,29 @@ function scrollTo(val: string) {
       uni.pageScrollTo({ scrollTop: top, duration: 100 })
     })
 }
+
+function openTemplate() {
+  packageRef.value?.open()
+}
+
+function closeTemplate() {
+  packageRef.value?.close()
+}
 </script>
 
 <template>
   <!-- <PatientDetailPopup v-model:show="pageData.show" @command="onCommand" /> -->
   <view class="page patient-narcotic-detail">
+    <uni-popup ref="packageRef">
+      <DoctorTemplateSelect @on-close="closeTemplate" />
+    </uni-popup>
+
     <view class="patient-narcotic-detail-header">
       <uni-segmented-control
         class="patient-narcotic-detail-header-tabs" :current="pageData.current"
         :values="pageData.controlItems" style-type="button" @click-item="onClickItem"
       />
-      <button class="patient-narcotic-detail-header-template-btn" size="mini" type="primary" @click="getTemplate">
+      <button class="patient-narcotic-detail-header-template-btn" size="mini" type="primary" @click="openTemplate">
         模板
       </button>
     </view>
@@ -103,7 +113,7 @@ function scrollTo(val: string) {
       <PatientNarcoticResult id="patient-narcotic-result" />
     </view>
     <view class="patient-narcotic-detail-bottom">
-      <PatientDetailStateTime />
+      <PatientDetailStateTime @on-time="openTemplate" />
     </view>
   </view>
 </template>

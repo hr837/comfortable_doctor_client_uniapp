@@ -7,6 +7,8 @@ import { STORE_KEY_USER } from '@/utils/app.constant'
 interface PropsType {
   /** 医生类型 */
   roleCode: ApiRequestType.RoleCode
+  /** 签名Code */
+  signCode: string
 }
 
 const props = defineProps<PropsType>()
@@ -21,7 +23,6 @@ const popupPwdRef = ref<UniHelper.UniPopupProps>()
 const currentUser = reactive({
   userCode: '',
   userName: '',
-  userSign: '',
 })
 
 // 用户选择之后
@@ -39,21 +40,17 @@ function dialogInputConfirm(pwd: any) {
   login({
     LoginName: currentUser.userCode,
     Password: pwd,
-  }).then(() => getUserSign(currentUser.userCode).then(onSigned)).catch(() => {
-    uni.showToast({
-      title: '验证失败',
-      icon: 'none',
-    })
   })
-}
-
-function onSigned(data: ArrayBuffer) {
-  currentUser.userSign = data as any
-  const baseStr = uni.arrayBufferToBase64(data)
-  imageSrc.value = `data:image/*;base64,${baseStr}`
-  // 隐藏用户选择框
-  showDoctorSelect.value = false
-  emits('signed', currentUser)
+    .then(() => {
+      emits('signed', currentUser)
+      showDoctorSelect.value = false
+    })
+    .catch(() => {
+      uni.showToast({
+        title: '验证失败',
+        icon: 'none',
+      })
+    })
 }
 
 // 询问
@@ -67,10 +64,8 @@ function onImageClick() {
       confirmText: '是',
       success: ({ confirm }) => {
         if (!confirm) {
-          showDoctorSelect.value = true
           emits('signed', null)
-          if (imageSrc.value !== DEFAULT_SRC)
-            imageSrc.value = '/static/sign.png'
+          showDoctorSelect.value = true
         }
         else {
           onUserSelectd(uni.getStorageSync(STORE_KEY_USER))
@@ -83,6 +78,19 @@ function onImageClick() {
     showDoctorSelect.value = true
   }
 }
+
+/** 监听属性签名code 显示用户签名 */
+watch(() => props.signCode, (val: string) => {
+  if (!val) {
+    imageSrc.value = '/static/sign.png'
+  }
+  else {
+    getUserSign(val).then((data) => {
+      const baseStr = uni.arrayBufferToBase64(data)
+      imageSrc.value = `data:image/*;base64,${baseStr}`
+    })
+  }
+})
 </script>
 
 <template>

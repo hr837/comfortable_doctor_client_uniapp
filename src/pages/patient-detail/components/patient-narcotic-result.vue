@@ -3,16 +3,17 @@ import dayjs from 'dayjs'
 import type { Ref } from 'vue'
 import NarcoticResultTempalteSelect from './narcotic-result-tempalte-select.vue'
 import DoctorSign from './doctor-sign.vue'
-import { PatientDetailDict, narcoticItemsConvert } from '@/composables/patient-narcotic-detail.composable'
-import { saveNarcoticResult } from '@/utils/api'
+import { PatientDetailDict, narcoticItemRevert, narcoticItemsConvert } from '@/composables/patient-narcotic-detail.composable'
+import { getNarcoticResult, saveNarcoticResult } from '@/utils/api'
 
 const id = inject<Ref<string>>('id')
-
+// 模板ref
 const popupSelectRef = ref<UniHelper.UniPopupProps>()
+// form ref
+const formRef = ref<UniForm>()
 // true手术室情况模板 false 恢复室情况模板
 const templateOperate = ref(true)
 const templateDialogTitle = computed(() => templateOperate.value ? '术中特殊情况模板选择' : '恢复室内容情况模板')
-const formRef = ref<UniForm>()
 const modelData = reactive({
   specific: '无',
   specificText: '',
@@ -72,6 +73,12 @@ const rules = {
   },
 }
 
+onMounted(() => {
+  getNarcoticResult(id!.value).then((data) => {
+    narcoticItemRevert(data, modelData)
+  })
+})
+
 /** 术后转其他验证 */
 function passToValidator(_: any, value: string, __: any, callback: Function) {
   if (value === '其它' && !modelData.passToText)
@@ -118,17 +125,17 @@ function setSignInfo(data?: any) {
   switch (doctorKey.value) {
     case 'narcoticDoctor':
       modelData.narcoticDoctorName = data?.userName ?? ''
-      modelData.narcoticDoctorSign = data?.userSign ?? ''
+      modelData.narcoticDoctorSign = data?.userCode ?? ''
       modelData.narcoticDoctorDate = data ? dateStr : ''
       break
     case 'narcoticDoctor2':
       modelData.narcoticDoctor2Name = data?.userName ?? ''
-      modelData.narcoticDoctor2Sign = data?.userSign ?? ''
+      modelData.narcoticDoctor2Sign = data?.userCode ?? ''
       modelData.narcoticDoctor2Date = data ? dateStr : ''
       break
     default:
       modelData.nurseName = data?.userName ?? ''
-      modelData.nurseSign = data?.userSign ?? ''
+      modelData.nurseSign = data?.userCode ?? ''
       modelData.nurseDate = data ? dateStr : ''
       break
   }
@@ -237,7 +244,7 @@ function saveData() {
       <uni-row>
         <uni-col :span="10">
           <uni-forms-item label="麻醉医师" class="form-item-doctor" name="narcoticDoctorName">
-            <DoctorSign role-code="Anesthetist" @click="() => doctorKey = 'narcoticDoctor'" @signed="setSignInfo" />
+            <DoctorSign :sign-code="modelData.narcoticDoctorSign" role-code="Anesthetist" @click="() => doctorKey = 'narcoticDoctor'" @signed="setSignInfo" />
           </uni-forms-item>
         </uni-col>
         <uni-col :span="14">
@@ -300,7 +307,7 @@ function saveData() {
       <uni-row>
         <uni-col :span="10">
           <uni-forms-item label="麻醉医师" class="form-item-doctor" name="narcoticDoctor2Name">
-            <DoctorSign role-code="Anesthetist" @click="() => doctorKey = 'narcoticDoctor2'" @signed="setSignInfo" />
+            <DoctorSign :sign-code="modelData.narcoticDoctor2Sign" role-code="Anesthetist" @click="() => doctorKey = 'narcoticDoctor2'" @signed="setSignInfo" />
           </uni-forms-item>
         </uni-col>
         <uni-col :span="14">
@@ -313,7 +320,7 @@ function saveData() {
       <uni-row>
         <uni-col :span="10">
           <uni-forms-item label="恢复室护士" class="form-item-doctor" name="nurseName">
-            <DoctorSign role-code="OpNurse" @click="() => doctorKey = 'nurse'" @signed="setSignInfo" />
+            <DoctorSign :sign-code="modelData.nurseSign" role-code="OpNurse" @click="() => doctorKey = 'nurse'" @signed="setSignInfo" />
           </uni-forms-item>
         </uni-col>
         <uni-col :span="14">

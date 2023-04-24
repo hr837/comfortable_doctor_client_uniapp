@@ -53,6 +53,9 @@ export const drugTransfusionList = ref<ApiResonseType.DrugInfo[]>([])
 /** 体征项目 */
 export const monitorItems = ref<ApiResonseType.MonitorConfigInfo[]>([])
 
+/** 详情页模板 */
+export const packageInfo = ref<ApiResonseType.PackageInfo[]>([])
+
 /** 初始化下拉框的数据 */
 export function initSelectOptions() {
   getDrugUnitList().then((data) => {
@@ -301,4 +304,165 @@ export function narcoticItemsConvert(data: any) {
     }
   })
   return items
+}
+
+export function narcoticItemRevert({ Items }: ApiResonseType.NarcoticResult, model: any) {
+  if (!Items.length)
+    return
+
+  Items.forEach((item) => {
+    switch (item.ItemName) {
+      case '术中特殊情况无':
+        if (item.ItemValue === 'true')
+          model.specific = '无'
+        break
+      case '术中特殊情况有':
+        if (item.ItemValue === 'true')
+          model.specific = '有'
+        break
+      case '术中特殊情况':
+        model.specificText = item.ItemValue
+        break
+      case 'Steward1':
+        model.comToLifeState = PatientDetailDict.comToLifeState.find(x => x.text === item.ItemValue)?.value
+        break
+      case 'Steward2':
+        model.breathActiveState = PatientDetailDict.breathActiveState.find(x => x.text === item.ItemValue)?.value
+        break
+      case 'Steward3':
+        model.bodyActiveState = PatientDetailDict.bodyActiveState.find(x => x.text === item.ItemValue)?.value
+        break
+      case 'Steward总分':
+        model.StewardCount = item.ItemValue
+        break
+      case '术后转恢复室':
+        if (item.ItemValue === 'true')
+          model.passTo = '恢复室'
+        break
+      case '术后转观察室':
+        if (item.ItemValue === 'true')
+          model.passTo = '观察室'
+        break
+      case '术后转其他':
+        if (item.ItemValue === 'true')
+          model.passTo = '其他'
+        break
+      case '术后转其他内容':
+        model.passToText = item.ItemValue
+        break
+      case '麻醉医师签名1#BTN#':
+        model.narcoticDoctorName = item.ItemValue
+        break
+      case '麻醉医师签名1#IMG#':
+        model.narcoticDoctorSign = item.ItemValue
+        break
+
+      case '麻醉医师签名1#DATE#':
+        if (model.narcoticDoctorDate) {
+          if (model.narcoticDoctorDate.includes(':'))
+            model.narcoticDoctorDate = `${item.ItemValue} ${model.narcoticDoctorDate}`
+        }
+        else {
+          model.narcoticDoctorDate = item.ItemValue
+        }
+        break
+      case '麻醉医师签名1#TIME#':
+        if (model.narcoticDoctorDate) {
+          if (model.narcoticDoctorDate.includes('-'))
+            model.narcoticDoctorDate += ` ${item.ItemValue}`
+        }
+        else {
+          model.narcoticDoctorDate = item.ItemValue
+        }
+        break
+      case '恢复室内情况无':
+        if (item.ItemValue === 'true')
+          model.recoverySpecific = '无'
+        break
+      case '恢复室内情况有':
+        if (item.ItemValue === 'true')
+          model.recoverySpecific = '有'
+        break
+      case '恢复室内情况':
+        if (item.ItemValue === 'true')
+          model.recoverySpecificText = '有'
+        break
+      case 'PADS1':
+        model.vitalsignState = PatientDetailDict.vitalsignState.find(x => x.text === item.ItemValue)?.value
+        break
+      case 'PADS2':
+        model.activeState = PatientDetailDict.activeState.find(x => x.text === item.ItemValue)?.value
+        break
+      case 'PADS3':
+        model.nauseaState = PatientDetailDict.nauseaState.find(x => x.text === item.ItemValue)?.value
+        break
+      case 'PADS4':
+        model.painState = PatientDetailDict.painState.find(x => x.text === item.ItemValue)?.value
+        break
+      case 'PADS5':
+        model.bleedingState = PatientDetailDict.bleedingState.find(x => x.text === item.ItemValue)?.value
+        break
+      case 'PADS评分':
+        model.PADSCount = item.ItemValue
+        break
+      case '离院可':
+        if (item.ItemValue === 'true')
+          model.canLeave = '可'
+        break
+      case '离院否':
+        if (item.ItemValue === 'true')
+          model.canLeave = '否'
+        break
+      case '麻醉医师签名2#BTN#':
+        model.narcoticDoctor2Name = item.ItemValue
+        break
+      case '麻醉医师签名2#IMG#':
+        model.narcoticDoctor2Sign = item.ItemValue
+        break
+      case '麻醉医师签名2#DATE#':
+        if (model.narcoticDoctor2Date) {
+          if (model.narcoticDoctor2Date.includes(':'))
+            model.narcoticDoctor2Date = `${item.ItemValue} ${model.narcoticDoctor2Date}`
+        }
+        else {
+          model.narcoticDoctor2Date = item.ItemValue
+        }
+        break
+      case '麻醉医师签名2#TIME#':
+        if (model.narcoticDoctor2Date) {
+          if (model.narcoticDoctor2Date.includes('-'))
+            model.narcoticDoctor2Date += ` ${item.ItemValue}`
+        }
+        else {
+          model.narcoticDoctor2Date = item.ItemValue
+        }
+        break
+      case '护士签名1#BTN#':
+        model.nurseName = item.ItemValue
+        break
+      case '护士签名1#IMG#':
+        model.nurseSign = item.ItemValue
+        break
+      case '护士签名1#DATE#':
+        if (model.nurseDate) {
+          if (model.nurseDate.includes(':'))
+            model.nurseDate = `${item.ItemValue} ${model.nurseDate}`
+        }
+        else {
+          model.nurseDate = item.ItemValue
+        }
+        break
+      case '护士签名1#TIME#':
+        if (model.nurseDate) {
+          if (model.nurseDate.includes('-'))
+            model.nurseDate += ` ${item.ItemValue}`
+        }
+        else {
+          model.nurseDate = item.ItemValue
+        }
+        break
+      default:
+        break
+    }
+  })
 }

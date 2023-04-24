@@ -553,6 +553,29 @@ export namespace ApiResonseType {
     DefaultValue: string
   }
 
+  /** 详情页模板 */
+  export interface PackageInfo {
+    /**
+     * 模板ID
+     */
+    PackageId: string
+    /**
+     * 模板名称
+     */
+    PackageName: string
+    /**
+     * 模板类型，包括“公共”和“个人”模板
+     */
+    PackageType: string
+  }
+
+  /** 麻醉小结详情 */
+  export interface NarcoticResult {
+    /** 手术患者ID */
+    AnesthesiaId: string
+    Items: ApiRequestType.NarcoticItemInfo[]
+  }
+
 }
 
 /** 体征检测项目 */

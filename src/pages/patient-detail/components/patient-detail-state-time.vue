@@ -2,6 +2,8 @@
 import type { Ref } from 'vue'
 import StateTimePicker from './state-time-picker.vue'
 import { getPatientDetail, updateState } from '@/utils/api'
+const emits = defineEmits(['onTime'])
+
 const id = inject<Ref<string>>('id')
 
 const list = [
@@ -29,6 +31,9 @@ function onChange(key: string, val: string) {
     StateName: item.title,
     StateTime: val,
     AnesthesiaId: id!.value,
+  }).then(() => {
+    if (modelData.AccessTime && modelData.AnesthesiaBeginTime)
+      emits('onTime')
   }).catch(() => {
     uni.showToast({
       title: '保存失败，请稍后重试',

@@ -260,12 +260,33 @@ export function saveNarcoticResult(id: string, items: ApiRequestType.NarcoticIte
   })
 }
 
+/** 保存麻醉小结项目内容 */
+export function getNarcoticResult(id: string) {
+  return request<ApiResonseType.NarcoticResult>({
+    path: '/api/AnesCustom/GetList',
+    data: {
+      anesId: id,
+    },
+    method: 'GET',
+  })
+}
+
 /** 更新节点信息 */
 export function updateState(data: ApiRequestType.FlowStateInfo) {
   return request<boolean>({
     path: '/api/Patient/UpdateState',
     data,
     method: 'POST',
+    loading: true,
+  })
+}
+
+/** 获取模板 */
+export function getPackages(loginName: string) {
+  return request<ApiResonseType.PackageInfo[]>({
+    path: '/api/Package/GetList',
+    data: { loginName },
+    method: 'GET',
     loading: true,
   })
 }
