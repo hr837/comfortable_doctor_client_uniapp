@@ -320,7 +320,7 @@ function saveData() {
       <uni-row>
         <uni-col :span="10">
           <uni-forms-item label="恢复室护士" class="form-item-doctor" name="nurseName">
-            <DoctorSign :sign-code="modelData.nurseSign" role-code="OpNurse" @click="() => doctorKey = 'nurse'" @signed="setSignInfo" />
+            <DoctorSign :sign-code="modelData.nurseSign" role-code="AnNurse" @click="() => doctorKey = 'nurse'" @signed="setSignInfo" />
           </uni-forms-item>
         </uni-col>
         <uni-col :span="14">

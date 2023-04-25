@@ -1,6 +1,6 @@
 import queryString from 'query-string'
 import dayJs from 'dayjs'
-import type { ApiResonseType } from '@/utils/api.help'
+import type { ApiRequestType, ApiResonseType } from '@/utils/api.help'
 
 interface GridMenuInfo {
   /** 显示文字 */
@@ -80,7 +80,7 @@ export function dateTimeFormat(date: string, fmt = 'YYYY-MM-DD HH:mm:ss') {
   return dateFormat(date, fmt)
 }
 
-export function roleFormat(roleName: string) {
+export function roleFormat(roleName: ApiRequestType.RoleCode) {
   let name = '管理员'
   switch (roleName) {
     case 'Anesthetist':
@@ -89,7 +89,7 @@ export function roleFormat(roleName: string) {
     case 'OpDoctor':
       name = '手术医生'
       break
-    case 'OpNurse':
+    case 'AnNurse':
       name = '护士'
       break
   }

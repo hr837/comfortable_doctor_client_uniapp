@@ -290,3 +290,13 @@ export function getPackages(loginName: string) {
     loading: true,
   })
 }
+
+/** 保存选择模板 */
+export function saveSelectdPackage(patientId: string, packageId: string) {
+  return request<boolean>({
+    path: '/api/Package/SelectPackage',
+    data: { anesId: patientId, packageId },
+    method: 'GET',
+    loading: true,
+  })
+}

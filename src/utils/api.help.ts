@@ -116,9 +116,9 @@ export namespace ApiRequestType {
   /** 医生类型
   * @description Anesthetist 麻醉医生
   * @description OpDoctor 手术医生
-  * @description OpNurse 手术护士
+  * @description AnNurse 手术护士
   */
-  export type RoleCode = 'Anesthetist' | 'OpDoctor' | 'OpNurse'
+  export type RoleCode = 'Anesthetist' | 'OpDoctor' | 'AnNurse'
 
   /** 麻醉小结项 */
   export interface NarcoticItemInfo {

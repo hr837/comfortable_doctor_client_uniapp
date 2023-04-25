@@ -1,9 +1,11 @@
 <script lang="ts" setup>
-import { getPackages } from '@/utils/api'
+import type { Ref } from 'vue'
+import { getPackages, saveSelectdPackage } from '@/utils/api'
 import type { ApiResonseType } from '@/utils/api.help'
 import { STORE_KEY_USER } from '@/utils/app.constant'
 
-const emits = defineEmits(['onClose', 'onConfirm'])
+const emits = defineEmits(['onClose'])
+const patientId = inject<Ref<string>>('id')
 
 const packageInfo = ref<ApiResonseType.PackageInfo[]>([])
 const current = ref(0)
@@ -31,7 +33,27 @@ function onClose() {
 }
 
 function onConfirm() {
-  emits('onConfirm')
+  if (!currentPackageId.value) {
+    return uni.showToast({
+      title: '请选择模板',
+      icon: 'none',
+    })
+  }
+  saveSelectdPackage(patientId!.value, currentPackageId.value).then((data) => {
+    if (!data) {
+      uni.showToast({
+        title: '保存失败，请重试',
+        icon: 'error',
+      })
+    }
+    else {
+      uni.showToast({
+        title: '保存成功',
+        icon: 'success',
+      })
+      emits('onClose')
+    }
+  })
 }
 
 const packgeType = computed(() => current.value === 0 ? '个人' : '公共')
@@ -68,9 +90,9 @@ const list = computed(() => packageInfo.value.filter(x => x.PackageType === pack
   }
 
   &-item {
-    @apply text-center p-1 m-y-2 bg-gray-1 border border-solid border-gray-2 rounded ;
+    @apply text-center p-1 m-y-2 bg-gray-1 border border-solid border-gray-2 rounded;
 
-    &.actived{
+    &.actived {
       @apply bg-gray-3;
     }
   }
