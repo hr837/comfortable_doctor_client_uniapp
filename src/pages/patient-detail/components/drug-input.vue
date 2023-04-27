@@ -12,18 +12,29 @@ interface PropsType {
 const props = defineProps<PropsType>()
 const emits = defineEmits(['selected'])
 
-const drug = ref('')
+const drugInput = ref('')
+const drug = computed({
+  get: () => {
+    return drugInput.value
+  },
+  set: (val) => {
+    drugInput.value = val.toUpperCase()
+  },
+})
 const drugList = ref<string[]>([])
 
 onMounted(() => {
   const source = props.type === 'MZ' ? drugNarcoticList : drugTransfusionList
-  drugList.value = source.value.map(x => `${x.DrugSpell}|${x.DrugName}`)
+  drugList.value = source.value.map((x) => {
+    const spell = x.DrugSpell.toUpperCase()
+    return `${spell}|${x.DrugName}`
+  })
 })
 
 function onSubmit() {
   const [s] = drug.value.split('|')
   const source = props.type === 'MZ' ? drugNarcoticList : drugTransfusionList
-  const item = source.value.find(x => x.DrugSpell === s)
+  const item = source.value.find(x => x.DrugSpell.toUpperCase() === s)
   emits('selected', item)
 }
 </script>
