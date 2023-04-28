@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import dayJs from 'dayjs'
+import { dateTimeFormat } from '@/composables'
 const props = defineProps<{ date: string }>()
 const emits = defineEmits(['change'])
 
@@ -10,11 +10,10 @@ const datePickerVal = ref()
 const timePickerVal = ref()
 
 watch(() => props.date, (val: string) => {
-  const dateTime = dayJs(val)
   if (dateTime.isValid()) {
-    dateValue.value = dateTime.format('YYYY-MM-DD')
-    dateTextValue.value = dateTime.format('MM-DD')
-    timeValue.value = dateTime.format('HH:mm')
+    dateValue.value = dateTimeFormat(val, 'YYYY-MM-DD')
+    dateTextValue.value = dateTimeFormat(val, 'MM-DD')
+    timeValue.value = dateTimeFormat(val, 'HH:mm')
   }
   else {
     dateValue.value = ''
@@ -53,7 +52,7 @@ function checkValue() {
 
 function setCurrentDate() {
   if (!props.date) {
-    const date = dayJs(Date.now()).format('YYYY-MM-DD HH:mm:ss')
+    const date = dateTimeFormat(new Date().toLocaleString())
     emits('change', date)
   }
 }
@@ -61,7 +60,7 @@ function setCurrentDate() {
 
 <template>
   <view class="component state-time-picker" @click="setCurrentDate">
-    <picker class="state-time-picker-date" mode="date" :value="dateValue" disabled @change="onDateChange">
+    <picker class="state-time-picker-date" mode="date" :value="dateValue" @change="onDateChange">
       <view ref="datePickerVal">
         {{ dateTextValue }}
       </view>

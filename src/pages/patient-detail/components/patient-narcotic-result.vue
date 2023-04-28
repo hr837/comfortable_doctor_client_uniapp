@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import dayjs from 'dayjs'
 import type { Ref } from 'vue'
 import NarcoticResultTempalteSelect from './narcotic-result-tempalte-select.vue'
 import DoctorSign from './doctor-sign.vue'
 import { PatientDetailDict, narcoticItemRevert, narcoticItemsConvert } from '@/composables/patient-narcotic-detail.composable'
 import { getNarcoticResult, saveNarcoticResult } from '@/utils/api'
+import { dateTimeFormat } from '@/composables'
 
 const id = inject<Ref<string>>('id')
 // 模板ref
@@ -43,56 +43,18 @@ const modelData = reactive({
   nurseDate: '',
 })
 
-const rules = {
-  narcoticDoctorName: {
-    rules: [{ required: true, errorMessage: '请选择麻醉医师' }],
-  },
-  narcoticDoctorDate: {
-    rules: [{ required: true, errorMessage: '请选择签字时间' }],
-  },
-  narcoticDoctor2Name: {
-    rules: [{ required: true, errorMessage: '请选择麻醉医师' }],
-  },
-  narcoticDoctor2Date: {
-    rules: [{ required: true, errorMessage: '请选择签字时间' }],
-  },
-  nurseName: {
-    rules: [{ required: true, errorMessage: '请选择恢复室护士' }],
-  },
-  nurseDate: {
-    rules: [{ required: true, errorMessage: '请选择签字时间' }],
-  },
-  passTo: {
-    rules: [{ validateFunction: passToValidator }],
-  },
-  specificText: {
-    rules: [{ required: true, errorMessage: '请输入术中特殊情况描述' }],
-  },
-  recoverySpecificText: {
-    rules: [{ required: true, errorMessage: '请输入恢复室内情况描述' }],
-  },
-}
-
 onMounted(() => {
   getNarcoticResult(id!.value).then((data) => {
     narcoticItemRevert(data, modelData)
   })
 })
 
-/** 术后转其他验证 */
-function passToValidator(_: any, value: string, __: any, callback: Function) {
-  if (value === '其它' && !modelData.passToText)
-    callback('请输入术后转其他内容')
-  else
-    return true
-}
-
 const StewardCount = computed(() => modelData.comToLifeState + modelData.bodyActiveState + modelData.breathActiveState)
 const PADSCount = computed(() => modelData.vitalsignState + modelData.activeState + modelData.painState + modelData.nauseaState + modelData.bleedingState)
 
 const showSpecific = computed(() => modelData.specific === '有')
 const showRecoverySpecific = computed(() => modelData.recoverySpecific === '有')
-const showPassToText = computed(() => modelData.passTo === '其它')
+const showPassToText = computed(() => modelData.passTo === '其他')
 const showCanLeaveText = computed(() => modelData.canLeave === '可')
 
 /**
@@ -121,7 +83,7 @@ function onTempalteClose() {
 const doctorKey = ref('')
 
 function setSignInfo(data?: any) {
-  const dateStr = dayjs(Date.now()).format('YYYY-MM-DD HH:mm:ss')
+  const dateStr = dateTimeFormat(new Date().toLocaleString())
   switch (doctorKey.value) {
     case 'narcoticDoctor':
       modelData.narcoticDoctorName = data?.userName ?? ''
@@ -139,13 +101,6 @@ function setSignInfo(data?: any) {
       modelData.nurseDate = data ? dateStr : ''
       break
   }
-}
-
-function onSubmit() {
-  formRef.value?.validate([], (errs) => {
-    if (!errs)
-      saveData()
-  })
 }
 
 function saveData() {
@@ -189,15 +144,12 @@ function saveData() {
 
     <uni-section class="patient-narcotic-result-header" title="麻醉情况" type="line">
       <template #right>
-        <button type="primary" size="mini" @click="onSubmit">
+        <button type="primary" size="mini" @click="saveData">
           保存
         </button>
       </template>
     </uni-section>
-    <uni-forms
-      ref="formRef" :rules="rules" :model="modelData" label-width="100px" label-align="right"
-      class="patient-narcotic-result-form"
-    >
+    <uni-forms :model="modelData" label-width="100px" label-align="right" class="patient-narcotic-result-form">
       <uni-forms-item label="术中特殊情况" class="no-margin">
         <uni-data-checkbox v-model="modelData.specific" :localdata="PatientDetailDict.has" mode="button" />
       </uni-forms-item>
@@ -244,7 +196,10 @@ function saveData() {
       <uni-row>
         <uni-col :span="10">
           <uni-forms-item label="麻醉医师" class="form-item-doctor" name="narcoticDoctorName">
-            <DoctorSign :sign-code="modelData.narcoticDoctorSign" role-code="Anesthetist" @click="() => doctorKey = 'narcoticDoctor'" @signed="setSignInfo" />
+            <DoctorSign
+              :sign-code="modelData.narcoticDoctorSign" role-code="Anesthetist"
+              @click="() => doctorKey = 'narcoticDoctor'" @signed="setSignInfo"
+            />
           </uni-forms-item>
         </uni-col>
         <uni-col :span="14">
@@ -307,7 +262,10 @@ function saveData() {
       <uni-row>
         <uni-col :span="10">
           <uni-forms-item label="麻醉医师" class="form-item-doctor" name="narcoticDoctor2Name">
-            <DoctorSign :sign-code="modelData.narcoticDoctor2Sign" role-code="Anesthetist" @click="() => doctorKey = 'narcoticDoctor2'" @signed="setSignInfo" />
+            <DoctorSign
+              :sign-code="modelData.narcoticDoctor2Sign" role-code="Anesthetist"
+              @click="() => doctorKey = 'narcoticDoctor2'" @signed="setSignInfo"
+            />
           </uni-forms-item>
         </uni-col>
         <uni-col :span="14">
@@ -320,7 +278,10 @@ function saveData() {
       <uni-row>
         <uni-col :span="10">
           <uni-forms-item label="恢复室护士" class="form-item-doctor" name="nurseName">
-            <DoctorSign :sign-code="modelData.nurseSign" role-code="AnNurse" @click="() => doctorKey = 'nurse'" @signed="setSignInfo" />
+            <DoctorSign
+              :sign-code="modelData.nurseSign" role-code="AnNurse" @click="() => doctorKey = 'nurse'"
+              @signed="setSignInfo"
+            />
           </uni-forms-item>
         </uni-col>
         <uni-col :span="14">

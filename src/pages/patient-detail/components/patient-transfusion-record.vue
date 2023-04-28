@@ -38,22 +38,23 @@ function onDelete(id: string) {
 function addRecord() {
   uni.navigateTo({
     url: `${editUrl}?pId=${id!.value}`,
-    success: () => {
-      uni.$once('refreshList:patient-transfusion-record', refreshList)
-    },
   })
 }
 
 function onClick(id: string) {
   uni.navigateTo({
     url: `${editUrl}?rId=${id!}`,
-    success: () => {
-      uni.$once('refreshList:patient-transfusion-record', refreshList)
-    },
   })
 }
 
-onMounted(refreshList)
+onMounted(() => {
+  refreshList()
+  uni.$on('refreshList:patient-transfusion-record', refreshList)
+})
+
+onUnmounted(() => {
+  uni.$off('refreshList:patient-transfusion-record')
+})
 </script>
 
 <template>

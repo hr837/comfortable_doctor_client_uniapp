@@ -1,12 +1,22 @@
 <script lang="ts" setup>
 import type { Ref } from 'vue'
-import StateTimePicker from './state-time-picker.vue'
-import { getPatientDetail, updateState } from '@/utils/api'
+// import StateTimePicker from './state-time-picker.vue'
+import { updateState } from '@/utils/api'
+import { patientInfo } from '@/composables/patient-narcotic-detail.composable'
+import type { ApiResonseType } from '@/utils/api.help'
+import { dateTimeFormat } from '@/composables'
 const emits = defineEmits(['onTime'])
 
 const id = inject<Ref<string>>('id')
 
-const list = [
+type ListItemKey = keyof Pick<ApiResonseType.PatientDetailInfo, 'AccessTime' | 'AnesthesiaBeginTime' | 'AnesthesiaEndTime' | 'OperationBeginTime' | 'OperationEndTime' | 'LeaveTime' | 'AccessPacuTime' | 'LeavePacuTime'>
+interface listItem {
+  title: string
+  label: string
+  key: ListItemKey
+}
+
+const list: listItem[] = [
   { title: '入室时间', label: '入室时间', key: 'AccessTime' },
   { title: '麻醉开始时间', label: '麻醉开始', key: 'AnesthesiaBeginTime' },
   { title: '麻醉结束时间', label: '麻醉结束', key: 'AnesthesiaEndTime' },
@@ -17,22 +27,22 @@ const list = [
   { title: '出恢复室时间', label: '出PACU', key: 'LeavePacuTime' },
 ]
 
-const modelData = reactive<any>({})
-list.forEach((item) => {
-  modelData[item.key] = ''
-})
+const popupRef = ref<UniHelper.UniPopupProps>()
+const itemValue = ref('')
+const editItem = ref<listItem>()
+function openDialog(item: listItem) {
+  editItem.value = item
+  itemValue.value = patientInfo[item.key] ?? new Date().toLocaleString()
+  popupRef.value?.open()
+}
 
-function onChange(key: string, val: string) {
-  modelData[key] = val
-  const item = list.find(x => x.key === key)
-  if (!item)
-    return
+function onDialogComfirm() {
   updateState({
-    StateName: item.title,
-    StateTime: val,
+    StateName: editItem.value!.title,
+    StateTime: itemValue.value,
     AnesthesiaId: id!.value,
   }).then(() => {
-    if (modelData.AccessTime && modelData.AnesthesiaBeginTime)
+    if (patientInfo.AccessTime && patientInfo.AnesthesiaBeginTime)
       emits('onTime')
   }).catch(() => {
     uni.showToast({
@@ -41,28 +51,23 @@ function onChange(key: string, val: string) {
     })
   })
 }
-
-onMounted(() => {
-  getPatientDetail(id!.value).then((data) => {
-    modelData.AccessPacuTime = data.AccessPacuTime
-    modelData.AnesthesiaBeginTime = data.AnesthesiaBeginTime
-    modelData.LeavePacuTime = data.LeavePacuTime
-    modelData.LeaveTime = data.LeaveTime
-    modelData.AccessTime = data.AccessTime
-    modelData.AnesthesiaEndTime = data.AnesthesiaEndTime
-    modelData.OperationBeginTime = data.OperationBeginTime
-    modelData.OperationEndTime = data.OperationEndTime
-  })
-})
 </script>
 
 <template>
   <view class="component patient-detail-state-time">
-    <uni-forms :model="modelData" label-width="70px">
+    <uni-popup ref="popupRef" type="dialog">
+      <uni-popup-dialog :title="editItem?.title" mode="base" type="info" @confirm="onDialogComfirm">
+        <uni-datetime-picker v-model="itemValue" class="patient-detail-state-time-picker" />
+      </uni-popup-dialog>
+    </uni-popup>
+    <uni-forms :model="patientInfo" label-width="70px">
       <uni-row>
         <uni-col v-for="(item) of list" :key="item.key" :span="6">
           <uni-forms-item :label="item.label">
-            <StateTimePicker :date="modelData[item.key]" @change="val => onChange(item.key, val)" />
+            <!-- <StateTimePicker :date="patientInfo[item.key] as string" @change="val => onChange(item.key, val)" /> -->
+            <view class="patient-detail-state-time-item" @click="() => openDialog(item)">
+              {{ dateTimeFormat(patientInfo[item.key], 'MM-DD HH:mm') }}
+            </view>
           </uni-forms-item>
         </uni-col>
       </uni-row>
@@ -79,6 +84,23 @@ onMounted(() => {
 
     ::v-deep .uni-forms-item__content {
       padding-right: 12px;
+    }
+  }
+
+  &-item{
+    height: 35px;
+    line-height: 35px;
+    border: solid 1px #f1f1f1;
+    border-radius: 4px;
+    padding-left: 8px;
+  }
+
+  &-picker {
+    ::v-deep .uni-date-picker__container {
+      .uni-date-single--x {
+        position: fixed;
+        top: calc(50% + 25px) !important;
+      }
     }
   }
 }

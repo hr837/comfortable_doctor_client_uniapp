@@ -2,7 +2,7 @@
 // import PatientDetailPopup from './components/patient-detail-popup.vue'
 import PatientDetailStateTime from './components/patient-detail-state-time.vue'
 import DoctorTemplateSelect from './components/doctor-template-select.vue'
-import { ComponentSetting, initMonitorItems, initSelectOptions } from '@/composables/patient-narcotic-detail.composable'
+import { ComponentSetting, initMonitorItems, initPatientInfo, initSelectOptions, patientInfo, refreshPatientInfo } from '@/composables/patient-narcotic-detail.composable'
 // import { goToPatientAttchPage } from '@/composables'
 import PatientBaseInfoForm from '@/pages/patient-detail/components/patient-base-info-form.vue'
 import PatientNarcoticDrugRecord from '@/pages/patient-detail/components/patient-narcotic-drug-record.vue'
@@ -35,9 +35,11 @@ onLoad((query) => {
   const title = `${PatientName} ${PatientSex} ${PatientAge}`
   id.value = Id
   uni.setNavigationBarTitle({ title })
+  initPatientInfo()
 })
 
 onMounted(() => {
+  refreshPatientInfo(id.value)
   setTimeout(() => {
     initSelectOptions()
     initMonitorItems(id.value)
@@ -80,7 +82,21 @@ function scrollTo(val: string) {
 }
 
 function openTemplate() {
-  packageRef.value?.open()
+  if (!patientInfo.AccessTime) {
+    uni.showToast({
+      title: '请填写入手术室时间',
+      icon: 'none',
+    })
+  }
+  else if (!patientInfo.AnesthesiaBeginTime) {
+    uni.showToast({
+      title: '请填写入麻醉开始时间',
+      icon: 'none',
+    })
+  }
+  else {
+    packageRef.value?.open()
+  }
 }
 
 function closeTemplate() {

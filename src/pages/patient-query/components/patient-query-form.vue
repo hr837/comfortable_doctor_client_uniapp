@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import dayJs from 'dayjs'
 import type { ItemInfo } from '@/utils/api.help'
 import { STORE_KEY_ROOM, STORE_ROOM_LIST } from '@/utils/app.constant'
+import { dateFormat } from '@/composables'
 
 export interface QueryInfo {
   query: string
@@ -41,7 +41,7 @@ onMounted(() => {
     model.roomCode = localCode ?? ''
   }
   nextTick(() => {
-    model.date = dayJs(Date.now()).format('YYYY-MM-DD')
+    model.date = dateFormat(new Date().toLocaleString())
     onSubmit()
   })
 })

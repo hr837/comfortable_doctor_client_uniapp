@@ -71,7 +71,7 @@ function submitForm() {
 <template>
   <view class="page login">
     <view class="login-setting">
-      <uni-data-select v-model="loginModel.RoomCode" class="login-setting-room" :localdata="roomList" placeholder="手术间" />
+      <uni-data-select v-model="loginModel.RoomCode" class="login-setting-room" :localdata="roomList" :clear="false" placeholder="手术间" />
       <LoginSetting @settinged="refreshRoomList" />
     </view>
     <image class="login-logo" src="/static/login-logo.png" />

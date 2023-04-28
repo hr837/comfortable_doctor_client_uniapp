@@ -38,7 +38,7 @@ const form = ref<UniForm>()
 const DATE_TEMPLATE = 'YYYY-MM-DD HH:mm:00'
 
 function getNextTime() {
-  let nextDate = dayJs(Date.now()).add(5, 'minute')
+  let nextDate = dayJs().add(5, 'minute')
   const count = Math.floor(nextDate.minute() / 5)
   nextDate = nextDate.set('minute', count * 5)
   return nextDate.format(DATE_TEMPLATE)

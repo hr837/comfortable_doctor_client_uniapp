@@ -72,7 +72,8 @@ export function goToPatientAttchPage(data: ApiResonseType.PatientInfo, command: 
 
 /** 日期格式化 */
 export function dateFormat(date: string, fmt = 'YYYY-MM-DD') {
-  return dayJs(date).format(fmt)
+  const tmpDayjs = dayJs(date)
+  return tmpDayjs.isValid() ? tmpDayjs.format(fmt) : ''
 }
 
 /** 时间r格式化 */

@@ -1,5 +1,5 @@
 import { dateFormat } from '.'
-import { getDrugList, getDrugUnitList, getDrugWayList, getMonitorItems } from '@/utils/api'
+import { getDrugList, getDrugUnitList, getDrugWayList, getMonitorItems, getPatientDetail } from '@/utils/api'
 import type { ApiRequestType, ApiResonseType } from '@/utils/api.help'
 
 export const ComponentSetting = [
@@ -19,7 +19,7 @@ export const PatientDetailDict = {
   comToLifeState: [{ text: '完全清醒-2分', value: 2, disabled: false }, { text: '对刺激有反应-1分', value: 1, disabled: false }, { text: '对刺激无反应-0分', value: 0, disabled: false }],
   breathActiveState: [{ text: '可以呼叫、自主咳嗽、咳痰-2分', value: 2, disabled: false }, { text: '可以保留呼吸道通畅-1分', value: 1, disabled: false }, { text: '呼吸道不能保持通畅-0分', value: 0, disabled: false }],
   bodyActiveState: [{ text: '有意识的肢体活动-2分', value: 2, disabled: false }, { text: '无意识的肢体活动-1分', value: 1, disabled: false }, { text: '无任何肢体活动-0分', value: 0, disabled: false }],
-  passTo: [{ text: '恢复室', value: '恢复室', disabled: false }, { text: '观察室', value: '观察室', disabled: false }, { text: '其它', value: '其它', disabled: false }],
+  passTo: [{ text: '恢复室', value: '恢复室', disabled: false }, { text: '观察室', value: '观察室', disabled: false }, { text: '其他', value: '其他', disabled: false }],
   canLeave: [{ text: '可', value: '可', disabled: false }, { text: '否', value: '否', disabled: false }],
   // 离院标准
   vitalsignState: [{ text: '波动在术前值得20%以内-2分', value: 2, disabled: false }, { text: '波动在术前值的20-40%-1分', value: 1, disabled: false }, { text: '波动大于术前值的40%-0分', value: 0, disabled: false }],
@@ -466,3 +466,186 @@ export function narcoticItemRevert({ Items }: ApiResonseType.NarcoticResult, mod
     }
   })
 }
+
+/**
+ * 病人详情信息
+ */
+export const patientInfo = reactive<ApiResonseType.PatientDetailInfo>({
+  AccessPacuTime: '',
+  AccessTime: '',
+  AnesthesiaBeginTime: '',
+  AnesthesiaEndTime: '',
+  AnesthesiaMethodCode: '',
+  AnesthesiaMethodName: '',
+  Anesthetist1Code: '',
+  Anesthetist1Name: '',
+  Anesthetist3Code: '',
+  Anesthetist3Name: '',
+  AppointmentCancel: '',
+  AssessTime: '',
+  DiagnosisCode: '',
+  DiagnosisName: '',
+  DoctorCode: '',
+  DoctorName: '',
+  ExamineTime: '',
+  ExamineType: '',
+  ExtubationTime: '',
+  Id: '',
+  IntubateTime: '',
+  IsChecked: false,
+  IsEmergency: false,
+  LeavePacuTime: '',
+  LeaveTime: '',
+  NurseCode: '',
+  NurseName: '',
+  OperateCancel: '',
+  OperatingRoomCode: '',
+  OperatingRoomName: '',
+  OperationBeginTime: '',
+  OperationCode: '',
+  OperationEndTime: '',
+  OperationName: '',
+  OperatorCode: '',
+  OperatorName: '',
+  Opinion: '',
+  PatientAge: '',
+  PatientBedCode: '',
+  PatientBedName: '',
+  PatientBirthday: '',
+  PatientDepartmentCode: '',
+  PatientDepartmentName: '',
+  PatientIdCard: '',
+  PatientIdentity: '',
+  PatientMrn: '',
+  PatientName: '',
+  PatientNumber: '',
+  PatientSex: '',
+  PatientSource: '',
+  PatientWardCode: '',
+  PatientWardName: '',
+  PlanStartTime: '',
+  SpecialInfect: '',
+  SubscribeDate: '',
+  SubscribeId: '',
+})
+
+/**
+ * 初始化病人详情信息
+ */
+export const initPatientInfo = () => {
+  patientInfo.AccessPacuTime = ''
+  patientInfo.AccessTime = ''
+  patientInfo.AnesthesiaBeginTime = ''
+  patientInfo.AnesthesiaEndTime = ''
+  patientInfo.AnesthesiaMethodCode = ''
+  patientInfo.AnesthesiaMethodName = ''
+  patientInfo.Anesthetist1Code = ''
+  patientInfo.Anesthetist1Name = ''
+  patientInfo.Anesthetist3Code = ''
+  patientInfo.Anesthetist3Name = ''
+  patientInfo.AppointmentCancel = ''
+  patientInfo.AssessTime = ''
+  patientInfo.DiagnosisCode = ''
+  patientInfo.DiagnosisName = ''
+  patientInfo.DoctorCode = ''
+  patientInfo.DoctorName = ''
+  patientInfo.ExamineTime = ''
+  patientInfo.ExamineType = ''
+  patientInfo.ExtubationTime = ''
+  patientInfo.Id = ''
+  patientInfo.IntubateTime = ''
+  patientInfo.IsChecked = false
+  patientInfo.IsEmergency = false
+  patientInfo.LeavePacuTime = ''
+  patientInfo.LeaveTime = ''
+  patientInfo.NurseCode = ''
+  patientInfo.NurseName = ''
+  patientInfo.OperateCancel = ''
+  patientInfo.OperatingRoomCode = ''
+  patientInfo.OperatingRoomName = ''
+  patientInfo.OperationBeginTime = ''
+  patientInfo.OperationCode = ''
+  patientInfo.OperationEndTime = ''
+  patientInfo.OperationName = ''
+  patientInfo.OperatorCode = ''
+  patientInfo.OperatorName = ''
+  patientInfo.Opinion = ''
+  patientInfo.PatientAge = ''
+  patientInfo.PatientBedCode = ''
+  patientInfo.PatientBedName = ''
+  patientInfo.PatientBirthday = ''
+  patientInfo.PatientDepartmentCode = ''
+  patientInfo.PatientDepartmentName = ''
+  patientInfo.PatientIdCard = ''
+  patientInfo.PatientIdentity = ''
+  patientInfo.PatientMrn = ''
+  patientInfo.PatientName = ''
+  patientInfo.PatientNumber = ''
+  patientInfo.PatientSex = ''
+  patientInfo.PatientSource = ''
+  patientInfo.PatientWardCode = ''
+  patientInfo.PatientWardName = ''
+  patientInfo.PlanStartTime = ''
+  patientInfo.SpecialInfect = ''
+  patientInfo.SubscribeDate = ''
+  patientInfo.SubscribeId = ''
+}
+
+/** 刷新病人信息 */
+export const refreshPatientInfo = (id: string) => getPatientDetail(id).then((data) => {
+  patientInfo.AccessPacuTime = data.AccessPacuTime
+  patientInfo.AccessTime = data.AccessTime
+  patientInfo.AnesthesiaBeginTime = data.AnesthesiaBeginTime
+  patientInfo.AnesthesiaEndTime = data.AnesthesiaEndTime
+  patientInfo.AnesthesiaMethodCode = data.AnesthesiaMethodCode
+  patientInfo.AnesthesiaMethodName = data.AnesthesiaMethodName
+  patientInfo.Anesthetist1Code = data.Anesthetist1Code
+  patientInfo.Anesthetist1Name = data.Anesthetist1Name
+  patientInfo.Anesthetist3Code = data.Anesthetist3Code
+  patientInfo.Anesthetist3Name = data.Anesthetist3Name
+  patientInfo.AppointmentCancel = data.AppointmentCancel
+  patientInfo.AssessTime = data.AssessTime
+  patientInfo.DiagnosisCode = data.DiagnosisCode
+  patientInfo.DiagnosisName = data.DiagnosisName
+  patientInfo.DoctorCode = data.DoctorCode
+  patientInfo.DoctorName = data.DoctorName
+  patientInfo.ExamineTime = data.ExamineTime
+  patientInfo.ExamineType = data.ExamineType
+  patientInfo.ExtubationTime = data.ExtubationTime
+  patientInfo.Id = data.Id
+  patientInfo.IntubateTime = data.IntubateTime
+  patientInfo.IsChecked = data.IsChecked
+  patientInfo.IsEmergency = data.IsEmergency
+  patientInfo.LeavePacuTime = data.LeavePacuTime
+  patientInfo.LeaveTime = data.LeaveTime
+  patientInfo.NurseCode = data.NurseCode
+  patientInfo.NurseName = data.NurseName
+  patientInfo.OperateCancel = data.OperateCancel
+  patientInfo.OperatingRoomCode = data.OperatingRoomCode
+  patientInfo.OperatingRoomName = data.OperatingRoomName
+  patientInfo.OperationBeginTime = data.OperationBeginTime
+  patientInfo.OperationCode = data.OperationCode
+  patientInfo.OperationEndTime = data.OperationEndTime
+  patientInfo.OperationName = data.OperationName
+  patientInfo.OperatorCode = data.OperatorCode
+  patientInfo.OperatorName = data.OperatorName
+  patientInfo.Opinion = data.Opinion
+  patientInfo.PatientAge = data.PatientAge
+  patientInfo.PatientBedCode = data.PatientBedCode
+  patientInfo.PatientBedName = data.PatientBedName
+  patientInfo.PatientBirthday = dateFormat(data.PatientBirthday)
+  patientInfo.PatientDepartmentCode = data.PatientDepartmentCode
+  patientInfo.PatientDepartmentName = data.PatientDepartmentName
+  patientInfo.PatientIdCard = data.PatientIdCard
+  patientInfo.PatientIdentity = data.PatientIdentity
+  patientInfo.PatientMrn = data.PatientMrn
+  patientInfo.PatientName = data.PatientName
+  patientInfo.PatientNumber = data.PatientNumber
+  patientInfo.PatientSex = data.PatientSex
+  patientInfo.PatientSource = data.PatientSource
+  patientInfo.PatientWardCode = data.PatientWardCode
+  patientInfo.PatientWardName = data.PatientWardName
+  patientInfo.PlanStartTime = data.PlanStartTime
+  patientInfo.SpecialInfect = data.SpecialInfect
+  patientInfo.SubscribeDate = dateFormat(data.SubscribeDate)
+})
