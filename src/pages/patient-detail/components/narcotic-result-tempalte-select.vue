@@ -22,8 +22,7 @@ function onConfirm() {
     })
   }
   else {
-    const val = `${currentItem.value.TemplateName}:${currentItem.value.TemplateContent}`
-    emits('confirm', val)
+    emits('confirm', currentItem.value.TemplateContent)
   }
 }
 
