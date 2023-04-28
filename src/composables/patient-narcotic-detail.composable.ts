@@ -250,7 +250,7 @@ export function narcoticItemsConvert(data: any) {
         if (value === '有') {
           items.push({
             ItemName: '恢复室内情况',
-            ItemValue: data.specificText,
+            ItemValue: data.recoverySpecificText,
             ControlType: 'InputTextBox',
           })
         }
