@@ -132,7 +132,7 @@ function saveData() {
 </script>
 
 <template>
-  <view class="component patient-narcotic-result p-x-4">
+  <view class="component patient-narcotic-result">
     <!-- 模板弹窗 -->
     <uni-popup ref="popupSelectRef" type="dialog">
       <NarcoticResultTempalteSelect
@@ -148,7 +148,7 @@ function saveData() {
         </button>
       </template>
     </uni-section>
-    <uni-forms :model="modelData" label-width="100px" label-align="right" class="patient-narcotic-result-form">
+    <uni-forms :model="modelData" label-width="100px" label-align="right" class="patient-narcotic-result-form  p-x-4">
       <uni-forms-item label="术中特殊情况" class="no-margin">
         <uni-data-checkbox v-model="modelData.specific" :localdata="PatientDetailDict.has" mode="button" />
       </uni-forms-item>
