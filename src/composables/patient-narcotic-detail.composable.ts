@@ -103,8 +103,6 @@ export function dictConvertDrugFlag(type?: string) {
 export function narcoticItemsConvert(data: any) {
   const items: ApiRequestType.NarcoticItemInfo[] = []
   Object.entries(data).forEach(([key, value]) => {
-    if (!value)
-      return
     switch (key) {
       // 术中特殊情况：
       case 'specific':
@@ -128,21 +126,21 @@ export function narcoticItemsConvert(data: any) {
         items.push({
           ItemName: 'Steward1',
           ItemValue: PatientDetailDict.comToLifeState.find(x => x.value === value)?.text ?? '',
-          ControlType: 'InputCheckBox',
+          ControlType: 'InputComboBox',
         })
         break
       case 'breathActiveState':
         items.push({
           ItemName: 'Steward2',
           ItemValue: PatientDetailDict.breathActiveState.find(x => x.value === value)?.text ?? '',
-          ControlType: 'InputCheckBox',
+          ControlType: 'InputComboBox',
         })
         break
       case 'bodyActiveState':
         items.push({
           ItemName: 'Steward3',
           ItemValue: PatientDetailDict.bodyActiveState.find(x => x.value === value)?.text ?? '',
-          ControlType: 'InputCheckBox',
+          ControlType: 'InputComboBox',
         })
         break
       // 术后转：
@@ -260,35 +258,35 @@ export function narcoticItemsConvert(data: any) {
         items.push({
           ItemName: 'PADS1',
           ItemValue: PatientDetailDict.vitalsignState.find(x => x.value === value)?.text ?? '',
-          ControlType: 'InputCheckBox',
+          ControlType: 'InputComboBox',
         })
         break
       case 'activeState':
         items.push({
-          ItemName: 'PADS1',
+          ItemName: 'PADS2',
           ItemValue: PatientDetailDict.activeState.find(x => x.value === value)?.text ?? '',
-          ControlType: 'InputCheckBox',
+          ControlType: 'InputComboBox',
         })
         break
       case 'nauseaState':
         items.push({
-          ItemName: 'PADS1',
+          ItemName: 'PADS3',
           ItemValue: PatientDetailDict.nauseaState.find(x => x.value === value)?.text ?? '',
-          ControlType: 'InputCheckBox',
+          ControlType: 'InputComboBox',
         })
         break
       case 'painState':
         items.push({
-          ItemName: 'PADS1',
+          ItemName: 'PADS4',
           ItemValue: PatientDetailDict.painState.find(x => x.value === value)?.text ?? '',
-          ControlType: 'InputCheckBox',
+          ControlType: 'InputComboBox',
         })
         break
       case 'bleedingState':
         items.push({
-          ItemName: 'PADS1',
+          ItemName: 'PADS5',
           ItemValue: PatientDetailDict.bleedingState.find(x => x.value === value)?.text ?? '',
-          ControlType: 'InputCheckBox',
+          ControlType: 'InputComboBox',
         })
         break
       // 可否出科：
@@ -324,13 +322,13 @@ export function narcoticItemRevert({ Items }: ApiResonseType.NarcoticResult, mod
         model.specificText = item.ItemValue
         break
       case 'Steward1':
-        model.comToLifeState = PatientDetailDict.comToLifeState.find(x => x.text === item.ItemValue)?.value
+        model.comToLifeState = PatientDetailDict.comToLifeState.find(x => x.text === item.ItemValue)?.value || 0
         break
       case 'Steward2':
-        model.breathActiveState = PatientDetailDict.breathActiveState.find(x => x.text === item.ItemValue)?.value
+        model.breathActiveState = PatientDetailDict.breathActiveState.find(x => x.text === item.ItemValue)?.value || 0
         break
       case 'Steward3':
-        model.bodyActiveState = PatientDetailDict.bodyActiveState.find(x => x.text === item.ItemValue)?.value
+        model.bodyActiveState = PatientDetailDict.bodyActiveState.find(x => x.text === item.ItemValue)?.value || 0
         break
       case 'Steward总分':
         model.StewardCount = item.ItemValue
@@ -388,19 +386,19 @@ export function narcoticItemRevert({ Items }: ApiResonseType.NarcoticResult, mod
           model.recoverySpecificText = '有'
         break
       case 'PADS1':
-        model.vitalsignState = PatientDetailDict.vitalsignState.find(x => x.text === item.ItemValue)?.value
+        model.vitalsignState = PatientDetailDict.vitalsignState.find(x => x.text === item.ItemValue)?.value || 0
         break
       case 'PADS2':
-        model.activeState = PatientDetailDict.activeState.find(x => x.text === item.ItemValue)?.value
+        model.activeState = PatientDetailDict.activeState.find(x => x.text === item.ItemValue)?.value || 0
         break
       case 'PADS3':
-        model.nauseaState = PatientDetailDict.nauseaState.find(x => x.text === item.ItemValue)?.value
+        model.nauseaState = PatientDetailDict.nauseaState.find(x => x.text === item.ItemValue)?.value || 0
         break
       case 'PADS4':
-        model.painState = PatientDetailDict.painState.find(x => x.text === item.ItemValue)?.value
+        model.painState = PatientDetailDict.painState.find(x => x.text === item.ItemValue)?.value || 0
         break
       case 'PADS5':
-        model.bleedingState = PatientDetailDict.bleedingState.find(x => x.text === item.ItemValue)?.value
+        model.bleedingState = PatientDetailDict.bleedingState.find(x => x.text === item.ItemValue)?.value || 0
         break
       case 'PADS评分':
         model.PADSCount = item.ItemValue

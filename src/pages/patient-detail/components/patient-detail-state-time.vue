@@ -19,9 +19,9 @@ interface listItem {
 const list: listItem[] = [
   { title: '入室时间', label: '入室时间', key: 'AccessTime' },
   { title: '麻醉开始时间', label: '麻醉开始', key: 'AnesthesiaBeginTime' },
-  { title: '麻醉结束时间', label: '麻醉结束', key: 'AnesthesiaEndTime' },
   { title: '手术开始时间', label: '手术开始', key: 'OperationBeginTime' },
   { title: '手术结束时间', label: '手术结束', key: 'OperationEndTime' },
+  { title: '麻醉结束时间', label: '麻醉结束', key: 'AnesthesiaEndTime' },
   { title: '出室时间', label: '出室时间', key: 'LeaveTime' },
   { title: '入恢复室时间', label: '入PACU', key: 'AccessPacuTime' },
   { title: '出恢复室时间', label: '出PACU', key: 'LeavePacuTime' },
@@ -32,7 +32,8 @@ const itemValue = ref('')
 const editItem = ref<listItem>()
 function openDialog(item: listItem) {
   editItem.value = item
-  itemValue.value = patientInfo[item.key] ?? new Date().toLocaleString()
+  const tmpTime = patientInfo[item.key] ?? new Date().toLocaleString()
+  itemValue.value = dateTimeFormat(tmpTime)
   popupRef.value?.open()
 }
 
@@ -42,7 +43,9 @@ function onDialogComfirm() {
     StateTime: itemValue.value,
     AnesthesiaId: id!.value,
   }).then(() => {
-    if (patientInfo.AccessTime && patientInfo.AnesthesiaBeginTime)
+    const key = editItem.value!.key
+    patientInfo[key] = itemValue.value
+    if (patientInfo.AccessTime && patientInfo.AnesthesiaBeginTime && key === 'AnesthesiaEndTime')
       emits('onTime')
   }).catch(() => {
     uni.showToast({

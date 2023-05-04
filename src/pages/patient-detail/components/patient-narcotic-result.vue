@@ -9,8 +9,7 @@ import { dateTimeFormat } from '@/composables'
 const id = inject<Ref<string>>('id')
 // 模板ref
 const popupSelectRef = ref<UniHelper.UniPopupProps>()
-// form ref
-const formRef = ref<UniForm>()
+
 // true手术室情况模板 false 恢复室情况模板
 const templateOperate = ref(true)
 const templateDialogTitle = computed(() => templateOperate.value ? '术中特殊情况模板选择' : '恢复室内容情况模板')
