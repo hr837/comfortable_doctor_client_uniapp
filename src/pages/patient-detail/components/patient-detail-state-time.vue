@@ -45,7 +45,7 @@ function onDialogComfirm() {
   }).then(() => {
     const key = editItem.value!.key
     patientInfo[key] = itemValue.value
-    if (patientInfo.AccessTime && patientInfo.AnesthesiaBeginTime && key === 'AnesthesiaEndTime')
+    if (patientInfo.AccessTime && key === 'AnesthesiaBeginTime')
       emits('onTime')
   }).catch(() => {
     uni.showToast({
