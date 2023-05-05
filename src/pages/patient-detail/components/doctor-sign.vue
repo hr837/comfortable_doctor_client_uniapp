@@ -9,9 +9,12 @@ interface PropsType {
   roleCode: ApiRequestType.RoleCode
   /** 签名Code */
   signCode: string
+  disabled: boolean
 }
 
-const props = defineProps<PropsType>()
+const props = withDefaults(defineProps<PropsType>(), {
+  disabled: false,
+})
 const emits = defineEmits(['signed', 'click'])
 
 const DEFAULT_SRC = '/static/sign.png'
@@ -55,6 +58,8 @@ function dialogInputConfirm(pwd: any) {
 
 // 询问
 function onImageClick() {
+  if (props.disabled)
+    return
   emits('click')
   if (props.roleCode === 'Anesthetist') {
     uni.showModal({

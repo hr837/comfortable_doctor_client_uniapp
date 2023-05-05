@@ -2,7 +2,7 @@
 import type { Ref } from 'vue'
 import NarcoticResultTempalteSelect from './narcotic-result-tempalte-select.vue'
 import DoctorSign from './doctor-sign.vue'
-import { PatientDetailDict, narcoticItemRevert, narcoticItemsConvert } from '@/composables/patient-narcotic-detail.composable'
+import { PatientDetailDict, narcoticItemRevert, narcoticItemsConvert, patientInfo } from '@/composables/patient-narcotic-detail.composable'
 import { getNarcoticResult, saveNarcoticResult } from '@/utils/api'
 import { dateTimeFormat } from '@/composables'
 
@@ -129,6 +129,8 @@ function saveData() {
     }
   })
 }
+
+const canEdit = computed(() => patientInfo.IsChecked !== true)
 </script>
 
 <template>
@@ -142,7 +144,7 @@ function saveData() {
     </uni-popup>
 
     <uni-section class="patient-narcotic-result-header" title="麻醉情况" type="line">
-      <template #right>
+      <template v-if="canEdit" #right>
         <button type="primary" size="mini" @click="saveData">
           保存
         </button>
@@ -150,12 +152,18 @@ function saveData() {
     </uni-section>
     <uni-forms :model="modelData" label-width="100px" label-align="right" class="patient-narcotic-result-form  p-x-4">
       <uni-forms-item label="术中特殊情况" class="no-margin">
-        <uni-data-checkbox v-model="modelData.specific" :localdata="PatientDetailDict.has" mode="button" />
+        <uni-data-checkbox
+          v-model="modelData.specific" :localdata="PatientDetailDict.has" mode="button"
+          :disabled="!canEdit"
+        />
       </uni-forms-item>
       <uni-forms-item v-if="showSpecific" name="specificText" label="情况描述">
         <view class="row">
           <uni-easyinput v-model="modelData.specificText" type="textarea" />
-          <button size="mini" type="primary" plain class="self-start m-l-4" @click="() => openSpecificTemplate(true)">
+          <button
+            v-if="canEdit" size="mini" type="primary" plain class="self-start m-l-4"
+            @click="() => openSpecificTemplate(true)"
+          >
             模板
           </button>
         </view>
@@ -166,19 +174,19 @@ function saveData() {
       <uni-forms-item label="清醒程度" class="no-margin">
         <uni-data-checkbox
           v-model="modelData.comToLifeState" :localdata="PatientDetailDict.comToLifeState"
-          mode="button"
+          :disabled="!canEdit" mode="button"
         />
       </uni-forms-item>
       <uni-forms-item label="呼吸通畅程度" class="no-margin">
         <uni-data-checkbox
           v-model="modelData.breathActiveState" :localdata="PatientDetailDict.breathActiveState"
-          mode="button"
+          :disabled="!canEdit" mode="button"
         />
       </uni-forms-item>
       <uni-forms-item label="肢体活动程度" class="no-margin">
         <uni-data-checkbox
           v-model="modelData.bodyActiveState" :localdata="PatientDetailDict.bodyActiveState"
-          mode="button"
+          :disabled="!canEdit" mode="button"
         />
       </uni-forms-item>
 
@@ -186,9 +194,9 @@ function saveData() {
         <div class="row">
           <uni-data-checkbox
             v-model="modelData.passTo" class="no-flex" :localdata="PatientDetailDict.passTo"
-            mode="button"
+            mode="button" :disabled="!canEdit"
           />
-          <uni-easyinput v-if="showPassToText" v-model="modelData.passToText" class="m-l-2" />
+          <uni-easyinput v-if="showPassToText" v-model="modelData.passToText" class="m-l-2" :disabled="!canEdit" />
         </div>
       </uni-forms-item>
 
@@ -196,25 +204,34 @@ function saveData() {
         <uni-col :span="10">
           <uni-forms-item label="麻醉医师" class="form-item-doctor" name="narcoticDoctorName">
             <DoctorSign
-              :sign-code="modelData.narcoticDoctorSign" role-code="Anesthetist"
+              :disabled="!canEdit" :sign-code="modelData.narcoticDoctorSign" role-code="Anesthetist"
               @click="() => doctorKey = 'narcoticDoctor'" @signed="setSignInfo"
             />
           </uni-forms-item>
         </uni-col>
         <uni-col :span="14">
           <uni-forms-item label="时间" class="form-item-doctor" name="narcoticDoctorDate">
-            <uni-datetime-picker v-model="modelData.narcoticDoctorDate" type="datetime" class="form-item-doctor-date" />
+            <uni-datetime-picker
+              v-model="modelData.narcoticDoctorDate" type="datetime" class="form-item-doctor-date"
+              :disabled="!canEdit"
+            />
           </uni-forms-item>
         </uni-col>
       </uni-row>
 
       <uni-forms-item label="恢复室内情况" name="recoverySpecific" class="no-margin">
-        <uni-data-checkbox v-model="modelData.recoverySpecific" :localdata="PatientDetailDict.has" mode="button" />
+        <uni-data-checkbox
+          v-model="modelData.recoverySpecific" :localdata="PatientDetailDict.has" mode="button"
+          :disabled="!canEdit"
+        />
       </uni-forms-item>
       <uni-forms-item v-if="showRecoverySpecific" name="recoverySpecificText" label="情况描述">
         <view class="row">
-          <uni-easyinput v-model="modelData.recoverySpecificText" type="textarea" />
-          <button size="mini" type="primary" plain class="self-start m-l-4" @click="() => openSpecificTemplate(false)">
+          <uni-easyinput v-model="modelData.recoverySpecificText" type="textarea" :disabled="!canEdit" />
+          <button
+            v-if="canEdit" size="mini" type="primary" plain class="self-start m-l-4"
+            @click="() => openSpecificTemplate(false)"
+          >
             模板
           </button>
         </view>
@@ -223,21 +240,33 @@ function saveData() {
       <uni-section title="离开院返科标准" />
       <uni-forms-item label="1、生命体征" class="no-margin">
         <uni-data-checkbox
-          v-model="modelData.vitalsignState" :localdata="PatientDetailDict.vitalsignState"
-          mode="button"
+          v-model="modelData.vitalsignState" :localdata="PatientDetailDict.vitalsignState" mode="button"
+          :disabled="!canEdit"
         />
       </uni-forms-item>
       <uni-forms-item label="2、活动状态" class="no-margin">
-        <uni-data-checkbox v-model="modelData.activeState" :localdata="PatientDetailDict.activeState" mode="button" />
+        <uni-data-checkbox
+          v-model="modelData.activeState" :localdata="PatientDetailDict.activeState" :disabled="!canEdit"
+          mode="button"
+        />
       </uni-forms-item>
       <uni-forms-item label="3、恶心呕吐" class="no-margin">
-        <uni-data-checkbox v-model="modelData.nauseaState" :localdata="PatientDetailDict.nauseaState" mode="button" />
+        <uni-data-checkbox
+          v-model="modelData.nauseaState" :localdata="PatientDetailDict.nauseaState" :disabled="!canEdit"
+          mode="button"
+        />
       </uni-forms-item>
       <uni-forms-item label="4、疼痛" class="no-margin">
-        <uni-data-checkbox v-model="modelData.painState" :localdata="PatientDetailDict.painState" mode="button" />
+        <uni-data-checkbox
+          v-model="modelData.painState" :localdata="PatientDetailDict.painState" :disabled="!canEdit"
+          mode="button"
+        />
       </uni-forms-item>
       <uni-forms-item label="5、手术部位出血" class="no-margin">
-        <uni-data-checkbox v-model="modelData.bleedingState" :localdata="PatientDetailDict.bleedingState" mode="button" />
+        <uni-data-checkbox
+          v-model="modelData.bleedingState" :localdata="PatientDetailDict.bleedingState"
+          :disabled="!canEdit" mode="button"
+        />
       </uni-forms-item>
       <uni-row>
         <uni-col :span="10">
@@ -249,7 +278,10 @@ function saveData() {
         </uni-col>
         <uni-col :span="14">
           <uni-forms-item label="可否出科">
-            <uni-data-checkbox v-model="modelData.canLeave" :localdata="PatientDetailDict.canLeave" mode="button" />
+            <uni-data-checkbox
+              v-model="modelData.canLeave" :localdata="PatientDetailDict.canLeave" mode="button"
+              :disabled="!canEdit"
+            />
           </uni-forms-item>
         </uni-col>
       </uni-row>
@@ -262,14 +294,17 @@ function saveData() {
         <uni-col :span="10">
           <uni-forms-item label="麻醉医师" class="form-item-doctor" name="narcoticDoctor2Name">
             <DoctorSign
-              :sign-code="modelData.narcoticDoctor2Sign" role-code="Anesthetist"
+              :disabled="!canEdit" :sign-code="modelData.narcoticDoctor2Sign" role-code="Anesthetist"
               @click="() => doctorKey = 'narcoticDoctor2'" @signed="setSignInfo"
             />
           </uni-forms-item>
         </uni-col>
         <uni-col :span="14">
           <uni-forms-item label="时间" class="form-item-doctor" name="narcoticDoctorDate">
-            <uni-datetime-picker v-model="modelData.narcoticDoctor2Date" type="datetime" class="form-item-doctor-date" />
+            <uni-datetime-picker
+              v-model="modelData.narcoticDoctor2Date" type="datetime" class="form-item-doctor-date"
+              :disabled="!canEdit"
+            />
           </uni-forms-item>
         </uni-col>
       </uni-row>
@@ -278,19 +313,22 @@ function saveData() {
         <uni-col :span="10">
           <uni-forms-item label="恢复室护士" class="form-item-doctor no-margin" name="nurseName">
             <DoctorSign
-              :sign-code="modelData.nurseSign" role-code="AnNurse" @click="() => doctorKey = 'nurse'"
-              @signed="setSignInfo"
+              :disabled="!canEdit" :sign-code="modelData.nurseSign" role-code="AnNurse"
+              @click="() => doctorKey = 'nurse'" @signed="setSignInfo"
             />
           </uni-forms-item>
         </uni-col>
         <uni-col :span="14">
           <uni-forms-item label="时间" class="form-item-doctor no-margin" name="narcoticDoctorDate">
-            <uni-datetime-picker v-model="modelData.nurseDate" type="datetime" class="form-item-doctor-date" />
+            <uni-datetime-picker
+              v-model="modelData.nurseDate" type="datetime" class="form-item-doctor-date"
+              :disabled="!canEdit"
+            />
           </uni-forms-item>
         </uni-col>
       </uni-row>
     </uni-forms>
-    <view class="patient-narcotic-result-bottom">
+    <view v-if="canEdit" class="patient-narcotic-result-bottom">
       <button type="primary" @click="saveData">
         保存
       </button>
@@ -314,7 +352,7 @@ function saveData() {
     margin-bottom: 4px;
   }
 
-  .patient-narcotic-result-bottom{
+  .patient-narcotic-result-bottom {
     @apply w-120px float-right p-b-4 p-r-4;
   }
 
