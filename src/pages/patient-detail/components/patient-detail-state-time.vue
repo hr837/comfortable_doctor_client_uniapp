@@ -2,7 +2,7 @@
 import type { Ref } from 'vue'
 // import StateTimePicker from './state-time-picker.vue'
 import { updateState } from '@/utils/api'
-import { patientInfo } from '@/composables/patient-narcotic-detail.composable'
+import { canEdit, patientInfo } from '@/composables/patient-narcotic-detail.composable'
 import type { ApiResonseType } from '@/utils/api.help'
 import { dateTimeFormat } from '@/composables'
 const emits = defineEmits(['onTime'])
@@ -31,6 +31,8 @@ const popupRef = ref<UniHelper.UniPopupProps>()
 const itemValue = ref('')
 const editItem = ref<listItem>()
 function openDialog(item: listItem) {
+  if (!canEdit.value)
+    return
   editItem.value = item
   const tmpTime = patientInfo[item.key] ?? new Date().toLocaleString()
   itemValue.value = dateTimeFormat(tmpTime)

@@ -2,7 +2,7 @@
 // import PatientDetailPopup from './components/patient-detail-popup.vue'
 import PatientDetailStateTime from './components/patient-detail-state-time.vue'
 import DoctorTemplateSelect from './components/doctor-template-select.vue'
-import { ComponentSetting, initMonitorItems, initPatientInfo, initSelectOptions, patientInfo, refreshPatientInfo } from '@/composables/patient-narcotic-detail.composable'
+import { ComponentSetting, canEdit, initMonitorItems, initPatientInfo, initSelectOptions, patientInfo, refreshPatientInfo } from '@/composables/patient-narcotic-detail.composable'
 // import { goToPatientAttchPage } from '@/composables'
 import PatientBaseInfoForm from '@/pages/patient-detail/components/patient-base-info-form.vue'
 import PatientNarcoticDrugRecord from '@/pages/patient-detail/components/patient-narcotic-drug-record.vue'
@@ -116,7 +116,7 @@ function closeTemplate() {
         class="patient-narcotic-detail-header-tabs" :current="pageData.current"
         :values="pageData.controlItems" style-type="button" @click-item="onClickItem"
       />
-      <button class="patient-narcotic-detail-header-template-btn" size="mini" type="primary" @click="openTemplate">
+      <button v-if="canEdit" class="patient-narcotic-detail-header-template-btn" size="mini" type="primary" @click="openTemplate">
         模板
       </button>
     </view>

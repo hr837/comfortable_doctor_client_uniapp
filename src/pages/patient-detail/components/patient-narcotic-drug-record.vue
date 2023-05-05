@@ -3,7 +3,7 @@ import type { Ref } from 'vue'
 import RecordItem from './record-item.vue'
 import type { ApiResonseType } from '@/utils/api.help'
 import { delTransfusion, getTransfusionList } from '@/utils/api'
-import { dictConvertDrugFlag } from '@/composables/patient-narcotic-detail.composable'
+import { canEdit, dictConvertDrugFlag } from '@/composables/patient-narcotic-detail.composable'
 import { dateTimeFormat } from '@/composables'
 
 const id = inject<Ref<string>>('id')
@@ -46,6 +46,8 @@ function addRecord() {
 }
 
 function onClick(id: string) {
+  if (!canEdit.value)
+    return
   uni.navigateTo({
     url: `${editUrl}?rId=${id!}`,
   })
@@ -64,7 +66,7 @@ onUnmounted(() => {
 <template>
   <view class="component patient-narcotic-drug-record">
     <uni-section class="patient-narcotic-drug-record-header" title="麻醉用药" type="line">
-      <template #right>
+      <template v-if="canEdit" #right>
         <button type="primary" size="mini" @click="addRecord">
           添加
         </button>
@@ -77,6 +79,7 @@ onUnmounted(() => {
       </view>
       <RecordItem
         v-for="item of dataSet" :key="item.Id" :tag="dictConvertDrugFlag(item.DrugFlag)"
+        :disabled="!canEdit"
         @delete="onDelete(item.Id)" @click="onClick(item.Id)"
       >
         <view class="row">

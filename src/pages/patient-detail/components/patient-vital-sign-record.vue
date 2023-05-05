@@ -4,7 +4,7 @@ import VitalSignInfoEdit from './vital-sign-info-edit.vue'
 import { delPatientMonitorRecord, getPatientMonitorRecords } from '@/utils/api'
 import type { ApiResonseType } from '@/utils/api.help'
 import { dateFormat, dateTimeFormat } from '@/composables'
-import { monitorItems } from '@/composables/patient-narcotic-detail.composable'
+import { canEdit, monitorItems } from '@/composables/patient-narcotic-detail.composable'
 
 const id = inject<Ref<string>>('id')
 
@@ -64,7 +64,7 @@ function onEdit(row: ApiResonseType.MonitorInfo) {
 <template>
   <view class="component patient-vital-sign-record">
     <uni-section class="patient-vital-sign-record-header" title="生命体征" type="line">
-      <template #right>
+      <template v-if="canEdit" #right>
         <button type="primary" size="mini">
           检测项目
         </button>
@@ -86,7 +86,7 @@ function onEdit(row: ApiResonseType.MonitorInfo) {
         <uni-th v-for="item of monitorItems" :key="item.ItemCode" align="center" width="80px">
           {{ item.ItemName }}
         </uni-th>
-        <uni-th align="center" width="80px">
+        <uni-th v-if="canEdit" align="center" width="80px">
           操作
         </uni-th>
       </uni-tr>
@@ -97,7 +97,7 @@ function onEdit(row: ApiResonseType.MonitorInfo) {
         <uni-td v-for="item of monitorItems" :key="`${record.Id}-${item.ItemCode}`" align="center">
           {{ record.ItemValues.find(x => x.ItemCode === item.ItemCode)?.ItemValue }}
         </uni-td>
-        <uni-td align="center">
+        <uni-td v-if="canEdit" align="center">
           <view v-show="currentId === record.Id" class="row justify-between">
             <view @click="onEdit(record)">
               <uni-icons class="leading-none" type="settings-filled" size="20" color="#007aff" />

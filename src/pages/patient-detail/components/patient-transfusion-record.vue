@@ -4,6 +4,7 @@ import RecordItem from './record-item.vue'
 import { delTransfusion, getTransfusionList } from '@/utils/api'
 import type { ApiResonseType } from '@/utils/api.help'
 import { dateTimeFormat } from '@/composables'
+import { canEdit } from '@/composables/patient-narcotic-detail.composable'
 const dataSet = ref<ApiResonseType.Transfusion[]>([])
 const id = inject<Ref<string>>('id')
 
@@ -42,6 +43,8 @@ function addRecord() {
 }
 
 function onClick(id: string) {
+  if (!canEdit.value)
+    return
   uni.navigateTo({
     url: `${editUrl}?rId=${id!}`,
   })
@@ -61,7 +64,7 @@ onUnmounted(() => {
   <view class="component patient-transfusion-record">
     <uni-section class="patient-transfusion-record-header" title="输液" type="line">
       <template #right>
-        <button type="primary" size="mini" @click="addRecord">
+        <button v-if="canEdit" type="primary" size="mini" @click="addRecord">
           添加
         </button>
       </template>
@@ -71,7 +74,10 @@ onUnmounted(() => {
       <view v-if="!dataSet.length" class="no-data">
         暂无数据
       </view>
-      <RecordItem v-for="item of dataSet" :key="item.Id" @delete="onDelete(item.Id)" @click="onClick(item.Id)">
+      <RecordItem
+        v-for="item of dataSet" :key="item.Id" :disabled="!canEdit" @delete="onDelete(item.Id)"
+        @click="onClick(item.Id)"
+      >
         <view class="row">
           <text class="text-gray-900 patient-transfusion-record-text">
             {{ item.DrugName }}

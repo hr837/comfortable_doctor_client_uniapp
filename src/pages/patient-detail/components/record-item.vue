@@ -1,8 +1,10 @@
 <script lang="ts" setup>
 defineProps<{
+  disabled: boolean
   /** 标签名称 */
   tag?: string
 }>()
+
 defineEmits(['delete', 'click'])
 </script>
 
@@ -15,7 +17,7 @@ defineEmits(['delete', 'click'])
       <!-- 记录内容 -->
       <slot />
     </view>
-    <view class="record-item-action" @click="$emit('delete')">
+    <view v-if="!disabled" class="record-item-action" @click="$emit('delete')">
       <uni-icons class="leading-none" type="trash" size="28" color="#d9001b" />
     </view>
   </view>

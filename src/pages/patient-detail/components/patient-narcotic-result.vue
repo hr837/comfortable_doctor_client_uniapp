@@ -2,7 +2,7 @@
 import type { Ref } from 'vue'
 import NarcoticResultTempalteSelect from './narcotic-result-tempalte-select.vue'
 import DoctorSign from './doctor-sign.vue'
-import { PatientDetailDict, narcoticItemRevert, narcoticItemsConvert, patientInfo } from '@/composables/patient-narcotic-detail.composable'
+import { PatientDetailDict, canEdit, narcoticItemRevert, narcoticItemsConvert } from '@/composables/patient-narcotic-detail.composable'
 import { getNarcoticResult, saveNarcoticResult } from '@/utils/api'
 import { dateTimeFormat } from '@/composables'
 
@@ -129,8 +129,6 @@ function saveData() {
     }
   })
 }
-
-const canEdit = computed(() => patientInfo.IsChecked !== true)
 </script>
 
 <template>
