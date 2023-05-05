@@ -276,7 +276,7 @@ function saveData() {
 
       <uni-row>
         <uni-col :span="10">
-          <uni-forms-item label="恢复室护士" class="form-item-doctor" name="nurseName">
+          <uni-forms-item label="恢复室护士" class="form-item-doctor no-margin" name="nurseName">
             <DoctorSign
               :sign-code="modelData.nurseSign" role-code="AnNurse" @click="() => doctorKey = 'nurse'"
               @signed="setSignInfo"
@@ -284,12 +284,17 @@ function saveData() {
           </uni-forms-item>
         </uni-col>
         <uni-col :span="14">
-          <uni-forms-item label="时间" class="form-item-doctor" name="narcoticDoctorDate">
+          <uni-forms-item label="时间" class="form-item-doctor no-margin" name="narcoticDoctorDate">
             <uni-datetime-picker v-model="modelData.nurseDate" type="datetime" class="form-item-doctor-date" />
           </uni-forms-item>
         </uni-col>
       </uni-row>
     </uni-forms>
+    <view class="patient-narcotic-result-bottom">
+      <button type="primary" @click="saveData">
+        保存
+      </button>
+    </view>
   </view>
 </template>
 
@@ -307,6 +312,10 @@ function saveData() {
 
   .no-margin {
     margin-bottom: 4px;
+  }
+
+  .patient-narcotic-result-bottom{
+    @apply w-120px float-right p-b-4 p-r-4;
   }
 
 }
