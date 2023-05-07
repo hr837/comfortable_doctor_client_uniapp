@@ -13,8 +13,6 @@ const dataSet = ref<ApiResonseType.MonitorInfo[]>([])
 const currentRow = ref<ApiResonseType.MonitorInfo | undefined>(undefined)
 const popup = ref<UniHelper.UniPopupProps>()
 
-onMounted(refreshList)
-
 function refreshList() {
   clearRowInfo()
   getPatientMonitorRecords(id!.value)
@@ -59,15 +57,24 @@ function onEdit(row: ApiResonseType.MonitorInfo) {
   currentRow.value = row
   popup.value?.open()
 }
+
+onMounted(() => {
+  refreshList()
+  uni.$on('refreshList:patient-vital-sign-record', refreshList)
+})
+
+onUnmounted(() => {
+  uni.$off('refreshList:patient-vital-sign-record')
+})
 </script>
 
 <template>
   <view class="component patient-vital-sign-record">
     <uni-section class="patient-vital-sign-record-header" title="生命体征" type="line">
       <template v-if="canEdit" #right>
-        <button type="primary" size="mini">
-          检测项目
-        </button>
+        <!-- <button type="primary" size="mini">
+                    检测项目
+                  </button> -->
         <button class="m-l-4" type="primary" size="mini" @click="onAddClick">
           添加时间
         </button>

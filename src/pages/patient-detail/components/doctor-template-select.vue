@@ -56,6 +56,8 @@ function onConfirm() {
       uni.$emit('refreshList:patient-narcotic-drug-record')
       // eslint-disable-next-line vue/custom-event-name-casing
       uni.$emit('refreshList:patient-transfusion-record')
+      // eslint-disable-next-line vue/custom-event-name-casing
+      uni.$emit('refreshList:patient-vital-sign-record')
     }
   })
 }
