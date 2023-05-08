@@ -184,6 +184,18 @@ export function getPatientMonitorRecords(id: string) {
 }
 
 /**
+ *  获取体征数据详情
+ * @param id 体征ID
+ */
+export function getPatientMonitorRecord(id: string) {
+  return request<ApiResonseType.MonitorInfo>({
+    path: `/api/MonitorRecord/${id}`,
+    method: 'GET',
+    loading: true,
+  })
+}
+
+/**
  *  删除体征数据
  * @param id 监测ID
  */

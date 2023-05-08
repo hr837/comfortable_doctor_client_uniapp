@@ -3,7 +3,7 @@ import type { Ref } from 'vue'
 import VitalSignInfoEdit from './vital-sign-info-edit.vue'
 import { delPatientMonitorRecord, getPatientMonitorRecords } from '@/utils/api'
 import type { ApiResonseType } from '@/utils/api.help'
-import { dateFormat, dateTimeFormat } from '@/composables'
+import { dateFormat } from '@/composables'
 import { canEdit, monitorItems } from '@/composables/patient-narcotic-detail.composable'
 
 const id = inject<Ref<string>>('id')
@@ -12,6 +12,8 @@ const currentId = ref('')
 const dataSet = ref<ApiResonseType.MonitorInfo[]>([])
 const currentRow = ref<ApiResonseType.MonitorInfo | undefined>(undefined)
 const popup = ref<UniHelper.UniPopupProps>()
+
+const editUrl = '/pages/patient-detail/patient-vital-sign-edit'
 
 function refreshList() {
   clearRowInfo()
@@ -45,17 +47,25 @@ function clearRowInfo() {
 }
 
 function onAddClick() {
-  clearRowInfo()
-  popup.value?.open()
+  // clearRowInfo()
+  // popup.value?.open()
+  uni.navigateTo({
+    url: `${editUrl}?pId=${id!.value}`,
+  })
 }
 
 function closeDialog() {
   popup.value?.close()
 }
-function onEdit(row: ApiResonseType.MonitorInfo) {
-  row.RecordTime = dateTimeFormat(row.RecordTime)
-  currentRow.value = row
-  popup.value?.open()
+function onEdit(rId: string) {
+  if (!canEdit.value)
+    return
+  uni.navigateTo({
+    url: `${editUrl}?rId=${rId}`,
+  })
+  // row.RecordTime = dateTimeFormat(row.RecordTime)
+  // currentRow.value = row
+  // popup.value?.open()
 }
 
 onMounted(() => {
@@ -87,13 +97,13 @@ onUnmounted(() => {
 
     <uni-table border stripe class="patient-vital-sign-record-table">
       <uni-tr class="patient-vital-sign-record-table-tr-hidden">
-        <uni-th align="center" width="120px">
+        <uni-th align="center" width="80">
           时间
         </uni-th>
-        <uni-th v-for="item of monitorItems" :key="item.ItemCode" align="center" width="80px">
+        <uni-th v-for="item of monitorItems" :key="item.ItemCode" align="center" width="60">
           {{ item.ItemName }}
         </uni-th>
-        <uni-th v-if="canEdit" align="center" width="80px">
+        <uni-th v-if="canEdit" align="center" width="70">
           操作
         </uni-th>
       </uni-tr>
@@ -106,7 +116,7 @@ onUnmounted(() => {
         </uni-td>
         <uni-td v-if="canEdit" align="center">
           <view v-show="currentId === record.Id" class="row justify-between">
-            <view @click="onEdit(record)">
+            <view @click="onEdit(record.Id)">
               <uni-icons class="leading-none" type="settings-filled" size="20" color="#007aff" />
             </view>
             <view @click="onDelete(record.Id)">

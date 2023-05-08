@@ -490,7 +490,7 @@ export const patientInfo = reactive<ApiResonseType.PatientDetailInfo>({
   ExtubationTime: '',
   Id: '',
   IntubateTime: '',
-  IsChecked: false,
+  IsChecked: true,
   IsEmergency: false,
   LeavePacuTime: '',
   LeaveTime: '',
@@ -555,7 +555,7 @@ export const initPatientInfo = () => {
   patientInfo.ExtubationTime = ''
   patientInfo.Id = ''
   patientInfo.IntubateTime = ''
-  patientInfo.IsChecked = false
+  patientInfo.IsChecked = true
   patientInfo.IsEmergency = false
   patientInfo.LeavePacuTime = ''
   patientInfo.LeaveTime = ''
