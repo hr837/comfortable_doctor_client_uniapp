@@ -71,7 +71,7 @@ onNavigationBarButtonTap(({ index }) => {
       return
 
     const obj: ApiRequestType.MonitorInfo = {
-      AnesthesiaId: modelData.paient,
+      AnesthesiaId: modelData.AnesthesiaId,
       RecordTime: modelData.RecordTime,
       ItemValues: [],
     }

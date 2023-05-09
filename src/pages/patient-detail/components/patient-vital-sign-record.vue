@@ -97,13 +97,13 @@ onUnmounted(() => {
 
     <uni-table border stripe class="patient-vital-sign-record-table">
       <uni-tr class="patient-vital-sign-record-table-tr-hidden">
-        <uni-th align="center" width="80">
+        <uni-th align="center" width="70">
           时间
         </uni-th>
-        <uni-th v-for="item of monitorItems" :key="item.ItemCode" align="center" width="60">
+        <uni-th v-for="item of monitorItems" :key="item.ItemCode" align="center" width="50">
           {{ item.ItemName }}
         </uni-th>
-        <uni-th v-if="canEdit" align="center" width="70">
+        <uni-th v-if="canEdit" align="center" width="60">
           操作
         </uni-th>
       </uni-tr>
