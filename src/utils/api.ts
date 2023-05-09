@@ -189,7 +189,7 @@ export function getPatientMonitorRecords(id: string) {
  */
 export function getPatientMonitorRecord(id: string) {
   return request<ApiResonseType.MonitorInfo>({
-    path: `/api/MonitorRecord/${id}`,
+    path: `/api/MonitorRecord/GetRecord/${id}`,
     method: 'GET',
     loading: true,
   })
