@@ -27,6 +27,10 @@ onLoad((query: any) => {
       title: '添加麻醉用药记录',
     })
     modelData.AnesthesiaId = pId
+    nextTick(() => {
+      modelData.BeginTime = dateTimeFormat(new Date().toString())
+      modelData.PointTime = modelData.BeginTime
+    })
   }
   if (rId) {
     uni.setNavigationBarTitle({
