@@ -27,9 +27,9 @@ onLoad((query: any) => {
       title: '添加输液记录',
     })
     modelData.AnesthesiaId = pId
-    nextTick(() => {
-      modelData.BeginTime = dateTimeFormat(new Date().toString())
-    })
+    setTimeout(() => {
+      modelData.BeginTime = dateTimeFormat(new Date().toLocaleString())
+    }, 100)
   }
   if (rId) {
     uni.setNavigationBarTitle({
