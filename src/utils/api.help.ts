@@ -263,6 +263,10 @@ export namespace ApiResonseType {
     * 申请时间
     */
     SubscribeDate: string
+    /**
+     * 是否评估
+     */
+    IsAssessed: boolean
   }
 
   export interface PatientDetailInfo {

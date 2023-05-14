@@ -35,10 +35,10 @@ async function onSubmit(query?: QueryInfo) {
     <PatientQueryForm show-room-item @submit="onSubmit">
       <template #append>
         <uni-row>
-          <uni-col :offset="2" :xs="22" :sm="10">
+          <uni-col :offset="1" :xs="22" :sm="11">
             <PatientQuerySelectStatus v-model="queryData.OperateState" />
           </uni-col>
-          <uni-col :offset="2" :xs="22" :sm="10">
+          <uni-col :offset="1" :xs="22" :sm="11">
             <PatientQuerySelectSource v-model="queryData.PatientSource" />
           </uni-col>
         </uni-row>

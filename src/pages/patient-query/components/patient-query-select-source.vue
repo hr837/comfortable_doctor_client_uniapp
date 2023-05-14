@@ -5,7 +5,7 @@ const props = defineProps<{
 
 const emits = defineEmits(['update:modelValue'])
 
-const Values = ['全部', '住院', '门诊']
+const Values = ['全部', '住院', '门诊', '普查']
 
 const current = computed(() => Values.indexOf(props.modelValue || '全部'))
 

@@ -39,11 +39,14 @@ const genderIcon = (str: string) => str === '女' ? 'icon-nvxing' : 'icon-nanxin
             <text class="patient-query-list-item_title_item">
               {{ item.PatientNumber }}
             </text>
+            <text class="patient-query-list-item_title_item">
+              {{ item.ExamineType }}
+            </text>
           </view>
         </template>
         <!-- 内容区域 -->
         <uni-row class="patient-query-list-item_content" @click="() => onClick(item)">
-          <uni-col :span="24" class="flex mb-2">
+          <uni-col :span="18" class="flex mb-2">
             <text class="label">
               诊断
             </text>
@@ -53,10 +56,10 @@ const genderIcon = (str: string) => str === '女' ? 'icon-nvxing' : 'icon-nanxin
           </uni-col>
           <uni-col :span="6" class="flex">
             <text class="label">
-              医保类型
+              是否评估
             </text>
             <text class="text">
-              --
+              {{ item.IsAssessed ? '是' : '否' }}
             </text>
           </uni-col>
           <uni-col :span="6" class="flex">
@@ -69,18 +72,26 @@ const genderIcon = (str: string) => str === '女' ? 'icon-nvxing' : 'icon-nanxin
           </uni-col>
           <uni-col :span="6" class="flex">
             <text class="label">
-              特殊感染
-            </text>
-            <text class="text">
-              {{ item.SpecialInfect }}
-            </text>
-          </uni-col>
-          <uni-col :span="6" class="flex">
-            <text class="label">
               申请日期
             </text>
             <text class="text">
               {{ dateFormat(item.SubscribeDate) }}
+            </text>
+          </uni-col>
+          <uni-col :span="6" class="flex">
+            <text class="label">
+              手术间
+            </text>
+            <text class="text">
+              {{ item.OperatingRoomName }}
+            </text>
+          </uni-col>
+          <uni-col :span="6" class="flex">
+            <text class="label">
+              特殊感染
+            </text>
+            <text class="text">
+              {{ item.SpecialInfect }}
             </text>
           </uni-col>
         </uni-row>
