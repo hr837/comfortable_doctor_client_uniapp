@@ -76,3 +76,10 @@ body {
   padding: 100px 0;
   color: #999;
 }
+
+uni-button{
+  line-height: 2.5em !important;
+  &[size='mini']{
+    line-height: 2.3em !important;
+  }
+}
