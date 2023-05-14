@@ -5,6 +5,7 @@ import { STORE_KEY_USER } from '@/utils/app.constant'
 const goToLogin = () =>
   uni.redirectTo({
     url: '/pages/login/login',
+    success: () => uni.removeStorageSync(STORE_KEY_USER),
   })
 
 onLoad(() => {
