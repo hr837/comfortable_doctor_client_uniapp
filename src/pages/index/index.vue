@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { GridMenuSetting, roleFormat } from '@/composables'
-import { STORE_KEY_USER } from '@/utils/app.constant'
+import { STORE_KEY_SYSNAME, STORE_KEY_USER } from '@/utils/app.constant'
 
 const goToLogin = () =>
   uni.redirectTo({
@@ -17,9 +17,16 @@ onLoad(() => {
   }
   else {
     const { UserName, UserId, UserRole } = userInfo
-    const roleName = roleFormat(UserRole)
-    const title = `${UserName} (${UserId}) ${roleName}`
-    uni.setNavigationBarTitle({ title })
+    if (UserRole === 'AnNurse') {
+      uni.setNavigationBarTitle({
+        title: uni.getStorageSync(STORE_KEY_SYSNAME),
+      })
+    }
+    else {
+      const roleName = roleFormat(UserRole)
+      const title = `${UserName} (${UserId}) ${roleName}`
+      uni.setNavigationBarTitle({ title })
+    }
   }
 })
 
