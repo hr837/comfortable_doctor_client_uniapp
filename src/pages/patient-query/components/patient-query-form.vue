@@ -71,7 +71,7 @@ onMounted(() => {
         </uni-col>
         <uni-col v-if="showRoomItem" :xs="24" :sm="8">
           <uni-forms-item label="手术间" name="roomCode">
-            <uni-data-select v-model="model.roomCode" :localdata="roomList" popup-title="请选择手术间" disabled />
+            <uni-data-select v-model="model.roomCode" :localdata="roomList" popup-title="请选择手术间" />
           </uni-forms-item>
         </uni-col>
       </uni-row>
