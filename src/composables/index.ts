@@ -22,9 +22,15 @@ export const GridMenuSetting: GridMenuInfo[] = [
     icon: 'icon-yiliao_xindianyi',
     path: '/pages/patient-query/patient-narcotic-query',
   },
+  {
+    text: '安全核查',
+    icon: 'icon-yiliao_yiliaowendang',
+    path: '/pages/patient-query/patient-check-query',
+  },
 ]
 
 export type DetailPageQueryType = Pick<ApiResonseType.PatientInfo, 'PatientName' | 'PatientSex' | 'PatientAge' | 'Id'>
+export type DetailCheckQueryType = DetailPageQueryType & Pick<ApiResonseType.PatientInfo, 'PatientNumber' | 'PatientDepartmentName'>
 
 /**
  * 跳转到病人麻醉详情页面
@@ -40,6 +46,29 @@ export function goToNarcoticDetailPage(data: ApiResonseType.PatientInfo) {
   const url = queryString.stringifyUrl({
     url: '/pages/patient-detail/patient-narcotic-detail',
     query: { ...query },
+  })
+
+  uni.navigateTo({
+    url,
+  })
+}
+
+/**
+ * 跳转到安全核查列表
+ * @param data 含有病人基本信息的数据
+ */
+export function goToCheckDetailPage(data: ApiResonseType.PatientInfo) {
+  const query: DetailCheckQueryType = {
+    PatientName: data.PatientName,
+    PatientSex: data.PatientSex,
+    PatientAge: data.PatientAge,
+    Id: data.Id,
+    PatientDepartmentName: data.PatientDepartmentName,
+    PatientNumber: data.PatientNumber,
+  }
+  const url = queryString.stringifyUrl({
+    url: '/pages/patient-detail/patient-check-detail',
+    query,
   })
 
   uni.navigateTo({

@@ -31,6 +31,12 @@
       }
     },
     {
+      "path": "pages/patient-query/patient-check-query",
+      "style": {
+        "navigationBarTitleText": "安全核查患者列表"
+      }
+    },
+    {
       "path": "pages/patient-query/patient-narcotic-query",
       "style": {
         "navigationBarTitleText": "麻醉记录查询"
@@ -100,7 +106,13 @@
           ]
         }
       }
-    }
+    },
+    {
+      "path": "pages/patient-detail/patient-check-detail",
+      "style": {
+        "navigationBarTitleText": "安全核查表"
+      }
+    },
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

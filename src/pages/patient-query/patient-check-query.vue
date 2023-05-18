@@ -3,7 +3,9 @@ import PatientQueryForm, { type QueryInfo } from './components/patient-query-for
 // import PatientQueryPopup from './components/patient-query-popup.vue'
 import PatientQueryList from './components/patient-query-list.vue'
 import PatientQuerySelectSource from './components/patient-query-select-source.vue'
-import { goToNarcoticDetailPage } from '@/composables'
+import PatientQuerySelectStatus from './components/patient-query-select-status.vue'
+import PatientQuerySelectPain from './components/patient-query-select-pain.vue'
+import { goToCheckDetailPage } from '@/composables'
 import { queryPatients } from '@/utils/api'
 import type { ApiRequestType, ApiResonseType } from '@/utils/api.help'
 
@@ -34,7 +36,7 @@ function onSubmit(query?: QueryInfo) {
 }
 
 function onRowClick(data: ApiResonseType.PatientInfo) {
-  goToNarcoticDetailPage(data)
+  goToCheckDetailPage(data)
   // pageData.row = data
   // pageData.showPopup = true
 }
@@ -48,11 +50,19 @@ function onRowClick(data: ApiResonseType.PatientInfo) {
 </script>
 
 <template>
-  <view class="page  patient-query">
-    <PatientQueryForm @submit="onSubmit">
+  <view class="page  patient-check-query">
+    <PatientQueryForm show-room-item @submit="onSubmit">
       <template #append>
         <uni-row>
-          <uni-col :xs="24" :sm="12">
+          <uni-col :xs="22" :sm="11">
+            <PatientQuerySelectStatus v-model="queryData.OperateState" />
+          </uni-col>
+          <uni-col :offset="1" :xs="22" :sm="12">
+            <PatientQuerySelectPain v-model="queryData.PainState" />
+          </uni-col>
+        </uni-row>
+        <uni-row class="m-t-2">
+          <uni-col :xs="24" :sm="16">
             <PatientQuerySelectSource v-model="queryData.PatientSource" />
           </uni-col>
         </uni-row>

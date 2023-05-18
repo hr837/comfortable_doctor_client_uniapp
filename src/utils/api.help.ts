@@ -29,6 +29,8 @@ export namespace ApiRequestType {
     PatientSource: string
     /** 手术间编码 */
     RoomCode: string
+    /** 0：非无痛、1：无痛、-1：全部 */
+    PainState: number
   }
 
   /** 输液、麻醉用药 */
