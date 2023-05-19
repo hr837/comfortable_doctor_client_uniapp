@@ -50,7 +50,7 @@ function onRowClick(data: ApiResonseType.PatientInfo) {
 </script>
 
 <template>
-  <view class="page  patient-check-query">
+  <view class="page  patient-safe-check-query">
     <PatientQueryForm show-room-item @submit="onSubmit">
       <template #append>
         <uni-row>

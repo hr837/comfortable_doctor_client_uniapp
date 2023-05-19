@@ -22,35 +22,35 @@ defineExpose({
 </script>
 
 <template>
-  <view class="component the-patient-check-header">
+  <view class="component the-patient-safe-check-header">
     <uni-row>
       <uni-col :span="4">
-        <text class="the-patient-check-header-label">
-          姓名：
+        <text class="the-patient-safe-check-header-label">
+          姓名:
         </text>
         <text>{{ model.PatientName }}</text>
       </uni-col>
       <uni-col :span="3">
-        <text class="the-patient-check-header-label">
-          性别：
+        <text class="the-patient-safe-check-header-label">
+          性别:
         </text>
         <text>{{ model.PatientSex }}</text>
       </uni-col>
       <uni-col :span="4">
-        <text class="the-patient-check-header-label">
-          年龄：
+        <text class="the-patient-safe-check-header-label">
+          年龄:
         </text>
         <text>{{ model.PatientAge }}</text>
       </uni-col>
       <uni-col :span="8">
-        <text class="the-patient-check-header-label">
-          门诊号/住院号：
+        <text class="the-patient-safe-check-header-label">
+          门诊号/住院号:
         </text>
         <text>{{ model.PatientNumber }}</text>
       </uni-col>
       <uni-col :span="5">
-        <text class="the-patient-check-header-label">
-          科室：
+        <text class="the-patient-safe-check-header-label">
+          科室:
         </text>
         <text>{{ model.PatientDepartmentName }}</text>
       </uni-col>
@@ -59,7 +59,7 @@ defineExpose({
 </template>
 
 <style lang="scss" scoped>
-.the-patient-check-header {
+.the-patient-safe-check-header {
   @apply p-4 bg-gray-200;
   &-label{
     @apply text-gray-500;

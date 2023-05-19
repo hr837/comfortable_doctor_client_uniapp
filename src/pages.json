@@ -31,7 +31,7 @@
       }
     },
     {
-      "path": "pages/patient-query/patient-check-query",
+      "path": "pages/patient-query/patient-safe-check-query",
       "style": {
         "navigationBarTitleText": "安全核查患者列表"
       }
@@ -108,7 +108,7 @@
       }
     },
     {
-      "path": "pages/patient-detail/patient-check-detail",
+      "path": "pages/patient-detail/patient-safe-check-detail",
       "style": {
         "navigationBarTitleText": "安全核查表"
       }

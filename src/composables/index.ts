@@ -25,7 +25,7 @@ export const GridMenuSetting: GridMenuInfo[] = [
   {
     text: '安全核查',
     icon: 'icon-yiliao_yiliaowendang',
-    path: '/pages/patient-query/patient-check-query',
+    path: '/pages/patient-query/patient-safe-check-query',
   },
 ]
 
@@ -67,7 +67,7 @@ export function goToCheckDetailPage(data: ApiResonseType.PatientInfo) {
     PatientNumber: data.PatientNumber,
   }
   const url = queryString.stringifyUrl({
-    url: '/pages/patient-detail/patient-check-detail',
+    url: '/pages/patient-detail/patient-safe-check-detail',
     query,
   })
 
