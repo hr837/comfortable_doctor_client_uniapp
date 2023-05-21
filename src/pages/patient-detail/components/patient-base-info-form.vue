@@ -21,10 +21,10 @@ import { PatientDetailDict, patientInfo } from '@/composables/patient-narcotic-d
   <view class="component patient-base-info">
     <uni-section title="基本信息" type="line">
       <!-- <template #right>
-          <button type="primary" size="mini">
-            保存
-          </button>
-        </template> -->
+                          <button type="primary" size="mini">
+                            保存
+                          </button>
+                        </template> -->
     </uni-section>
     <uni-forms ref="formRef" label-width="100px" label-align="right" class="p-4 p-t-0">
       <uni-row>
@@ -82,18 +82,26 @@ import { PatientDetailDict, patientInfo } from '@/composables/patient-narcotic-d
             <uni-easyinput :value="patientInfo.PatientBedCode" disabled />
           </uni-forms-item>
         </uni-col>
-
-        <uni-col :xs="24" :sm="12">
-          <uni-forms-item label="体重">
-            <uni-easyinput type="digit" disabled />
-          </uni-forms-item>
-        </uni-col>
         <uni-col :xs="24" :sm="12">
           <uni-forms-item label="身高">
-            <uni-easyinput type="number" disabled />
+            <view class="row items-center">
+              <uni-easyinput class="content" :value="patientInfo.PatientHeight" type="number" disabled />
+              <view class="patient-base-info-item--append">
+                CM
+              </view>
+            </view>
           </uni-forms-item>
         </uni-col>
-
+        <uni-col :xs="24" :sm="12">
+          <uni-forms-item label="体重">
+            <view class="row items-center">
+              <uni-easyinput class="content" :value="patientInfo.PatientWeight" type="digit" disabled />
+              <view class="patient-base-info-item--append">
+                KG
+              </view>
+            </view>
+          </uni-forms-item>
+        </uni-col>
         <uni-col :xs="24" :sm="12">
           <uni-forms-item label="血型">
             <uni-data-select :localdata="PatientDetailDict.bloodType" disabled />
@@ -136,6 +144,10 @@ import { PatientDetailDict, patientInfo } from '@/composables/patient-narcotic-d
     ::v-deep .is-disabled {
       color: inherit;
     }
+  }
+
+  &-item--append {
+    @apply w-40px text-gray-600 text-center;
   }
 
 }

@@ -496,6 +496,10 @@ export namespace ApiResonseType {
      * HIS申请单ID
      */
     SubscribeId: string
+    /** 体重 */
+    PatientWeight: string
+    /** 身高 */
+    PatientHeight: string
   }
 
   /** 获取用药单位返回列表 */

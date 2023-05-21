@@ -525,6 +525,8 @@ export const patientInfo = reactive<ApiResonseType.PatientDetailInfo>({
   SpecialInfect: '',
   SubscribeDate: '',
   SubscribeId: '',
+  PatientHeight: '',
+  PatientWeight: '',
 })
 
 /** 当前详情页是否可以编辑 */
@@ -590,6 +592,8 @@ export const initPatientInfo = () => {
   patientInfo.SpecialInfect = ''
   patientInfo.SubscribeDate = ''
   patientInfo.SubscribeId = ''
+  patientInfo.PatientHeight = ''
+  patientInfo.PatientWeight = ''
 }
 
 /** 刷新病人信息 */
@@ -649,4 +653,6 @@ export const refreshPatientInfo = (id: string) => getPatientDetail(id).then((dat
   patientInfo.PlanStartTime = data.PlanStartTime
   patientInfo.SpecialInfect = data.SpecialInfect
   patientInfo.SubscribeDate = dateFormat(data.SubscribeDate)
+  patientInfo.PatientHeight = data.PatientHeight
+  patientInfo.PatientWeight = data.PatientWeight
 })
