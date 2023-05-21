@@ -19,7 +19,7 @@ const rules = {
   },
 }
 
-const formRef = ref<UniForm>()
+const formRef = ref()
 const goToIndex = () => uni.redirectTo({
   url: '/pages/index/index',
 })
@@ -61,17 +61,17 @@ const toLogin = () => login(loginModel).then((data) => {
 }))
 
 function submitForm() {
-  formRef.value?.validate([], (err) => {
-    if (!err)
-      toLogin()
-  })
+  formRef.value?.validate().then(toLogin).catch(() => { })
 }
 </script>
 
 <template>
   <view class="page login">
     <view class="login-setting">
-      <uni-data-select v-model="loginModel.RoomCode" class="login-setting-room" :localdata="roomList" :clear="false" placeholder="手术间" />
+      <uni-data-select
+        v-model="loginModel.RoomCode" class="login-setting-room" :localdata="roomList" :clear="false"
+        placeholder="手术间"
+      />
       <LoginSetting @settinged="refreshRoomList" />
     </view>
     <image class="login-logo" src="/static/login-logo.png" />
@@ -84,7 +84,10 @@ function submitForm() {
           <uni-easyinput v-model="loginModel.LoginName" prefix-icon="person" placeholder="账号" confirm-type="next" />
         </uni-forms-item>
         <uni-forms-item name="Password">
-          <uni-easyinput ref="inputPwdRef" v-model="loginModel.Password" prefix-icon="locked" type="password" placeholder="密码" />
+          <uni-easyinput
+            ref="inputPwdRef" v-model="loginModel.Password" prefix-icon="locked" type="password"
+            placeholder="密码"
+          />
         </uni-forms-item>
       </uni-forms>
 
@@ -109,20 +112,25 @@ function submitForm() {
 
   .login-setting {
     @apply row items-center absolute top-8 right-8;
+
     &-room {
       margin-right: 8px;
-    ::v-deep .uni-select {
-      background-color: transparent;
-      border: none;
-      .uni-select__input-text,.uni-icons{
-        color: #fff ;
-        margin-right: 4px;
-      }
-      .uni-icons{
-        color: #fff !important;
+
+      ::v-deep .uni-select {
+        background-color: transparent;
+        border: none;
+
+        .uni-select__input-text,
+        .uni-icons {
+          color: #fff;
+          margin-right: 4px;
+        }
+
+        .uni-icons {
+          color: #fff !important;
+        }
       }
     }
-  }
   }
 
   .login-title {
@@ -134,9 +142,10 @@ function submitForm() {
   }
 
   // #ifdef APP-PLUS
-  .login-submit{
+  .login-submit {
     padding: 12px;
   }
+
   // #endif
 }
 </style>
