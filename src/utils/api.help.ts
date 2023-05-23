@@ -158,6 +158,15 @@ export namespace ApiRequestType {
      */
     StateTime: string
   }
+
+  /** 安全核查查下请求体 */
+  export interface PatientSafeCheckQueryInput extends Patient {
+    /** 1：无痛、0：非无痛、-1：全部 */
+    Analgesia: number
+
+    /** 上午、下午，为空“”则为全部 */
+    ExamineSpan: string
+  }
 }
 
 export namespace ApiResonseType {
@@ -494,6 +503,10 @@ export namespace ApiResonseType {
      * HIS申请单ID
      */
     SubscribeId: string
+    /** 体重 */
+    PatientWeight: string
+    /** 身高 */
+    PatientHeight: string
   }
 
   /** 获取用药单位返回列表 */
