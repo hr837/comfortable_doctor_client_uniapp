@@ -29,8 +29,6 @@ export namespace ApiRequestType {
     PatientSource: string
     /** 手术间编码 */
     RoomCode: string
-    /** 0：非无痛、1：无痛、-1：全部 */
-    PainState: number
   }
 
   /** 输液、麻醉用药 */
@@ -159,6 +157,15 @@ export namespace ApiRequestType {
      * 时间
      */
     StateTime: string
+  }
+
+  /** 安全核查查下请求体 */
+  export interface PatientSafeCheckQueryInput extends Patient {
+    /** 1：无痛、0：非无痛、-1：全部 */
+    Analgesia: number
+
+    /** 上午、下午，为空“”则为全部 */
+    ExamineSpan: string
   }
 }
 

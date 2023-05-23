@@ -312,3 +312,13 @@ export function saveSelectdPackage(patientId: string, packageId: string) {
     loading: true,
   })
 }
+
+/** 获取安全核查患者信息列表 */
+export function getCheckPatientList(query: ApiRequestType.PatientSafeCheckQueryInput) {
+  return request<ApiResonseType.PatientInfo[]>({
+    path: '/api/Patient/GetCheckPatientList',
+    data: query,
+    method: 'POST',
+    loading: true,
+  })
+}

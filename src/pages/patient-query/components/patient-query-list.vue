@@ -39,7 +39,7 @@ const genderIcon = (str: string) => str === '女' ? 'icon-nvxing' : 'icon-nanxin
             <text class="patient-query-list-item_title_item">
               {{ item.PatientNumber }}
             </text>
-            <text class="patient-query-list-item_title_item">
+            <text class="patient-query-list-item_title_item patient-query-list-item_title_item--examine-type">
               {{ item.ExamineType }}
             </text>
           </view>
@@ -117,7 +117,11 @@ const genderIcon = (str: string) => str === '女' ? 'icon-nvxing' : 'icon-nanxin
       @apply flex items-center p-3;
 
       &_item {
-        @apply mx-4 min-w-15;
+        @apply mx-4 min-w-50px;
+
+        &--examine-type {
+          @apply max-w-120px truncate;
+        }
       }
     }
 
