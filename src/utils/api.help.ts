@@ -166,6 +166,8 @@ export namespace ApiRequestType {
 
     /** 上午、下午，为空“”则为全部 */
     ExamineSpan: string
+    /** 科别 */
+    DeptType: string
   }
 }
 
@@ -591,6 +593,90 @@ export namespace ApiResonseType {
     /** 手术患者ID */
     AnesthesiaId: string
     Items: ApiRequestType.NarcoticItemInfo[]
+  }
+
+  /** 安全核查 */
+  export interface SafeCheckInfo {
+    /**
+     * 评估时间
+     */
+    AssessTime: string
+    /**
+     * 诊断
+     */
+    DiagnosisName: string
+    /**
+     * 申请医生
+     */
+    DoctorName: string
+    /**
+     * 检查时间
+     */
+    ExamineTime: string
+    /**
+     * 检查类型
+     */
+    ExamineType: string
+    /**
+     * 麻醉患者ID
+     */
+    Id: string
+    /**
+     * 是否无痛
+     */
+    IsAnalgesia: boolean
+    /**
+     * 是否评估
+     */
+    IsAssessed: boolean
+    /**
+     * 是否急诊
+     */
+    IsEmergency: boolean
+    /**
+     * 手术间
+     */
+    OperatingRoomName: string
+    /**
+     * 年龄
+     */
+    PatientAge: string
+    /**
+     * 科室
+     */
+    PatientDepartmentName: string
+    /**
+     * 身份证
+     */
+    PatientIdCard: string
+    /**
+     * 病案号
+     */
+    PatientMrn: string
+    /**
+     * 患者姓名
+     */
+    PatientName: string
+    /**
+     * 就诊号，门诊号或住院号
+     */
+    PatientNumber: string
+    /**
+     * 性别
+     */
+    PatientSex: string
+    /**
+     * 来源
+     */
+    PatientSource: string
+    /**
+     * 特殊感染
+     */
+    SpecialInfect: string
+    /**
+     * 申请日期
+     */
+    SubscribeDate: string
   }
 
 }

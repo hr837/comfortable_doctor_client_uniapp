@@ -315,7 +315,7 @@ export function saveSelectdPackage(patientId: string, packageId: string) {
 
 /** 获取安全核查患者信息列表 */
 export function getCheckPatientList(query: ApiRequestType.PatientSafeCheckQueryInput) {
-  return request<ApiResonseType.PatientInfo[]>({
+  return request<ApiResonseType.SafeCheckInfo[]>({
     path: '/api/Patient/GetCheckPatientList',
     data: query,
     method: 'POST',

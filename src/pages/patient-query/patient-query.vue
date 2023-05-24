@@ -20,7 +20,6 @@ const queryData = reactive<ApiRequestType.Patient>({
   PatientSource: '',
   OperateState: -1,
   RoomCode: '',
-  PainState: -1,
 })
 
 function onSubmit(query?: QueryInfo) {

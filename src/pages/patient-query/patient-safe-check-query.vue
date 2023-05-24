@@ -9,7 +9,7 @@ import { goToCheckDetailPage } from '@/composables'
 import { getCheckPatientList } from '@/utils/api'
 import type { ApiRequestType, ApiResonseType } from '@/utils/api.help'
 
-const dataSet = ref<ApiResonseType.PatientInfo[]>([])
+const dataSet = ref<ApiResonseType.SafeCheckInfo[]>([])
 
 const queryData = reactive<ApiRequestType.PatientSafeCheckQueryInput>({
   KeyWord: '',
@@ -19,6 +19,7 @@ const queryData = reactive<ApiRequestType.PatientSafeCheckQueryInput>({
   OperateState: -1,
   RoomCode: '',
   Analgesia: -1,
+  DeptType: '',
   ExamineSpan: '',
 })
 
@@ -32,14 +33,14 @@ function onSubmit(query?: QueryInfo) {
   })
 }
 
-function onRowClick(data: ApiResonseType.PatientInfo) {
+function onRowClick(data: ApiResonseType.SafeCheckInfo) {
   goToCheckDetailPage(data)
 }
 </script>
 
 <template>
   <view class="page  patient-safe-check-query">
-    <PatientQueryForm show-room-item @submit="onSubmit">
+    <PatientQueryForm show-room-item :show-department="false" @submit="onSubmit">
       <template #append>
         <uni-row>
           <uni-col :xs="22" :sm="11">

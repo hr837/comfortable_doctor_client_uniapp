@@ -10,7 +10,17 @@ export interface QueryInfo {
   roomCode: string
 }
 
-const props = withDefaults(defineProps<{ showRoomItem?: boolean }>(), { showRoomItem: false })
+interface PropType {
+  /** 显示手术间 */
+  showRoomItem?: boolean
+  /** 显示科别 */
+  showDepartment?: boolean
+}
+
+const props = withDefaults(defineProps<PropType>(), {
+  showRoomItem: false,
+  showDepartment: true,
+})
 
 const emits = defineEmits(['submit'])
 
@@ -64,7 +74,7 @@ onMounted(() => {
             <uni-datetime-picker v-model="model.date" type="date" :clear-icon="false" />
           </uni-forms-item>
         </uni-col>
-        <uni-col :xs="24" :sm="showRoomItem ? 8 : 12">
+        <uni-col v-if="showDepartment" :xs="24" :sm="showRoomItem ? 8 : 12">
           <uni-forms-item label="科室" name="department">
             <uni-data-select v-model="model.department" :localdata="departmentList" popup-title="请选择科室" />
           </uni-forms-item>

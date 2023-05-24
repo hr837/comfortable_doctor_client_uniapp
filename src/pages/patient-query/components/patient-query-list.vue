@@ -1,10 +1,14 @@
 <script lang="ts" setup>
-import type { ApiResonseType } from '@/utils/api.help'
 import { dateFormat } from '@/composables'
 
-const props = defineProps<{
-  data: ApiResonseType.PatientInfo[]
-}>()
+interface PropType {
+  data: Array<any>
+  showPain?: boolean
+}
+
+const props = withDefaults(defineProps<PropType>(), {
+  showPain: false,
+})
 
 const emits = defineEmits(['rowClick'])
 
@@ -54,14 +58,26 @@ const genderIcon = (str: string) => str === '女' ? 'icon-nvxing' : 'icon-nanxin
               {{ item.DiagnosisName }}
             </text>
           </uni-col>
-          <uni-col :span="6" class="flex">
-            <text class="label">
-              是否评估
-            </text>
-            <text class="text">
-              {{ item.IsAssessed ? '是' : '否' }}
-            </text>
-          </uni-col>
+          <template v-if="showPain">
+            <uni-col :span="6" class="flex">
+              <text class="label">
+                是否无痛
+              </text>
+              <text class="text">
+                {{ item.Analgesia ? '是' : '否' }}
+              </text>
+            </uni-col>
+          </template>
+          <template v-else>
+            <uni-col :span="6" class="flex">
+              <text class="label">
+                是否评估
+              </text>
+              <text class="text">
+                {{ item.IsAssessed ? '是' : '否' }}
+              </text>
+            </uni-col>
+          </template>
           <uni-col :span="6" class="flex">
             <text class="label">
               申请医生
