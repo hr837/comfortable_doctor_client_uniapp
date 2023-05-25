@@ -6,8 +6,10 @@ import PatientQuerySelectStatus from './components/patient-query-select-status.v
 import PatientQuerySelectPain from './components/patient-query-select-pain.vue'
 import PatientQuerySelectSpan from './components/patient-query-select-span.vue'
 import PatientQueryPopupPatientConfirm from './components/patient-query-popup-patient-confirm.vue'
+import PatientQueryPopupSettingAccesstime from './components/patient-query-popup-setting-accesstime.vue'
 import { getCheckPatientList } from '@/utils/api'
 import type { ApiRequestType, ApiResonseType } from '@/utils/api.help'
+import { goToCheckDetailPage } from '@/composables'
 
 const dataSet = ref<ApiResonseType.SafeCheckInfo[]>([])
 
@@ -26,6 +28,7 @@ const queryData = reactive<ApiRequestType.PatientSafeCheckQueryInput>({
 const pageData = reactive({
   confirmPopup: false,
   currentRow: {},
+  settingPopup: false,
 })
 
 function onSubmit(query?: QueryInfo) {
@@ -41,8 +44,9 @@ function onSubmit(query?: QueryInfo) {
 function onRowClick(data: ApiResonseType.SafeCheckInfo) {
   pageData.currentRow = data
   pageData.confirmPopup = true
-  // goToCheckDetailPage(data)
 }
+
+const patientId = computed(() => (pageData.currentRow as any).patientId || '')
 </script>
 
 <template>
@@ -68,6 +72,13 @@ function onRowClick(data: ApiResonseType.SafeCheckInfo) {
       </template>
     </PatientQueryForm>
     <PatientQueryList class="!p-t-0" :data="dataSet" @row-click="onRowClick" />
-    <PatientQueryPopupPatientConfirm v-model:show="pageData.confirmPopup" :data="pageData.currentRow as any" />
+    <PatientQueryPopupPatientConfirm
+      v-model:show="pageData.confirmPopup" :data="pageData.currentRow as any"
+      @confirm="() => pageData.settingPopup = true"
+    />
+    <PatientQueryPopupSettingAccesstime
+      v-model:show="pageData.settingPopup" :patient-id="patientId"
+      :data="pageData.currentRow as any" @saved="() => goToCheckDetailPage(pageData.currentRow as any)"
+    />
   </view>
 </template>

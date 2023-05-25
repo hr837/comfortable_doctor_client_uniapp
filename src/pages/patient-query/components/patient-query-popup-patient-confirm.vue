@@ -3,13 +3,14 @@ import type { ApiResonseType } from '@/utils/api.help'
 // prop
 const props = defineProps<{ data: ApiResonseType.SafeCheckInfo; show: boolean }>()
 // event
-const emits = defineEmits(['command', 'update:show'])
+const emits = defineEmits(['command', 'update:show', 'confirm'])
 // ref
 const popupRef = ref<UniHelper.UniPopupProps>()
 
 function onClick() {
   popupRef.value?.close()
   emits('update:show', false)
+  emits('confirm')
 }
 
 watch(() => props.show, (val) => {
@@ -31,7 +32,7 @@ function onPopupChange(e: UniEvent<{ val: boolean }>) {
         <view class="popup-patient-confirm-header">
           患者信息确认
         </view>
-        <uni-forms class="popup-patient-confirm-form" label-width="70px">
+        <uni-forms class="popup-patient-confirm-form" label-width="70px" label-align="right">
           <uni-forms-item label="姓名">
             {{ data.PatientName }}
           </uni-forms-item>
@@ -62,15 +63,25 @@ function onPopupChange(e: UniEvent<{ val: boolean }>) {
 .patient-query-popup-patient-confirm {
   .popup-patient-confirm {
     &-container {
-      @apply w-300px bg-white ;
+      @apply w-300px bg-white;
     }
 
     &-header {
       @apply text-xl p-y-2 bg-gray-200 font-500 text-center;
     }
 
-    &-form{
+    &-form {
       @apply w-180px m-auto p-y-4;
+
+      .uni-forms-item {
+        ::v-deep .uni-forms-item__content {
+          line-height: 36px;
+        }
+
+        &:last-of-type {
+          margin-bottom: 0 !important;
+        }
+      }
     }
 
     &-footer {
