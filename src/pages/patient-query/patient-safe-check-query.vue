@@ -5,7 +5,7 @@ import PatientQuerySelectSource from './components/patient-query-select-source.v
 import PatientQuerySelectStatus from './components/patient-query-select-status.vue'
 import PatientQuerySelectPain from './components/patient-query-select-pain.vue'
 import PatientQuerySelectSpan from './components/patient-query-select-span.vue'
-import { goToCheckDetailPage } from '@/composables'
+import PatientQueryPopupPatientConfirm from './components/patient-query-popup-patient-confirm.vue'
 import { getCheckPatientList } from '@/utils/api'
 import type { ApiRequestType, ApiResonseType } from '@/utils/api.help'
 
@@ -23,6 +23,11 @@ const queryData = reactive<ApiRequestType.PatientSafeCheckQueryInput>({
   ExamineSpan: '',
 })
 
+const pageData = reactive({
+  confirmPopup: false,
+  currentRow: {},
+})
+
 function onSubmit(query?: QueryInfo) {
   queryData.KeyWord = query?.query ?? ''
   queryData.ExamineDate = query?.date ?? ''
@@ -34,7 +39,9 @@ function onSubmit(query?: QueryInfo) {
 }
 
 function onRowClick(data: ApiResonseType.SafeCheckInfo) {
-  goToCheckDetailPage(data)
+  pageData.currentRow = data
+  pageData.confirmPopup = true
+  // goToCheckDetailPage(data)
 }
 </script>
 
@@ -61,5 +68,6 @@ function onRowClick(data: ApiResonseType.SafeCheckInfo) {
       </template>
     </PatientQueryForm>
     <PatientQueryList class="!p-t-0" :data="dataSet" @row-click="onRowClick" />
+    <PatientQueryPopupPatientConfirm v-model:show="pageData.confirmPopup" :data="pageData.currentRow as any" />
   </view>
 </template>
