@@ -71,7 +71,7 @@ const patientId = computed(() => (pageData.currentRow as any).patientId || '')
         </uni-row>
       </template>
     </PatientQueryForm>
-    <PatientQueryList class="!p-t-0" :data="dataSet" @row-click="onRowClick" />
+    <PatientQueryList class="!p-t-0" :data="dataSet" show-pain @row-click="onRowClick" />
     <PatientQueryPopupPatientConfirm
       v-model:show="pageData.confirmPopup" :data="pageData.currentRow as any"
       @confirm="() => pageData.settingPopup = true"

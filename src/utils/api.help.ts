@@ -679,6 +679,29 @@ export namespace ApiResonseType {
     SubscribeDate: string
   }
 
+  /** 安全检查详情数据 */
+  export interface SafeCheckDetail {
+    /**
+    * 麻醉患者ID
+    */
+    AnesthesiaId: string
+    /**
+     * 安全核查单：1
+     */
+    FormType: string
+    /**
+     * 是否审核，审核后的信息不可以修改
+     */
+    IsChecked: boolean
+    /**
+     * 表单项目数据
+     */
+    Items: ApiRequestType.NarcoticItemInfo[]
+    /**
+     * 操作人员，保存时使用，查询是可为“”
+     */
+    LoginName?: null | string
+  }
 }
 
 /** 体征检测项目 */

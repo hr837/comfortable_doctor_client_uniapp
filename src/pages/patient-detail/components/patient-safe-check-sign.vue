@@ -2,43 +2,32 @@
 import DoctorSign from './doctor-sign.vue'
 
 import { dateTimeFormat } from '@/composables'
+import { editSafeCheckSignData } from '@/composables/patient-safe-check-detail.composable'
 
-const modelData = reactive({
-  narcoticDoctorName: '',
-  narcoticDoctorSign: '',
-  narcoticDoctorDate: '',
-  narcoticDoctor2Name: '',
-  narcoticDoctor2Sign: '',
-  narcoticDoctor2Date: '',
-  nurseName: '',
-  nurseSign: '',
-  nurseDate: '',
-})
+defineProps<{
+  disabled: boolean
+  isAnalgesia: boolean
+}>()
 
-onMounted(() => {
-
-})
-
-const canEdit = ref(true)
 const doctorKey = ref('')
 
 function setSignInfo(data?: any) {
   const dateStr = dateTimeFormat(new Date().toLocaleString())
   switch (doctorKey.value) {
     case 'narcoticDoctor':
-      modelData.narcoticDoctorName = data?.userName ?? ''
-      modelData.narcoticDoctorSign = data?.userCode ?? ''
-      modelData.narcoticDoctorDate = data ? dateStr : ''
+      editSafeCheckSignData.narcoticDoctorName = data?.userName ?? ''
+      editSafeCheckSignData.narcoticDoctorSign = data?.userCode ?? ''
+      editSafeCheckSignData.narcoticDoctorDate = data ? dateStr : ''
       break
-    case 'narcoticDoctor2':
-      modelData.narcoticDoctor2Name = data?.userName ?? ''
-      modelData.narcoticDoctor2Sign = data?.userCode ?? ''
-      modelData.narcoticDoctor2Date = data ? dateStr : ''
+    case 'doctor':
+      editSafeCheckSignData.doctorName = data?.userName ?? ''
+      editSafeCheckSignData.doctorSign = data?.userCode ?? ''
+      editSafeCheckSignData.doctorDate = data ? dateStr : ''
       break
     default:
-      modelData.nurseName = data?.userName ?? ''
-      modelData.nurseSign = data?.userCode ?? ''
-      modelData.nurseDate = data ? dateStr : ''
+      editSafeCheckSignData.nurseName = data?.userName ?? ''
+      editSafeCheckSignData.nurseSign = data?.userCode ?? ''
+      editSafeCheckSignData.nurseDate = data ? dateStr : ''
       break
   }
 }
@@ -47,42 +36,54 @@ function setSignInfo(data?: any) {
 <template>
   <view class="component patient-safe-check-sign">
     <uni-section title="核对无误后三方签名：" type="line" />
-    <uni-forms :model="modelData" label-width="70px" label-align="right" class="patient-narcotic-result-form  p-x-4">
-      <uni-row>
-        <uni-col :span="8">
+    <uni-forms
+      :model="editSafeCheckSignData" label-width="70px" label-align="right"
+      class="patient-narcotic-result-form  p-x-4"
+    >
+      <view class="row justify-around">
+        <view v-if="isAnalgesia">
           <uni-forms-item label="麻醉医师" class="no-margin" name="narcoticDoctorName">
             <DoctorSign
-              :disabled="!canEdit" :sign-code="modelData.narcoticDoctorSign" role-code="Anesthetist"
+              :disabled="disabled" :sign-code="editSafeCheckSignData.narcoticDoctorSign" role-code="Anesthetist"
               @click="() => doctorKey = 'narcoticDoctor'" @signed="setSignInfo"
             />
           </uni-forms-item>
           <uni-forms-item label="时间" name="narcoticDoctorDate" :label-width="45">
-            <uni-datetime-picker v-model="modelData.narcoticDoctorDate" type="datetime" :disabled="!canEdit" />
+            <uni-datetime-picker
+              v-model="editSafeCheckSignData.narcoticDoctorDate" type="datetime" :disabled="disabled"
+              hide-second
+            />
           </uni-forms-item>
-        </uni-col>
-        <uni-col :span="8">
-          <uni-forms-item label="内镜医师" class="no-margin" name="narcoticDoctorName">
+        </view>
+        <view>
+          <uni-forms-item label="内镜医师" class="no-margin" name="doctorName">
             <DoctorSign
-              :disabled="!canEdit" :sign-code="modelData.narcoticDoctor2Sign" role-code="Anesthetist"
-              @click="() => doctorKey = 'narcoticDoctor2'" @signed="setSignInfo"
+              :disabled="disabled" :sign-code="editSafeCheckSignData.doctorSign" role-code="Anesthetist"
+              @click="() => doctorKey = 'doctor'" @signed="setSignInfo"
             />
           </uni-forms-item>
           <uni-forms-item label="时间" name="narcoticDoctorDate" :label-width="45">
-            <uni-datetime-picker v-model="modelData.narcoticDoctor2Date" type="datetime" :disabled="!canEdit" />
+            <uni-datetime-picker
+              v-model="editSafeCheckSignData.doctorDate" type="datetime" :disabled="disabled"
+              hide-second
+            />
           </uni-forms-item>
-        </uni-col>
-        <uni-col :span="8">
-          <uni-forms-item label="内镜护士" class="no-margin" name="narcoticDoctorName">
+        </view>
+        <view>
+          <uni-forms-item label="内镜护士" class="no-margin" name="nurseName">
             <DoctorSign
-              :disabled="!canEdit" :sign-code="modelData.nurseSign" role-code="AnNurse"
+              :disabled="disabled" :sign-code="editSafeCheckSignData.nurseSign" role-code="AnNurse"
               @click="() => doctorKey = 'nurse'" @signed="setSignInfo"
             />
           </uni-forms-item>
-          <uni-forms-item label="时间" name="narcoticDoctorDate" :label-width="45">
-            <uni-datetime-picker v-model="modelData.nurseDate" type="datetime" :disabled="!canEdit" />
+          <uni-forms-item label="时间" name="nurseDate" :label-width="45">
+            <uni-datetime-picker
+              v-model="editSafeCheckSignData.nurseDate" type="datetime" :disabled="disabled"
+              hide-second
+            />
           </uni-forms-item>
-        </uni-col>
-      </uni-row>
+        </view>
+      </view>
     </uni-forms>
   </view>
 </template>

@@ -30,7 +30,7 @@ export const GridMenuSetting: GridMenuInfo[] = [
 ]
 
 export type DetailPageQueryType = Pick<ApiResonseType.PatientInfo, 'PatientName' | 'PatientSex' | 'PatientAge' | 'Id'>
-export type DetailCheckQueryType = DetailPageQueryType & Pick<ApiResonseType.PatientInfo, 'PatientNumber' | 'PatientDepartmentName'>
+export type DetailCheckQueryType = Pick<ApiResonseType.SafeCheckInfo, 'PatientName' | 'PatientSex' | 'PatientAge' | 'Id' | 'PatientNumber' | 'PatientDepartmentName' | 'IsAnalgesia'>
 
 /**
  * 跳转到病人麻醉详情页面
@@ -57,7 +57,7 @@ export function goToNarcoticDetailPage(data: ApiResonseType.PatientInfo) {
  * 跳转到安全核查列表
  * @param data 含有病人基本信息的数据
  */
-export function goToCheckDetailPage(data: ApiResonseType.PatientInfo) {
+export function goToCheckDetailPage(data: ApiResonseType.SafeCheckInfo) {
   const query: DetailCheckQueryType = {
     PatientName: data.PatientName,
     PatientSex: data.PatientSex,
@@ -65,6 +65,7 @@ export function goToCheckDetailPage(data: ApiResonseType.PatientInfo) {
     Id: data.Id,
     PatientDepartmentName: data.PatientDepartmentName,
     PatientNumber: data.PatientNumber,
+    IsAnalgesia: data.IsAnalgesia,
   }
   const url = queryString.stringifyUrl({
     url: '/pages/patient-detail/patient-safe-check-detail',

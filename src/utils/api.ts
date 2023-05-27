@@ -322,3 +322,40 @@ export function getCheckPatientList(query: ApiRequestType.PatientSafeCheckQueryI
     loading: true,
   })
 }
+
+/** 自定义表单内容项目，安全核查功能获取数据调用 */
+export function getCustomFormList(anesId: string) {
+  return request<ApiResonseType.SafeCheckDetail>({
+    path: '/api/CustomForm/GetList',
+    data: {
+      anesId,
+      formType: 1,
+    },
+    method: 'GET',
+    loading: true,
+  })
+}
+
+/** 自定义表单内容项目，安全核查功能数据保存 */
+export function saveCustomFormList(data: Required<ApiResonseType.SafeCheckDetail>) {
+  return request<ApiResonseType.SafeCheckDetail>({
+    path: '/api/CustomForm/Save',
+    data,
+    method: 'POST',
+    loading: true,
+  })
+}
+
+/** 安全核查功能审核 */
+export function checkCustomFormData(anesId: string, loginName: string) {
+  return request<boolean>({
+    path: '/api/CustomForm/Checked',
+    data: {
+      anesId,
+      loginName,
+      formType: 1,
+    },
+    method: 'GET',
+    loading: true,
+  })
+}

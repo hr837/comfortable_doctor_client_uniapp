@@ -1,23 +1,21 @@
 <script lang="ts" setup>
-const configList = ref([
-  { name: '查看患者是否佩戴腕带', value: '0' },
-  { name: '患者姓名、性别、门诊号/住院号', value: '0' },
-  { name: '患者检查/治疗手术申请单/病历、检查项目、检查部位', value: '0' },
-  { name: '患方、医师是否签署诊疗知情同意书', value: '0' },
-  { name: '患者检查报告单是否齐全', value: '0' },
-  { name: '患者禁饮食情况', value: '0' },
-  { name: '患者过敏史、药物史', value: '0' },
-  { name: '患者检查/治疗体位是否正确', value: '0' },
-  { name: '患者检查/治疗镇静方式', value: '0' },
-  { name: '植入物和特殊器材准备就绪', value: '0' },
-  { name: '检查/治疗时需用设备、物品是否完善', value: '0' },
-  { name: '检查/治疗时需用药品是否齐全', value: '0' },
-])
+import { editSafeCheckList } from '@/composables/patient-safe-check-detail.composable'
+interface PropType {
+  /** 是否禁用 */
+  disabled: boolean
+}
+defineProps<PropType>()
 
 function onItemValueChange(index: number, e: any) {
-  const checked = e.detail!.value
-  configList.value[index].value = checked ? '1' : '0'
+  const checked = e.detail!.value ? 'true' : 'false'
+  editSafeCheckList.value[index].ItemValue = checked
+  // const editIndex = safeCheckConfigList.findIndex(x => x.ItemName === name)
+  // if (editIndex < 0)
+  //   return
+  // safeCheckConfigList[editIndex].ItemValue = checked
 }
+
+// const safeCheckList = computed(() => safeCheckConfigList.filter(item => !(item.ItemName === 'Item09' && props.isAnalgesia)))
 </script>
 
 <template>
@@ -31,12 +29,15 @@ function onItemValueChange(index: number, e: any) {
           确认
         </uni-th>
       </uni-tr>
-      <uni-tr v-for="(item, index) in configList" :key="item.name">
+      <uni-tr v-for="(item, index) in editSafeCheckList" :key="item.ItemName">
         <uni-td align="center">
-          {{ item.name }}
+          {{ item.title }}
         </uni-td>
         <uni-td align="center">
-          <switch :checked="item.value === '1'" color="#13ce66" @change="(e) => onItemValueChange(index, e)" />
+          <switch
+            :checked="item.ItemValue === 'true'" color="#13ce66" :disabled="disabled"
+            @change="(e) => onItemValueChange(index, e)"
+          />
         </uni-td>
       </uni-tr>
     </uni-table>

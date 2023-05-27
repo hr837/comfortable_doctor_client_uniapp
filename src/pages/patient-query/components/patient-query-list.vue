@@ -64,7 +64,7 @@ const genderIcon = (str: string) => str === '女' ? 'icon-nvxing' : 'icon-nanxin
                 是否无痛
               </text>
               <text class="text">
-                {{ item.Analgesia ? '是' : '否' }}
+                {{ item.IsAnalgesia ? '是' : '否' }}
               </text>
             </uni-col>
           </template>

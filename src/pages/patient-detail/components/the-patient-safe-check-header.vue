@@ -8,6 +8,7 @@ const model = reactive<DetailCheckQueryType>({
   PatientAge: '',
   PatientDepartmentName: '',
   Id: '',
+  IsAnalgesia: false,
 })
 
 defineExpose({
