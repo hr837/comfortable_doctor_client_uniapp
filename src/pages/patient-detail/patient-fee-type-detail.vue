@@ -104,7 +104,55 @@ function onSave() {
   })
 }
 
-function onVerify() {
+async function onVerify() {
+  const items: ItemInfo[] = []
+  for (const code of checkedConsumeCodes.value) {
+    const item = consumeFeeItems.value.find(x => x.value === code)
+    if (item) {
+      items.push({
+        ItemName: item.text,
+        ItemCode: item.value as string,
+      })
+    }
+  }
+  for (const code of checkedGroupCodes.value) {
+    const item = groupFeeItems.value.find(x => x.value === code)
+    if (item) {
+      items.push({
+        ItemName: item.text,
+        ItemCode: item.value as string,
+      })
+    }
+  }
+
+  if (items.length < 1) {
+    const agreed = await uni.showModal({
+      title: '数据验证提醒',
+      content: '还未设置费用项，是否继续提交？',
+    }).then(v => v.confirm === true).catch(() => false)
+    if (!agreed)
+      return
+  }
+
+  if (!requestData.RecorderCode) {
+    const agreed = await uni.showModal({
+      title: '数据验证提醒',
+      content: '还未签名，是否继续提交？',
+    }).then(v => v.confirm === true).catch(() => false)
+    if (!agreed)
+      return
+  }
+
+  const _requestData = {
+    ...requestData,
+    IsChecked: false,
+    FeeItems: items,
+  }
+
+  const saved = await saveFeeItems(_requestData).then(() => true).catch(() => false)
+
+  if (!saved)
+    return
   const user: ApiResonseType.UserInfo = uni.getStorageSync(STORE_KEY_USER)
   if (user) {
     feeItemsChecked(requestData.AnesthesiaId, user.LoginName).then(() => {

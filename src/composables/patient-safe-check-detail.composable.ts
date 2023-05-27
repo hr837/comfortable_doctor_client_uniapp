@@ -53,11 +53,13 @@ export function getCheckDetail(id: string, isAnalgesia: boolean) {
       if (item.ItemName === 'Item09' && !isAnalgesia)
         continue
       const info = checkItems.find(x => x.ItemName === item.ItemName)
+
+      const value = (info ? info.ItemValue as string : 'false').toLocaleLowerCase()
       // 追加
       editSafeCheckList.value.push({
         ControlType: item.ControlType,
         ItemName: item.ItemName,
-        ItemValue: info?.ItemValue ?? 'false' as any,
+        ItemValue: value,
         title: item.title,
       })
 

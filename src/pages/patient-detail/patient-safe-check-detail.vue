@@ -2,7 +2,7 @@
 import ThePatientSafeCheckHeader from './components/the-patient-safe-check-header.vue'
 import PatientSafeCheckTable from './components/patient-safe-check-table.vue'
 import PatientSafeCheckSign from './components/patient-safe-check-sign.vue'
-import { getCheckDetail, getSafeCheckData } from '@/composables/patient-safe-check-detail.composable'
+import { editSafeCheckSignData, getCheckDetail, getSafeCheckData } from '@/composables/patient-safe-check-detail.composable'
 import { checkCustomFormData, saveCustomFormList } from '@/utils/api'
 import { STORE_KEY_USER } from '@/utils/app.constant'
 import type { ApiResonseType } from '@/utils/api.help'
@@ -47,7 +47,32 @@ function onSave() {
   })
 }
 
-function onVerify() {
+async function onVerify() {
+  let validated = true
+  if (!editSafeCheckSignData.doctorSign || !editSafeCheckSignData.nurseSign)
+    validated = false
+  if (isAnalgesia.value && !editSafeCheckSignData.narcoticDoctorSign)
+    validated = false
+
+  if (!validated) {
+    const agreed = await uni.showModal({
+      title: '数据验证提醒',
+      content: '签名信息不完整，是否继续提交？',
+    }).then(v => v.confirm === true)
+      .catch(() => false)
+    if (!agreed)
+      return
+  }
+
+  const _requestData = {
+    ...requestData,
+    IsChecked: false,
+    Items: getSafeCheckData(),
+  }
+  const saved = await saveCustomFormList(_requestData).then(() => true).catch(() => false)
+
+  if (!saved)
+    return
   checkCustomFormData(requestData.AnesthesiaId, requestData.LoginName).then(() => {
     uni.showToast({
       title: '已提交',
