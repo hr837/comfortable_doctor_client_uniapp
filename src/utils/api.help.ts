@@ -702,6 +702,30 @@ export namespace ApiResonseType {
      */
     LoginName?: null | string
   }
+
+  /** 费用项 */
+  export interface RecordFeeItems {
+    /**
+     * 手术患者ID
+     */
+    AnesthesiaId: string
+    /**
+     * 计费项目
+     */
+    FeeItems: MonitorItem[]
+    /**
+     * 是否审核，审核状态不可再编辑
+     */
+    IsChecked: boolean
+    /**
+     * 记录者，选择前面后前面护士的LoginName
+     */
+    RecorderCode: string
+    /**
+     * 记录日期，签字日期，签名后面的日期
+     */
+    RecordTime: string
+  }
 }
 
 /** 体征检测项目 */

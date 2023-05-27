@@ -113,6 +113,18 @@
         "navigationBarTitleText": "安全核查表"
       }
     },
+    {
+      "path": "pages/patient-query/patient-fee-type-query",
+      "style": {
+        "navigationBarTitleText": "内镜检查治疗计费单"
+      }
+    },
+    {
+      "path": "pages/patient-detail/patient-fee-type-detail",
+      "style": {
+        "navigationBarTitleText": "内镜检查、治疗计费项"
+      }
+    },
   ],
   "globalStyle": {
     "navigationBarTextStyle": "black",

@@ -27,6 +27,11 @@ export const GridMenuSetting: GridMenuInfo[] = [
     icon: 'icon-yiliao_yiliaowendang',
     path: '/pages/patient-query/patient-safe-check-query',
   },
+  {
+    text: '检查计费',
+    icon: 'icon-yiliao_baocunbaogao',
+    path: '/pages/patient-query/patient-fee-type-query',
+  },
 ]
 
 export type DetailPageQueryType = Pick<ApiResonseType.PatientInfo, 'PatientName' | 'PatientSex' | 'PatientAge' | 'Id'>
@@ -69,6 +74,24 @@ export function goToCheckDetailPage(data: ApiResonseType.SafeCheckInfo) {
   }
   const url = queryString.stringifyUrl({
     url: '/pages/patient-detail/patient-safe-check-detail',
+    query,
+  })
+
+  uni.navigateTo({
+    url,
+  })
+}
+
+/**
+ * 跳转到计费明细页面
+ * @param data 含有病人基本信息的数据
+ */
+export function goToFeeTypeDetailPage(data: ApiResonseType.SafeCheckInfo) {
+  const query = {
+    Id: data.Id,
+  }
+  const url = queryString.stringifyUrl({
+    url: '/pages/patient-detail/patient-fee-type-detail',
     query,
   })
 

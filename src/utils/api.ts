@@ -1,5 +1,5 @@
 import { request } from './http'
-import type { ApiRequestType, ApiResonseType } from './api.help'
+import type { ApiRequestType, ApiResonseType, ItemInfo } from './api.help'
 
 /**
  *  登录验证
@@ -356,6 +356,61 @@ export function checkCustomFormData(anesId: string, loginName: string) {
       formType: 1,
     },
     method: 'GET',
+    loading: true,
+  })
+}
+
+/** 计费患者信息查询 */
+export function getFeePatientList(query: ApiRequestType.PatientSafeCheckQueryInput) {
+  return request<ApiResonseType.SafeCheckInfo[]>({
+    path: '/api/Patient/GetFeePatientList',
+    data: query,
+    method: 'POST',
+    loading: true,
+  })
+}
+
+/** 获取计费项目字典信息 */
+export function getFeeTempaltes(typeName: '耗材' | '组套') {
+  return request<ItemInfo[]>({
+    path: '/api/FeeRecord/GetList',
+    data: { typeName },
+    method: 'GET',
+    loading: true,
+  })
+}
+
+/** 为患者配置的计费信息 */
+export function getRecordFeeItems(patientId: string) {
+  return request<ApiResonseType.RecordFeeItems>({
+    path: '/api/FeeRecord/GetRecord',
+    data: {
+      anesthesiaId: patientId,
+    },
+    method: 'GET',
+    loading: true,
+  })
+}
+
+/** 保存患者配置的计费信息 */
+export function saveFeeItems(data: ApiResonseType.RecordFeeItems) {
+  return request<ApiResonseType.RecordFeeItems>({
+    path: '/api/FeeRecord/Save',
+    data,
+    method: 'POST',
+    loading: true,
+  })
+}
+
+/** 审核计费信息 */
+export function feeItemsChecked(patientId: string, loginName: string) {
+  return request<ApiResonseType.RecordFeeItems>({
+    path: '/api/FeeRecord/Checked',
+    data: {
+      anesthesiaId: patientId,
+      loginName,
+    },
+    method: 'POST',
     loading: true,
   })
 }
