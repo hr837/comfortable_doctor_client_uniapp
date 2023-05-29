@@ -13,11 +13,11 @@ const model = reactive<DetailCheckQueryType>({
 
 defineExpose({
   revertData: (data: DetailCheckQueryType) => {
-    model.PatientNumber = data.PatientNumber
-    model.PatientName = data.PatientName
-    model.PatientSex = data.PatientSex
-    model.PatientAge = data.PatientAge
-    model.PatientDepartmentName = data.PatientDepartmentName
+    model.PatientNumber = decodeURIComponent(data.PatientNumber)
+    model.PatientName = decodeURIComponent(data.PatientName)
+    model.PatientSex = decodeURIComponent(data.PatientSex)
+    model.PatientAge = decodeURIComponent(data.PatientAge)
+    model.PatientDepartmentName = decodeURIComponent(data.PatientDepartmentName)
   },
 })
 </script>
@@ -43,13 +43,13 @@ defineExpose({
         </text>
         <text>{{ model.PatientAge }}</text>
       </uni-col>
-      <uni-col :span="8">
+      <uni-col :span="7">
         <text class="the-patient-safe-check-header-label">
           门诊号/住院号:
         </text>
         <text>{{ model.PatientNumber }}</text>
       </uni-col>
-      <uni-col :span="5">
+      <uni-col :span="6">
         <text class="the-patient-safe-check-header-label">
           科室:
         </text>

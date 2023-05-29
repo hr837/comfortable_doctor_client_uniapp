@@ -101,7 +101,7 @@ async function onVerify() {
 
 <style lang="scss" scoped>
 .patient-safe-check-detail-bottom {
-  @apply row justify-center m-t-4;
+  @apply row justify-center m-y-4;
 
   .submit-button {
     width: 120px;

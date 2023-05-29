@@ -48,7 +48,7 @@ function setSignInfo(data?: any) {
               @click="() => doctorKey = 'narcoticDoctor'" @signed="setSignInfo"
             />
           </uni-forms-item>
-          <uni-forms-item label="时间" name="narcoticDoctorDate" :label-width="45">
+          <uni-forms-item label="时间" name="narcoticDoctorDate" :label-width="60">
             <uni-datetime-picker
               v-model="editSafeCheckSignData.narcoticDoctorDate" type="datetime" :disabled="disabled"
               hide-second
@@ -58,11 +58,11 @@ function setSignInfo(data?: any) {
         <view>
           <uni-forms-item label="内镜医师" class="no-margin" name="doctorName">
             <DoctorSign
-              :disabled="disabled" :sign-code="editSafeCheckSignData.doctorSign" role-code="Anesthetist"
+              :disabled="disabled" :sign-code="editSafeCheckSignData.doctorSign" role-code="AnDoctor"
               @click="() => doctorKey = 'doctor'" @signed="setSignInfo"
             />
           </uni-forms-item>
-          <uni-forms-item label="时间" name="narcoticDoctorDate" :label-width="45">
+          <uni-forms-item label="时间" name="narcoticDoctorDate" :label-width="60">
             <uni-datetime-picker
               v-model="editSafeCheckSignData.doctorDate" type="datetime" :disabled="disabled"
               hide-second
@@ -76,7 +76,7 @@ function setSignInfo(data?: any) {
               @click="() => doctorKey = 'nurse'" @signed="setSignInfo"
             />
           </uni-forms-item>
-          <uni-forms-item label="时间" name="nurseDate" :label-width="45">
+          <uni-forms-item label="时间" name="nurseDate" :label-width="60">
             <uni-datetime-picker
               v-model="editSafeCheckSignData.nurseDate" type="datetime" :disabled="disabled"
               hide-second

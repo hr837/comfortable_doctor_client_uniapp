@@ -47,7 +47,7 @@ export function getCheckDetail(id: string, isAnalgesia: boolean) {
 
   return getCustomFormList(id).then((data) => {
     if (!data)
-      return
+      return false
     const checkItems = data.Items
     // 重置
     editSafeCheckList.value = []
