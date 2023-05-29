@@ -410,7 +410,7 @@ export function feeItemsChecked(patientId: string, loginName: string) {
       anesthesiaId: patientId,
       loginName,
     },
-    method: 'POST',
+    method: 'GET',
     loading: true,
   })
 }

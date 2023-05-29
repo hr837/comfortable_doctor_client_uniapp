@@ -8,6 +8,7 @@ interface GridMenuInfo {
   icon: string
   /** 对应页面路径 */
   path: string
+  roleName: string[]
 }
 
 /** 宫格菜单配置 */
@@ -16,21 +17,25 @@ export const GridMenuSetting: GridMenuInfo[] = [
     text: '患者查询',
     icon: 'icon-yiliao_dianzishebaoka',
     path: '/pages/patient-query/patient-query',
+    roleName: ['Anesthetist', 'OpDoctor'],
   },
   {
     text: '麻醉记录',
     icon: 'icon-yiliao_xindianyi',
     path: '/pages/patient-query/patient-narcotic-query',
+    roleName: ['Anesthetist', 'OpDoctor'],
   },
   {
     text: '安全核查',
     icon: 'icon-yiliao_yiliaowendang',
     path: '/pages/patient-query/patient-safe-check-query',
+    roleName: ['AnNurse'],
   },
   {
     text: '检查计费',
     icon: 'icon-yiliao_baocunbaogao',
     path: '/pages/patient-query/patient-fee-type-query',
+    roleName: ['AnNurse'],
   },
 ]
 

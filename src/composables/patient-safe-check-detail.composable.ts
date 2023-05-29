@@ -46,6 +46,8 @@ export function getCheckDetail(id: string, isAnalgesia: boolean) {
   editSafeCheckSignData.nurseDate = ''
 
   return getCustomFormList(id).then((data) => {
+    if (!data)
+      return
     const checkItems = data.Items
     // 重置
     editSafeCheckList.value = []

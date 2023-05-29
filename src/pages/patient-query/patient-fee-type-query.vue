@@ -8,6 +8,7 @@ import PatientQuerySelectSpan from './components/patient-query-select-span.vue'
 import { getFeePatientList } from '@/utils/api'
 import type { ApiRequestType, ApiResonseType } from '@/utils/api.help'
 import { goToFeeTypeDetailPage } from '@/composables'
+import { initFeeConfig } from '@/composables/patient-fee-type-detail.composable'
 
 const dataSet = ref<ApiResonseType.SafeCheckInfo[]>([])
 
@@ -31,6 +32,8 @@ function onSubmit(query?: QueryInfo) {
   getFeePatientList(queryData).then((data) => {
     dataSet.value = data
   })
+
+  initFeeConfig()
 }
 </script>
 

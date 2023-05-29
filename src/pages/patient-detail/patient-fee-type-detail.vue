@@ -3,19 +3,19 @@ import PatientFeeTypeHeader from './components/patient-fee-type-header.vue'
 import DoctorSign from './components/doctor-sign.vue'
 import { refreshPatientInfo } from '@/composables/patient-narcotic-detail.composable'
 import { dateTimeFormat } from '@/composables'
-import { feeItemsChecked, getFeeTempaltes, getRecordFeeItems, saveFeeItems } from '@/utils/api'
+import { feeItemsChecked, getRecordFeeItems, saveFeeItems } from '@/utils/api'
 import type { ApiResonseType, ItemInfo } from '@/utils/api.help'
 import { STORE_KEY_USER } from '@/utils/app.constant'
+
+import { consumeFeeItems, groupFeeItems } from '@/composables/patient-fee-type-detail.composable'
+
 const disabledEdit = ref(false)
 
-const requestData = {
+const requestData = reactive({
   AnesthesiaId: '',
   RecordTime: '',
   RecorderCode: '',
-}
-
-const consumeFeeItems = ref<UniHelper.UniDataCheckboxLocaldata[]>([])
-const groupFeeItems = ref<UniHelper.UniDataCheckboxLocaldata[]>([])
+})
 
 const checkedConsumeCodes = ref<string[]>([])
 const checkedGroupCodes = ref<string[]>([])
@@ -25,45 +25,25 @@ onLoad((query) => {
     return
 
   requestData.AnesthesiaId = query.Id
-  refreshPatientInfo(query.Id)
-  getFeeTempaltes('耗材').then((data) => {
-    consumeFeeItems.value = data.map((item) => {
-      return {
-        text: item.ItemName,
-        value: item.ItemCode,
-        disabled: false,
-      }
-    })
-  })
-  getFeeTempaltes('组套').then((data) => {
-    groupFeeItems.value = data.map((item) => {
-      return {
-        text: item.ItemName,
-        value: item.ItemCode,
-        disabled: false,
-      }
-    })
-  })
+  refreshPatientInfo(requestData.AnesthesiaId)
+  revertCheckFeeItems(requestData.AnesthesiaId)
+})
+
+function revertCheckFeeItems(id: string) {
   checkedConsumeCodes.value = []
   checkedGroupCodes.value = []
-  getRecordFeeItems(query.id).then((data) => {
-    requestData.RecordTime = data.RecordTime
+  getRecordFeeItems(id).then((data) => {
+    if (!data)
+      return
+    requestData.RecordTime = dateTimeFormat(data.RecordTime)
     requestData.RecorderCode = data.RecorderCode
     disabledEdit.value = data.IsChecked
-    for (const feeItem of data.FeeItems) {
-      let index = consumeFeeItems.value.findIndex(x => x.value === feeItem.ItemCode)
-      if (index > -1) {
-        checkedConsumeCodes.value.push(feeItem.ItemCode)
-        continue
-      }
-      index = groupFeeItems.value.findIndex(x => x.value === feeItem.ItemCode)
-      if (index > -1) {
-        checkedGroupCodes.value.push(feeItem.ItemCode)
-        continue
-      }
-    }
-  })
-})
+    const checkedFeeCodes = data.FeeItems.map(x => x.ItemCode)
+
+    checkedConsumeCodes.value = checkedFeeCodes.filter(x => consumeFeeItems.value.findIndex(item => item.value === x))
+    checkedGroupCodes.value = checkedFeeCodes.filter(x => groupFeeItems.value.findIndex(item => item.value === x))
+  }).catch(() => { })
+}
 
 function setSignInfo(data?: any) {
   const dateStr = dateTimeFormat(new Date().toLocaleString())
@@ -190,7 +170,7 @@ async function onVerify() {
           />
         </uni-forms-item>
         <uni-forms-item label="时间" name="nurseDate" :label-width="45">
-          <uni-datetime-picker v-model="requestData.RecorderCode" type="datetime" :disabled="disabledEdit" hide-second />
+          <uni-datetime-picker v-model="requestData.RecordTime" type="datetime" :disabled="disabledEdit" hide-second />
         </uni-forms-item>
       </view>
     </uni-forms>

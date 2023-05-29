@@ -2,6 +2,7 @@
 import { GridMenuSetting, roleFormat } from '@/composables'
 import { STORE_KEY_SYSNAME, STORE_KEY_USER } from '@/utils/app.constant'
 
+const roleName = ref('')
 const goToLogin = () =>
   uni.redirectTo({
     url: '/pages/login/login',
@@ -18,6 +19,7 @@ onLoad(() => {
   }
   else {
     const { UserName, UserId, UserRole } = userInfo
+    roleName.value = UserRole
     if (UserRole === 'AnNurse') {
       uni.setNavigationBarTitle({
         title: uni.getStorageSync(STORE_KEY_SYSNAME),
@@ -36,10 +38,12 @@ onNavigationBarButtonTap(({ index }) => {
     goToLogin()
 })
 
+const roleMenu = computed(() => GridMenuSetting.filter(item => roleName.value === 'gly' || item.roleName.includes(roleName.value)))
+
 function onChagne(e: UniEvent<{ index: number }>) {
   const index = e.detail?.index
   if (index !== undefined && index > -1) {
-    const { path } = GridMenuSetting[index]
+    const { path } = roleMenu.value[index]
     uni.navigateTo({
       url: path,
     })
@@ -50,7 +54,7 @@ function onChagne(e: UniEvent<{ index: number }>) {
 <template>
   <view class="page">
     <uni-grid class="px-6 py-4" :column="4" :show-border="false" @change="onChagne">
-      <uni-grid-item v-for="(item, index) of GridMenuSetting" :key="`grid-item-${index + 1}`" :index="index">
+      <uni-grid-item v-for="(item, index) of roleMenu" :key="`grid-item-${index + 1}`" :index="index">
         <uni-icons custom-prefix="iconfont" :type="item.icon" />
         <text>{{ item.text }}</text>
       </uni-grid-item>

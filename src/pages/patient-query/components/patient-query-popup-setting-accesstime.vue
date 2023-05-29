@@ -47,15 +47,16 @@ watch(() => props.show, (val) => {
     popupRef.value.open()
 
     getPatientDetail(props.patientId).then((data) => {
-      if (data && data.AssessTime)
-        accessTime.value = data.AccessTime
-      else
-        accessTime.value = dayJs().format('YYYY-MM-DD HH:mm:00')
-    }).catch(() => {
-      accessTime.value = dayJs().format('YYYY-MM-DD HH:mm:00')
-    })
+      initAccessTime(data.AccessTime)
+    }).catch(initAccessTime)
   }
 })
+
+function initAccessTime(time?: string) {
+  setTimeout(() => {
+    accessTime.value = dayJs(time).format('YYYY-MM-DD HH:mm:00')
+  }, 100)
+}
 
 function onPopupChange(e: UniEvent<{ val: boolean }>) {
   const show = e.detail?.val

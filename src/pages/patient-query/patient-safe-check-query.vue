@@ -46,7 +46,7 @@ function onRowClick(data: ApiResonseType.SafeCheckInfo) {
   pageData.confirmPopup = true
 }
 
-const patientId = computed(() => (pageData.currentRow as any).patientId || '')
+const patientId = computed(() => (pageData.currentRow as any).Id || '')
 </script>
 
 <template>
