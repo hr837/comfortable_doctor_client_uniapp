@@ -41,9 +41,10 @@ body {
       }
     }
 
-    .uni-date-editor--x__disabled{
+    .uni-date-editor--x__disabled {
       opacity: unset;
-      .uni-date-x{
+
+      .uni-date-x {
         background-color: #f7f6f6;
         color: #333;
       }
@@ -64,22 +65,30 @@ body {
   }
 }
 
-.uni-stat__select{
-  .uni-select--disabled{
+.uni-stat__select {
+  .uni-select--disabled {
     background-color: #f7f6f6 !important;
   }
 }
 
-.no-data{
+.no-data {
   text-align: center;
   font-size: 32px;
   padding: 100px 0;
   color: #999;
 }
 
-uni-button{
+uni-button {
   line-height: 2.5em !important;
-  &[size='mini']{
+
+  &[size='mini'] {
     line-height: 2.3em !important;
+  }
+}
+
+
+.uni-combox {
+  .uni-combox__selector {
+    min-width: 150px;
   }
 }

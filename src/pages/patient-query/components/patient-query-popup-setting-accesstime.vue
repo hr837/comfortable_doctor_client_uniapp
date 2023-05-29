@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import dayJs from 'dayjs'
 import { getPatientDetail, updateState } from '@/utils/api'
+import { dateTimeFormat } from '@/composables'
 // prop
 const props = defineProps<{ patientId: string; show: boolean }>()
 // event
@@ -54,7 +54,7 @@ watch(() => props.show, (val) => {
 
 function initAccessTime(time?: string) {
   setTimeout(() => {
-    accessTime.value = dayJs(time).format('YYYY-MM-DD HH:mm:00')
+    accessTime.value = dateTimeFormat(time ?? new Date().toLocaleString())
   }, 100)
 }
 
