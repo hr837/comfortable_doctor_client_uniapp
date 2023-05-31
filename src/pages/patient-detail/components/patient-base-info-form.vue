@@ -103,6 +103,16 @@ import { PatientDetailDict, patientInfo } from '@/composables/patient-narcotic-d
           </uni-forms-item>
         </uni-col>
         <uni-col :xs="24" :sm="12">
+          <uni-forms-item label="申请日期">
+            <uni-datetime-picker v-model="patientInfo.SubscribeDate" type="date" disabled />
+          </uni-forms-item>
+        </uni-col>
+        <uni-col :xs="24" :sm="12">
+          <uni-forms-item label="BMI">
+            <uni-easyinput :value="patientInfo.Bmi" disabled />
+          </uni-forms-item>
+        </uni-col>
+        <uni-col :xs="24" :sm="12">
           <uni-forms-item label="血型">
             <uni-data-select :localdata="PatientDetailDict.bloodType" disabled />
           </uni-forms-item>
@@ -112,10 +122,17 @@ import { PatientDetailDict, patientInfo } from '@/composables/patient-narcotic-d
             <uni-data-select :localdata="PatientDetailDict.bolldRH" disabled />
           </uni-forms-item>
         </uni-col>
-
+      </uni-row>
+      <uni-forms-item label="初步诊断">
+        <uni-easyinput type="textarea" :value="patientInfo.DiagnosisName" disabled />
+      </uni-forms-item>
+      <uni-forms-item label="处理意见">
+        <uni-easyinput type="textarea" :value="patientInfo.Opinion" disabled />
+      </uni-forms-item>
+      <uni-row>
         <uni-col :xs="24" :sm="12">
-          <uni-forms-item label="申请日期">
-            <uni-datetime-picker v-model="patientInfo.SubscribeDate" type="date" disabled />
+          <uni-forms-item label="特殊感染">
+            <uni-easyinput :value="patientInfo.SpecialInfect" disabled />
           </uni-forms-item>
         </uni-col>
         <uni-col :xs="24" :sm="12">
@@ -124,15 +141,6 @@ import { PatientDetailDict, patientInfo } from '@/composables/patient-narcotic-d
           </uni-forms-item>
         </uni-col>
       </uni-row>
-      <uni-forms-item label="特殊感染">
-        <uni-easyinput :value="patientInfo.SpecialInfect" disabled />
-      </uni-forms-item>
-      <uni-forms-item label="初步诊断">
-        <uni-easyinput type="textarea" :value="patientInfo.DiagnosisName" disabled />
-      </uni-forms-item>
-      <uni-forms-item label="处理意见">
-        <uni-easyinput type="textarea" :value="patientInfo.Opinion" disabled />
-      </uni-forms-item>
     </uni-forms>
   </view>
 </template>

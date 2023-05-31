@@ -167,8 +167,6 @@ export namespace ApiRequestType {
 
     /** 上午、下午，为空“”则为全部 */
     ExamineSpan: string
-    /** 科别 */
-    DeptType: string
   }
 }
 
@@ -510,6 +508,8 @@ export namespace ApiResonseType {
     PatientWeight: string
     /** 身高 */
     PatientHeight: string
+    /** 体重指数 */
+    Bmi: string
   }
 
   /** 获取用药单位返回列表 */

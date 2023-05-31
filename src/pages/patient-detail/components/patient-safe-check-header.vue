@@ -42,13 +42,13 @@ onMounted(() => {
         </text>
         <text>{{ model.PatientSex }}</text>
       </uni-col>
-      <uni-col :span="4">
+      <uni-col :span="3">
         <text class="the-patient-safe-check-header-label">
           年龄:
         </text>
         <text>{{ model.PatientAge }}</text>
       </uni-col>
-      <uni-col :span="7">
+      <uni-col :span="8">
         <text class="the-patient-safe-check-header-label">
           门诊号/住院号:
         </text>
