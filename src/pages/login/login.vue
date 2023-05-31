@@ -2,7 +2,7 @@
 import LoginSetting from './components/login-setting.vue'
 import { getDeptList, login } from '@/utils/api'
 import type { ApiRequestType } from '@/utils/api.help'
-import { STORE_KEY_ROOM, STORE_KEY_USER, STORE_ROOM_LIST } from '@/utils/app.constant'
+import { STORE_KEY_ROOM, STORE_KEY_SYSNAME, STORE_KEY_USER, STORE_ROOM_LIST, SYS_NAME_DEFAULT } from '@/utils/app.constant'
 
 const loginModel = reactive<ApiRequestType.Login & { RoomCode: string }>({
   LoginName: '',
@@ -25,8 +25,12 @@ const goToIndex = () => uni.redirectTo({
 })
 const roomList = ref<UniHelper.UniDataSelectLocaldata[]>([])
 
+const sysName = ref(SYS_NAME_DEFAULT)
+
 function refreshRoomList() {
   const localData = uni.getStorageSync(STORE_ROOM_LIST)
+  sysName.value = uni.getStorageSync(STORE_KEY_SYSNAME) ?? SYS_NAME_DEFAULT
+
   if (!localData) {
     uni.showToast({
       title: '或许还没有设置服务器地址',
@@ -76,7 +80,7 @@ function submitForm() {
     </view>
     <image class="login-logo" src="/static/login-logo.png" />
     <view class="login-title">
-      麻醉舒适化管理信息系统
+      {{ sysName }}
     </view>
     <view class="login-form-container">
       <uni-forms ref="formRef" class="login-form" :model="loginModel" :rules="rules">
