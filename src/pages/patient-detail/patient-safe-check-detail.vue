@@ -1,12 +1,14 @@
 <script lang="ts" setup>
-import ThePatientSafeCheckHeader from './components/the-patient-safe-check-header.vue'
+import PatientSafeCheckHeader from './components/patient-safe-check-header.vue'
 import PatientSafeCheckTable from './components/patient-safe-check-table.vue'
 import PatientSafeCheckSign from './components/patient-safe-check-sign.vue'
 import { editSafeCheckSignData, getCheckDetail, getSafeCheckData } from '@/composables/patient-safe-check-detail.composable'
-import { checkCustomFormData, saveCustomFormList } from '@/utils/api'
+import { checkCustomFormData, saveCustomFormList, unCheckCustomFormData } from '@/utils/api'
 import { STORE_KEY_USER } from '@/utils/app.constant'
 import type { ApiResonseType } from '@/utils/api.help'
+import { goToFeeTypeDetailPage } from '@/composables'
 const isAnalgesia = ref(false)
+const patientId = ref('')
 const disabledEdit = ref(false)
 
 const requestData = {
@@ -15,16 +17,13 @@ const requestData = {
   LoginName: '',
 }
 
-const headerRef = ref()
 onLoad((query) => {
   if (query === undefined)
     return
 
+  patientId.value = query.Id
   requestData.AnesthesiaId = query.Id
   isAnalgesia.value = query.IsAnalgesia === 'true'
-  setTimeout(() => {
-    headerRef.value?.revertData(query)
-  }, 100)
   getCheckDetail(query.Id, isAnalgesia.value)
     .then(val => disabledEdit.value = val)
 
@@ -81,19 +80,41 @@ async function onVerify() {
     disabledEdit.value = true
   })
 }
+
+function onCancelVerify() {
+  unCheckCustomFormData(requestData.AnesthesiaId, requestData.LoginName).then(() => {
+    uni.showToast({
+      title: '已取消核查',
+      icon: 'success',
+    })
+    disabledEdit.value = false
+  })
+}
+
+onNavigationBarButtonTap(({ index }) => {
+  if (index !== 0)
+    return
+  goToFeeTypeDetailPage(requestData.AnesthesiaId, isAnalgesia.value)
+})
 </script>
 
 <template>
   <view class="page patient-safe-check-detail">
-    <ThePatientSafeCheckHeader ref="headerRef" />
+    <PatientSafeCheckHeader :id="patientId" />
     <PatientSafeCheckTable :disabled="disabledEdit" />
     <PatientSafeCheckSign :disabled="disabledEdit" :is-analgesia="isAnalgesia" />
-    <view v-if="!disabledEdit" class="patient-safe-check-detail-bottom ">
-      <button type="primary" class="submit-button" @click="onSave">
+    <view class="patient-safe-check-detail-bottom ">
+      <button v-if="!disabledEdit" type="primary" class="submit-button" @click="onSave">
         保存
       </button>
-      <button type="primary" class="submit-button submit-button-verify" @click="onVerify">
+      <button v-if="!disabledEdit" type="primary" class="submit-button submit-button-verify" @click="onVerify">
         审核
+      </button>
+      <button
+        v-if="disabledEdit" type="primary" class="submit-button submit-button-verify-cancel"
+        @click="onCancelVerify"
+      >
+        取消审核
       </button>
     </view>
   </view>
@@ -107,7 +128,8 @@ async function onVerify() {
     width: 120px;
     margin: 0;
 
-    &.submit-button-verify {
+    &.submit-button-verify,
+    &.submit-button-verify-cancel {
       margin-left: 40px;
     }
   }

@@ -47,6 +47,12 @@ function onRowClick(data: ApiResonseType.SafeCheckInfo) {
 }
 
 const patientId = computed(() => (pageData.currentRow as any).Id || '')
+
+function onAccessTimeSaved() {
+  const isAnalgesia = (pageData.currentRow as any).IsAnalgesia
+  if (isAnalgesia !== undefined)
+    goToCheckDetailPage(patientId.value, isAnalgesia)
+}
 </script>
 
 <template>
@@ -78,7 +84,7 @@ const patientId = computed(() => (pageData.currentRow as any).Id || '')
     />
     <PatientQueryPopupSettingAccesstime
       v-model:show="pageData.settingPopup" :patient-id="patientId"
-      :data="pageData.currentRow as any" @saved="() => goToCheckDetailPage(pageData.currentRow as any)"
+      :data="pageData.currentRow as any" @saved="onAccessTimeSaved"
     />
   </view>
 </template>

@@ -3,26 +3,28 @@ import { getFeeTempaltes } from '@/utils/api'
 export const consumeFeeItems = ref<UniHelper.UniDataCheckboxLocaldata[]>([])
 export const groupFeeItems = ref<UniHelper.UniDataCheckboxLocaldata[]>([])
 
-export function initFeeConfig() {
+export async function initFeeConfig() {
   const itemsCount = consumeFeeItems.value.length + groupFeeItems.value.length
   if (itemsCount)
-    return
-  getFeeTempaltes('耗材').then((data) => {
-    consumeFeeItems.value = data.map((item) => {
+    return true
+
+  return Promise.all([getFeeTempaltes('耗材'), getFeeTempaltes('组套')]).then(([r1, r2]) => {
+    consumeFeeItems.value = r1.map((item) => {
       return {
         text: item.ItemName,
         value: item.ItemCode,
         disabled: false,
       }
     })
-  })
-  getFeeTempaltes('组套').then((data) => {
-    groupFeeItems.value = data.map((item) => {
+
+    groupFeeItems.value = r2.map((item) => {
       return {
         text: item.ItemName,
         value: item.ItemCode,
         disabled: false,
       }
     })
-  })
+
+    return true
+  }).catch(() => false)
 }

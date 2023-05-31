@@ -71,7 +71,7 @@ function onPopupChange(e: UniEvent<{ val: boolean }>) {
     }
 
     &-form {
-      @apply w-180px m-auto p-y-4;
+      @apply w-200px m-auto p-y-4;
 
       .uni-forms-item {
         ::v-deep .uni-forms-item__content {

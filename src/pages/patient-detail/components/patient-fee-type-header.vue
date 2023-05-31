@@ -1,5 +1,36 @@
 <script lang="ts" setup>
-import { patientInfo } from '@/composables/patient-narcotic-detail.composable'
+import { getPatientDetail } from '@/utils/api'
+
+const props = defineProps({
+  id: {
+    type: String,
+    required: true,
+  },
+})
+
+const patientInfo = reactive({
+  PatientNumber: '',
+  PatientName: '',
+  PatientSex: '',
+  PatientAge: '',
+  PatientDepartmentName: '',
+  PatientBedCode: '',
+  ExamineType: '',
+  DiagnosisName: '',
+})
+
+onMounted(() => {
+  getPatientDetail(props.id).then((data) => {
+    patientInfo.PatientNumber = data.PatientNumber
+    patientInfo.PatientName = data.PatientName
+    patientInfo.PatientSex = data.PatientSex
+    patientInfo.PatientAge = data.PatientAge
+    patientInfo.PatientDepartmentName = data.PatientDepartmentName
+    patientInfo.PatientBedCode = data.PatientBedCode
+    patientInfo.ExamineType = data.ExamineType
+    patientInfo.DiagnosisName = data.DiagnosisName
+  })
+})
 </script>
 
 <template>
@@ -64,6 +95,7 @@ import { patientInfo } from '@/composables/patient-narcotic-detail.composable'
 <style lang="scss" scoped>
 .patient-fee-type-header {
   @apply p-4 leading-8;
+
   &-label {
     @apply text-gray-500;
   }

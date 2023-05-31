@@ -46,9 +46,7 @@ watch(() => props.show, (val) => {
   if (val === true && popupRef.value) {
     popupRef.value.open()
 
-    getPatientDetail(props.patientId).then((data) => {
-      initAccessTime(data.AccessTime)
-    }).catch(initAccessTime)
+    getPatientDetail(props.patientId).then(data => initAccessTime(data.AccessTime)).catch(initAccessTime)
   }
 })
 

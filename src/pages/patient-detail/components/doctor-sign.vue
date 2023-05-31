@@ -61,7 +61,9 @@ function onImageClick() {
   if (props.disabled)
     return
   emits('click')
-  if (props.roleCode === 'Anesthetist') {
+
+  const user: ApiResonseType.UserInfo = uni.getStorageSync(STORE_KEY_USER)
+  if (props.roleCode === user.UserRole) {
     uni.showModal({
       title: '提示',
       content: '是否使用当前用户',
@@ -109,7 +111,7 @@ watch(() => props.signCode, (val: string) => {
     </uni-popup>
     <image :src="imageSrc" class="doctor-sign-image" @click="onImageClick" />
     <DoctorInput
-      v-show="showDoctorSelect" :role-code="roleCode" class="form-item-doctor-name"
+      v-show="showDoctorSelect && !disabled" :role-code="roleCode" class="form-item-doctor-name"
       @selected="onUserSelectd"
     />
   </view>

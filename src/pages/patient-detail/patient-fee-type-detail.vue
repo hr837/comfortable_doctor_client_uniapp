@@ -1,16 +1,14 @@
 <script lang="ts" setup>
 import PatientFeeTypeHeader from './components/patient-fee-type-header.vue'
 import DoctorSign from './components/doctor-sign.vue'
-import { refreshPatientInfo } from '@/composables/patient-narcotic-detail.composable'
-import { dateTimeFormat } from '@/composables'
-import { feeItemsChecked, getRecordFeeItems, saveFeeItems } from '@/utils/api'
+import { dateTimeFormat, goToCheckDetailPage } from '@/composables'
+import { feeItemsChecked, feeItemsUnChecked, getRecordFeeItems, saveFeeItems } from '@/utils/api'
 import type { ApiResonseType, ItemInfo } from '@/utils/api.help'
 import { STORE_KEY_USER } from '@/utils/app.constant'
-
-import { consumeFeeItems, groupFeeItems } from '@/composables/patient-fee-type-detail.composable'
+import { consumeFeeItems, groupFeeItems, initFeeConfig } from '@/composables/patient-fee-type-detail.composable'
 
 const disabledEdit = ref(false)
-
+const isAnalgesia = ref(false)
 const requestData = reactive({
   AnesthesiaId: '',
   RecordTime: '',
@@ -25,14 +23,14 @@ onLoad((query) => {
     return
 
   requestData.AnesthesiaId = query.Id
-  refreshPatientInfo(requestData.AnesthesiaId)
-  revertCheckFeeItems(requestData.AnesthesiaId)
+  isAnalgesia.value = query.IsAnalgesia === 'true'
+  initFeeConfig().then(revertCheckFeeItems)
 })
 
-function revertCheckFeeItems(id: string) {
+function revertCheckFeeItems() {
   checkedConsumeCodes.value = []
   checkedGroupCodes.value = []
-  getRecordFeeItems(id).then((data) => {
+  getRecordFeeItems(requestData.AnesthesiaId).then((data) => {
     if (!data)
       return
     requestData.RecordTime = dateTimeFormat(data.RecordTime)
@@ -144,11 +142,30 @@ async function onVerify() {
     })
   }
 }
+
+function onCancelVerify() {
+  const user: ApiResonseType.UserInfo = uni.getStorageSync(STORE_KEY_USER)
+  if (user) {
+    feeItemsUnChecked(requestData.AnesthesiaId, user.LoginName).then(() => {
+      uni.showToast({
+        title: '已取消核查',
+        icon: 'success',
+      })
+      disabledEdit.value = false
+    })
+  }
+}
+
+onNavigationBarButtonTap(({ index }) => {
+  if (index !== 0)
+    return
+  goToCheckDetailPage(requestData.AnesthesiaId, isAnalgesia.value)
+})
 </script>
 
 <template>
   <view class="page patient-fee-type-detail">
-    <PatientFeeTypeHeader />
+    <PatientFeeTypeHeader :id="requestData.AnesthesiaId" />
     <view class="patient-fee-type-detail-select">
       <uni-section title="耗材" type="line" />
       <uni-data-checkbox
@@ -174,12 +191,18 @@ async function onVerify() {
         </uni-forms-item>
       </view>
     </uni-forms>
-    <view v-if="!disabledEdit" class="patient-fee-type-detail-bottom ">
-      <button type="primary" class="submit-button" @click="onSave">
+    <view class="patient-fee-type-detail-bottom ">
+      <button v-if="!disabledEdit" type="primary" class="submit-button" @click="onSave">
         保存
       </button>
-      <button type="primary" class="submit-button submit-button-verify" @click="onVerify">
+      <button v-if="!disabledEdit" type="primary" class="submit-button submit-button-verify" @click="onVerify">
         审核
+      </button>
+      <button
+        v-if="disabledEdit" type="primary" class="submit-button submit-button-verify-cancel"
+        @click="onCancelVerify"
+      >
+        取消审核
       </button>
     </view>
   </view>
@@ -196,7 +219,8 @@ async function onVerify() {
     width: 120px;
     margin: 0;
 
-    &.submit-button-verify {
+    &.submit-button-verify,
+    &.submit-button-verify-cancel {
       margin-left: 40px;
     }
   }

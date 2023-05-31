@@ -360,6 +360,20 @@ export function checkCustomFormData(anesId: string, loginName: string) {
   })
 }
 
+/** 安全核查功能取消审核 */
+export function unCheckCustomFormData(anesId: string, loginName: string) {
+  return request<boolean>({
+    path: '/api/CustomForm/Unchecked',
+    data: {
+      anesId,
+      loginName,
+      formType: 1,
+    },
+    method: 'GET',
+    loading: true,
+  })
+}
+
 /** 计费患者信息查询 */
 export function getFeePatientList(query: ApiRequestType.PatientSafeCheckQueryInput) {
   return request<ApiResonseType.SafeCheckInfo[]>({
@@ -406,6 +420,19 @@ export function saveFeeItems(data: ApiResonseType.RecordFeeItems) {
 export function feeItemsChecked(patientId: string, loginName: string) {
   return request<ApiResonseType.RecordFeeItems>({
     path: '/api/FeeRecord/Checked',
+    data: {
+      anesthesiaId: patientId,
+      loginName,
+    },
+    method: 'GET',
+    loading: true,
+  })
+}
+
+/** 取消审核计费信息 */
+export function feeItemsUnChecked(patientId: string, loginName: string) {
+  return request<ApiResonseType.RecordFeeItems>({
+    path: '/api/FeeRecord/Unchecked',
     data: {
       anesthesiaId: patientId,
       loginName,

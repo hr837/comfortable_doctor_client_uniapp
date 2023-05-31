@@ -1,29 +1,34 @@
 <script lang="ts" setup>
-import type { DetailCheckQueryType } from '@/composables'
+import { getPatientDetail } from '@/utils/api'
 
-const model = reactive<DetailCheckQueryType>({
+const props = defineProps({
+  id: {
+    type: String,
+    required: true,
+  },
+})
+
+const model = reactive({
   PatientNumber: '',
   PatientName: '',
   PatientSex: '',
   PatientAge: '',
   PatientDepartmentName: '',
-  Id: '',
-  IsAnalgesia: false,
 })
 
-defineExpose({
-  revertData: (data: DetailCheckQueryType) => {
-    model.PatientNumber = decodeURIComponent(data.PatientNumber)
-    model.PatientName = decodeURIComponent(data.PatientName)
-    model.PatientSex = decodeURIComponent(data.PatientSex)
-    model.PatientAge = decodeURIComponent(data.PatientAge)
-    model.PatientDepartmentName = decodeURIComponent(data.PatientDepartmentName)
-  },
+onMounted(() => {
+  getPatientDetail(props.id).then((data) => {
+    model.PatientNumber = data.PatientNumber
+    model.PatientName = data.PatientName
+    model.PatientSex = data.PatientSex
+    model.PatientAge = data.PatientAge
+    model.PatientDepartmentName = data.PatientDepartmentName
+  })
 })
 </script>
 
 <template>
-  <view class="component the-patient-safe-check-header">
+  <view class="component patient-safe-check-header">
     <uni-row>
       <uni-col :span="4">
         <text class="the-patient-safe-check-header-label">
@@ -60,9 +65,10 @@ defineExpose({
 </template>
 
 <style lang="scss" scoped>
-.the-patient-safe-check-header {
+.patient-safe-check-header {
   @apply p-4 bg-gray-200;
-  &-label{
+
+  &-label {
     @apply text-gray-500;
   }
 }

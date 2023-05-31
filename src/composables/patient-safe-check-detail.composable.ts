@@ -51,6 +51,8 @@ export function getCheckDetail(id: string, isAnalgesia: boolean) {
     const checkItems = data.Items
     // 重置
     editSafeCheckList.value = []
+
+    // 按照固定顺序取值恢复
     for (const item of safeCheckConfigList) {
       if (item.ItemName === 'Item09' && !isAnalgesia)
         continue
@@ -64,10 +66,14 @@ export function getCheckDetail(id: string, isAnalgesia: boolean) {
         ItemValue: value,
         title: item.title,
       })
+    }
 
+    // 取签名
+    for (const item of checkItems) {
+      const value = item.ItemValue as string
       if (item.ItemName === '麻醉医师签名1#LBL#') {
-        editSafeCheckSignData.narcoticDoctorName = item.ItemValue
-        editSafeCheckSignData.narcoticDoctorSign = item.ItemValue
+        editSafeCheckSignData.narcoticDoctorName = value
+        editSafeCheckSignData.narcoticDoctorSign = value
       }
 
       if (item.ItemName === '麻醉医师签名1#DAT#') {
@@ -75,12 +81,12 @@ export function getCheckDetail(id: string, isAnalgesia: boolean) {
         if (!timeItem)
           continue
 
-        editSafeCheckSignData.narcoticDoctorDate = `${item.ItemValue} ${timeItem.ItemValue}:00`
+        editSafeCheckSignData.narcoticDoctorDate = `${value} ${timeItem.ItemValue}:00`
       }
 
       if (item.ItemName === '手术医师签名1#LBL#') {
-        editSafeCheckSignData.doctorName = item.ItemValue
-        editSafeCheckSignData.doctorSign = item.ItemValue
+        editSafeCheckSignData.doctorName = value
+        editSafeCheckSignData.doctorSign = value
       }
 
       if (item.ItemName === '手术医师签名1#DAT#') {
@@ -88,12 +94,12 @@ export function getCheckDetail(id: string, isAnalgesia: boolean) {
         if (!timeItem)
           continue
 
-        editSafeCheckSignData.doctorDate = `${item.ItemValue} ${timeItem.ItemValue}:00`
+        editSafeCheckSignData.doctorDate = `${value} ${timeItem.ItemValue}:00`
       }
 
       if (item.ItemName === '护士签名1#LBL#') {
-        editSafeCheckSignData.nurseName = item.ItemValue
-        editSafeCheckSignData.nurseSign = item.ItemValue
+        editSafeCheckSignData.nurseName = value
+        editSafeCheckSignData.nurseSign = value
       }
 
       if (item.ItemName === '护士签名1#DAT#') {
@@ -101,9 +107,10 @@ export function getCheckDetail(id: string, isAnalgesia: boolean) {
         if (!timeItem)
           continue
 
-        editSafeCheckSignData.nurseDate = `${item.ItemValue} ${timeItem.ItemValue}:00`
+        editSafeCheckSignData.nurseDate = `${value} ${timeItem.ItemValue}:00`
       }
     }
+
     return data.IsChecked
   }).catch(() => false)
 }
