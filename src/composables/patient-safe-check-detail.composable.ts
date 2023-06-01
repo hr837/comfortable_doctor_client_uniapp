@@ -34,7 +34,7 @@ export const editSafeCheckSignData = reactive({
 
 export function getCheckDetail(id: string, isAnalgesia: boolean) {
   // 使用默认
-  editSafeCheckList.value = safeCheckConfigList
+  editSafeCheckList.value = safeCheckConfigList.map(item => ({ ...item }))
   editSafeCheckSignData.narcoticDoctorName = ''
   editSafeCheckSignData.narcoticDoctorSign = ''
   editSafeCheckSignData.narcoticDoctorDate = ''
