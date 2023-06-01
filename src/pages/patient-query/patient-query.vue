@@ -48,7 +48,7 @@ function onRowClick(data: ApiResonseType.PatientInfo) {
 
 <template>
   <view class="page  patient-query">
-    <PatientQueryForm @submit="onSubmit">
+    <PatientQueryForm show-department @submit="onSubmit">
       <template #append>
         <uni-row>
           <uni-col :xs="24" :sm="12">

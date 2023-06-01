@@ -6,20 +6,24 @@ import { dateFormat } from '@/composables'
 export interface QueryInfo {
   query: string
   date: string
-  department: string
-  roomCode: string
+  department?: string
+  roomCode?: string
+  deptType?: string
 }
 
 interface PropType {
   /** 显示手术间 */
   showRoomItem?: boolean
-  /** 显示科别 */
+  /** 显示科室 */
   showDepartment?: boolean
+  /** 显示科别 */
+  showDeptType?: boolean
 }
 
 const props = withDefaults(defineProps<PropType>(), {
   showRoomItem: false,
-  showDepartment: true,
+  showDepartment: false,
+  showDeptType: false,
 })
 
 const emits = defineEmits(['submit'])
@@ -31,6 +35,7 @@ const model = $ref<QueryInfo>({
   date: '',
   department: '',
   roomCode: '',
+  deptType: '',
 })
 
 const departmentList = computed(() => getApp().globalData!.deptList.map((item: ItemInfo) => ({
@@ -55,6 +60,12 @@ onMounted(() => {
     onSubmit()
   })
 })
+
+const deptTypeData = [
+  { text: '消化内科', value: '消化内科', disable: false },
+  { text: '普查', value: '普查', disable: false },
+  { text: '其他', value: '其他', disable: false },
+]
 </script>
 
 <template>
@@ -69,14 +80,19 @@ onMounted(() => {
         </view>
       </uni-forms-item>
       <uni-row>
-        <uni-col :xs="24" :sm="showRoomItem ? 8 : 12">
+        <uni-col :xs="24" :sm="8">
           <uni-forms-item label="检查日期" name="date">
             <uni-datetime-picker v-model="model.date" type="date" :clear-icon="false" />
           </uni-forms-item>
         </uni-col>
-        <uni-col v-if="showDepartment" :xs="24" :sm="showRoomItem ? 8 : 12">
+        <uni-col v-if="showDepartment" :xs="24" :sm="8">
           <uni-forms-item label="科室" name="department">
             <uni-data-select v-model="model.department" :localdata="departmentList" popup-title="请选择科室" />
+          </uni-forms-item>
+        </uni-col>
+        <uni-col v-if="showDeptType" :xs="24" :sm="8">
+          <uni-forms-item label="科别">
+            <uni-data-select v-model="model.deptType" :localdata="deptTypeData" popup-title="请选择科别" />
           </uni-forms-item>
         </uni-col>
         <uni-col v-if="showRoomItem" :xs="24" :sm="8">

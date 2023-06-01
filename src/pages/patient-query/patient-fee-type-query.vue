@@ -27,6 +27,8 @@ function onSubmit(query?: QueryInfo) {
   queryData.KeyWord = query?.query ?? ''
   queryData.ExamineDate = query?.date ?? ''
   queryData.DepartmentName = query?.department ?? ''
+  queryData.RoomCode = query?.roomCode ?? ''
+  queryData.DeptType = query?.deptType ?? ''
 
   getFeePatientList(queryData).then((data) => {
     dataSet.value = data
@@ -40,7 +42,7 @@ function onRowClick(data: ApiResonseType.SafeCheckInfo) {
 
 <template>
   <view class="page  patient-fee-type-query">
-    <PatientQueryForm show-room-item :show-department="false" @submit="onSubmit">
+    <PatientQueryForm show-room-item :show-department="false" show-dept-type @submit="onSubmit">
       <template #append>
         <uni-row>
           <uni-col :xs="22" :sm="11">

@@ -32,7 +32,7 @@ async function onSubmit(query?: QueryInfo) {
 
 <template>
   <view class="page  patient-narcotic-query">
-    <PatientQueryForm show-room-item @submit="onSubmit">
+    <PatientQueryForm show-department show-room-item @submit="onSubmit">
       <template #append>
         <uni-row>
           <uni-col :offset="1" :xs="22" :sm="11">

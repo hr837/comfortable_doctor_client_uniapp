@@ -167,6 +167,8 @@ export namespace ApiRequestType {
 
     /** 上午、下午，为空“”则为全部 */
     ExamineSpan: string
+
+    DeptType: string
   }
 }
 

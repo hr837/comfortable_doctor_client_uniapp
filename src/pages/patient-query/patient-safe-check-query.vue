@@ -35,6 +35,8 @@ function onSubmit(query?: QueryInfo) {
   queryData.KeyWord = query?.query ?? ''
   queryData.ExamineDate = query?.date ?? ''
   queryData.DepartmentName = query?.department ?? ''
+  queryData.RoomCode = query?.roomCode ?? ''
+  queryData.DeptType = query?.deptType ?? ''
 
   getCheckPatientList(queryData).then((data) => {
     dataSet.value = data
@@ -57,7 +59,7 @@ function onAccessTimeSaved() {
 
 <template>
   <view class="page  patient-safe-check-query">
-    <PatientQueryForm show-room-item :show-department="false" @submit="onSubmit">
+    <PatientQueryForm show-room-item :show-department="false" show-dept-type @submit="onSubmit">
       <template #append>
         <uni-row>
           <uni-col :xs="22" :sm="11">
