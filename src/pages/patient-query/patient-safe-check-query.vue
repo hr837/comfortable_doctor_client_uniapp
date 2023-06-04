@@ -45,7 +45,10 @@ function onSubmit(query?: QueryInfo) {
 
 function onRowClick(data: ApiResonseType.SafeCheckInfo) {
   pageData.currentRow = data
-  pageData.confirmPopup = true
+  if (data.FormChecked)
+    goToCheckDetailPage(data.Id, data.IsAnalgesia)
+  else
+    pageData.confirmPopup = true
 }
 
 const patientId = computed(() => (pageData.currentRow as any).Id || '')

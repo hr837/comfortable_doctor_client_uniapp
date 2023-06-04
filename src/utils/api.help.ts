@@ -680,6 +680,9 @@ export namespace ApiResonseType {
      * 申请日期
      */
     SubscribeDate: string
+
+    /** 是否审核 */
+    FormChecked: boolean
   }
 
   /** 安全检查详情数据 */

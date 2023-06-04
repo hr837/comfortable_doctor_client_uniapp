@@ -38,9 +38,7 @@ onNavigationBarButtonTap(({ index }) => {
     goToLogin()
 })
 
-// const roleMenu = computed(() => GridMenuSetting.filter(item => roleName.value === 'gly' || item.roleName.includes(roleName.value)))
-// TEST
-const roleMenu = computed(() => GridMenuSetting.filter(() => true))
+const roleMenu = computed(() => GridMenuSetting.filter(item => roleName.value === 'gly' || item.roleName.includes(roleName.value)))
 
 function onChagne(e: UniEvent<{ index: number }>) {
   const index = e.detail?.index

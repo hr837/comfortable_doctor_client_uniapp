@@ -441,3 +441,16 @@ export function feeItemsUnChecked(patientId: string, loginName: string) {
     loading: true,
   })
 }
+
+/** 修改患者手术间 */
+export function updateRoom(patientId: string, patientRoom: string) {
+  return request<boolean>({
+    path: '/api/Patient/UpdateRoom',
+    data: {
+      anesthesiaId: patientId,
+      roomCode: patientRoom,
+    },
+    method: 'GET',
+    loading: true,
+  })
+}
