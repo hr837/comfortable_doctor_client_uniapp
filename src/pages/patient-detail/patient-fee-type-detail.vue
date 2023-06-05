@@ -3,9 +3,10 @@ import PatientFeeTypeHeader from './components/patient-fee-type-header.vue'
 import DoctorSign from './components/doctor-sign.vue'
 import { dateTimeFormat, goToCheckDetailPage } from '@/composables'
 import { feeItemsChecked, feeItemsUnChecked, getRecordFeeItems, saveFeeItems } from '@/utils/api'
-import type { ApiResonseType, ItemInfo } from '@/utils/api.help'
+import type { ApiResonseType } from '@/utils/api.help'
 import { STORE_KEY_USER } from '@/utils/app.constant'
-import { consumeFeeItems, groupFeeItems, initFeeConfig } from '@/composables/patient-fee-type-detail.composable'
+import { initFeeConfig } from '@/composables/patient-fee-type-detail.composable'
+import PatientFeeTypeSet from "./components/patient-fee-type-set.vue";
 
 const disabledEdit = ref(false)
 const isAnalgesia = ref(false)
@@ -15,8 +16,7 @@ const requestData = reactive({
   RecorderCode: '',
 })
 
-const checkedConsumeCodes = ref<string[]>([])
-const checkedGroupCodes = ref<string[]>([])
+const feeTypeRef = ref();
 
 onLoad((query) => {
   if (query === undefined)
@@ -28,18 +28,19 @@ onLoad((query) => {
 })
 
 function revertCheckFeeItems() {
-  checkedConsumeCodes.value = []
-  checkedGroupCodes.value = []
   getRecordFeeItems(requestData.AnesthesiaId).then((data) => {
-    if (!data)
+    if (!data) {
+      nextTick(() => {
+        feeTypeRef.value.revertData([])
+      })
       return
+    }
     requestData.RecordTime = dateTimeFormat(data.RecordTime)
     requestData.RecorderCode = data.RecorderCode
     disabledEdit.value = data.IsChecked
-    const checkedFeeCodes = data.FeeItems.map(x => x.ItemCode)
-
-    checkedConsumeCodes.value = checkedFeeCodes.filter(x => consumeFeeItems.value.findIndex(item => item.value === x))
-    checkedGroupCodes.value = checkedFeeCodes.filter(x => groupFeeItems.value.findIndex(item => item.value === x))
+    nextTick(() => {
+      feeTypeRef.value.revertData(data.FeeItems)
+    })
   }).catch(() => { })
 }
 
@@ -50,25 +51,7 @@ function setSignInfo(data?: any) {
 }
 
 function onSave() {
-  const items: ItemInfo[] = []
-  for (const code of checkedConsumeCodes.value) {
-    const item = consumeFeeItems.value.find(x => x.value === code)
-    if (item) {
-      items.push({
-        ItemName: item.text,
-        ItemCode: item.value as string,
-      })
-    }
-  }
-  for (const code of checkedGroupCodes.value) {
-    const item = groupFeeItems.value.find(x => x.value === code)
-    if (item) {
-      items.push({
-        ItemName: item.text,
-        ItemCode: item.value as string,
-      })
-    }
-  }
+  const items = feeTypeRef.value.getData()
   const _requestData = {
     ...requestData,
     IsChecked: false,
@@ -83,26 +66,7 @@ function onSave() {
 }
 
 async function onVerify() {
-  const items: ItemInfo[] = []
-  for (const code of checkedConsumeCodes.value) {
-    const item = consumeFeeItems.value.find(x => x.value === code)
-    if (item) {
-      items.push({
-        ItemName: item.text,
-        ItemCode: item.value as string,
-      })
-    }
-  }
-  for (const code of checkedGroupCodes.value) {
-    const item = groupFeeItems.value.find(x => x.value === code)
-    if (item) {
-      items.push({
-        ItemName: item.text,
-        ItemCode: item.value as string,
-      })
-    }
-  }
-
+  const items = feeTypeRef.value.getData()
   if (items.length < 1) {
     const agreed = await uni.showModal({
       title: '数据验证提醒',
@@ -166,25 +130,12 @@ onNavigationBarButtonTap(({ index }) => {
 <template>
   <view class="page patient-fee-type-detail">
     <PatientFeeTypeHeader :id="requestData.AnesthesiaId" />
-    <view class="patient-fee-type-detail-select">
-      <uni-section title="耗材" type="line" />
-      <uni-data-checkbox
-        v-model="checkedConsumeCodes" :localdata="consumeFeeItems" mode="tag" multiple
-        :disabled="disabledEdit"
-      />
-      <uni-section title="组套" type="line" />
-      <uni-data-checkbox
-        v-model="checkedGroupCodes" :localdata="groupFeeItems" mode="tag" multiple
-        :disabled="disabledEdit"
-      />
-    </view>
+    <PatientFeeTypeSet :disabled="disabledEdit" ref="feeTypeRef" />
     <uni-forms class="patient-fee-type-detail-form" :model="requestData" label-width="70px" label-align="right">
       <view class="row justify-center">
         <uni-forms-item label="计费人" name="nurseName" class="patient-fee-type-detail-form-item-sign">
-          <DoctorSign
-            :disabled="disabledEdit" :sign-code="requestData.RecorderCode" role-code="AnNurse"
-            @signed="setSignInfo"
-          />
+          <DoctorSign :disabled="disabledEdit" :sign-code="requestData.RecorderCode" role-code="AnNurse"
+            @signed="setSignInfo" />
         </uni-forms-item>
         <uni-forms-item label="时间" name="nurseDate" :label-width="45">
           <uni-datetime-picker v-model="requestData.RecordTime" type="datetime" :disabled="disabledEdit" hide-second />
@@ -198,10 +149,8 @@ onNavigationBarButtonTap(({ index }) => {
       <button v-if="!disabledEdit" type="primary" class="submit-button submit-button-verify" @click="onVerify">
         审核
       </button>
-      <button
-        v-if="disabledEdit" type="primary" class="submit-button submit-button-verify-cancel"
-        @click="onCancelVerify"
-      >
+      <button v-if="disabledEdit" type="primary" class="submit-button submit-button-verify-cancel"
+        @click="onCancelVerify">
         取消审核
       </button>
     </view>

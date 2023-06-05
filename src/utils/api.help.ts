@@ -718,7 +718,7 @@ export namespace ApiResonseType {
     /**
      * 计费项目
      */
-    FeeItems: MonitorItem[]
+    FeeItems: FeeTypeItem[]
     /**
      * 是否审核，审核状态不可再编辑
      */
@@ -736,6 +736,11 @@ export namespace ApiResonseType {
 
 /** 体征检测项目 */
 export type MonitorItem = Omit<ItemInfo, 'Spell'>
+/** 费用类型 */
+export type FeeTypeItem = Omit<ItemInfo, 'Spell'> & {
+  /** 数量 */
+  ItemNumber: string
+}
 
 /** 项目 */
 export interface ItemInfo {
