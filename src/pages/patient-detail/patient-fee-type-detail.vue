@@ -201,7 +201,7 @@ onNavigationBarButtonTap(({ index }) => {
   }
 
   &-bottom {
-    @apply row justify-center m-t-10;
+    @apply row justify-center m-y-4;
   }
 }
 </style>
