@@ -24,23 +24,20 @@ onLoad((query) => {
 
   requestData.AnesthesiaId = query.Id
   isAnalgesia.value = query.IsAnalgesia === 'true'
-  initFeeConfig().then(revertCheckFeeItems)
 })
+
+onMounted(() => initFeeConfig().then(revertCheckFeeItems))
 
 function revertCheckFeeItems() {
   getRecordFeeItems(requestData.AnesthesiaId).then((data) => {
     if (!data) {
-      nextTick(() => {
-        feeTypeRef.value.revertData([])
-      })
+      feeTypeRef.value.revertData([])
       return
     }
     requestData.RecordTime = dateTimeFormat(data.RecordTime)
     requestData.RecorderCode = data.RecorderCode
     disabledEdit.value = data.IsChecked
-    nextTick(() => {
-      feeTypeRef.value.revertData(data.FeeItems)
-    })
+    feeTypeRef.value.revertData(data.FeeItems)
   }).catch(() => { })
 }
 
