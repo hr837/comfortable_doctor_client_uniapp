@@ -29,16 +29,17 @@ onLoad((query) => {
 onMounted(() => initFeeConfig().then(revertCheckFeeItems))
 
 function revertCheckFeeItems() {
+  disabledEdit.value = false;
+  requestData.RecordTime = ''
+  requestData.RecorderCode = ''
   getRecordFeeItems(requestData.AnesthesiaId).then((data) => {
-    if (!data) {
-      feeTypeRef.value.revertData([])
-      return
-    }
     requestData.RecordTime = dateTimeFormat(data.RecordTime)
     requestData.RecorderCode = data.RecorderCode
     disabledEdit.value = data.IsChecked
     feeTypeRef.value.revertData(data.FeeItems)
-  }).catch(() => { })
+  }).catch(() => {
+    feeTypeRef.value.revertData([])
+  })
 }
 
 function setSignInfo(data?: any) {
