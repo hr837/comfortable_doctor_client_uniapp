@@ -32,6 +32,8 @@ function onClick() {
           closePopup()
         }
       })
+    } else {
+      savePatientRoom(patientRoom.value)
     }
   } else {
     if (patientRoom.value) {
