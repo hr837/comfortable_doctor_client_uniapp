@@ -20,23 +20,25 @@ onMounted(() => {
 })
 
 function onClick() {
-  if (localCode.value && patientRoom.value !== localCode.value) {
-    uni.showModal({
-      title: '手术间确认',
-      content: '患者手术间与当前手术间不一致，确认是否更换手术间',
-
-    }).then((res) => {
-      // 点击是
-      if (res.confirm)
-        savePatientRoom()
-
-      // 点击否
-      if (res.cancel)
-        closePopup()
-    })
-  }
-  else {
-    closePopup()
+  if (localCode.value) {
+    if (localCode.value !== patientRoom.value) {
+      uni.showModal({
+        title: '手术间确认',
+        content: '患者手术间与当前手术间不一致，确认是否更换手术间?',
+      }).then(res => {
+        if (res.confirm) {
+          savePatientRoom(localCode.value)
+        } else {
+          closePopup()
+        }
+      })
+    }
+  } else {
+    if (patientRoom.value) {
+      savePatientRoom(patientRoom.value)
+    } else {
+      closePopup()
+    }
   }
 }
 
@@ -46,8 +48,8 @@ function closePopup() {
   emits('confirm')
 }
 
-function savePatientRoom() {
-  updateRoom(props.data.Id, patientRoom.value).then((data) => {
+function savePatientRoom(code: string) {
+  updateRoom(props.data.Id, code).then((data) => {
     if (data) {
       closePopup()
     }
