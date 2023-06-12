@@ -2,11 +2,12 @@
 import PatientFeeTypeHeader from './components/patient-fee-type-header.vue'
 import DoctorSign from './components/doctor-sign.vue'
 import { dateTimeFormat, goToCheckDetailPage } from '@/composables'
-import { feeItemsChecked, feeItemsUnChecked, getRecordFeeItems, saveFeeItems } from '@/utils/api'
+import { checkPrinted, feeItemsChecked, feeItemsUnChecked, getRecordFeeItems, saveFeeItems } from '@/utils/api'
 import type { ApiResonseType } from '@/utils/api.help'
 import { STORE_KEY_USER } from '@/utils/app.constant'
 import { initFeeConfig } from '@/composables/patient-fee-type-detail.composable'
 import PatientFeeTypeSet from "./components/patient-fee-type-set.vue";
+import PrinterSelect from './components/printer-select.vue'
 
 const disabledEdit = ref(false)
 const isAnalgesia = ref(false)
@@ -123,10 +124,26 @@ onNavigationBarButtonTap(({ index }) => {
     return
   goToCheckDetailPage(requestData.AnesthesiaId, isAnalgesia.value)
 })
+
+const visablePrint = ref(false);
+
+function onPrintClick() {
+  checkPrinted(requestData.AnesthesiaId, "2").then(() => {
+    uni.showModal({
+      title: '打印确认',
+      content: '已经打印，是否重新打印？',
+    }).then(res => {
+      visablePrint.value = res.confirm
+    })
+
+  }).catch(() => visablePrint.value = true)
+}
+
 </script>
 
 <template>
   <view class="page patient-fee-type-detail">
+    <PrinterSelect :id="requestData.AnesthesiaId" form-type="2" v-model:visable="visablePrint" />
     <PatientFeeTypeHeader :id="requestData.AnesthesiaId" />
     <PatientFeeTypeSet :disabled="disabledEdit" ref="feeTypeRef" />
     <uni-forms class="patient-fee-type-detail-form" :model="requestData" label-width="70px" label-align="right">
@@ -151,6 +168,9 @@ onNavigationBarButtonTap(({ index }) => {
         @click="onCancelVerify">
         取消审核
       </button>
+      <button v-if="disabledEdit" type="primary" class="submit-button submit-button-print" @click="onPrintClick">
+        打印
+      </button>
     </view>
   </view>
 </template>
@@ -167,7 +187,8 @@ onNavigationBarButtonTap(({ index }) => {
     margin: 0;
 
     &.submit-button-verify,
-    &.submit-button-verify-cancel {
+    &.submit-button-verify-cancel,
+    &.submit-button-print {
       margin-left: 40px;
     }
   }

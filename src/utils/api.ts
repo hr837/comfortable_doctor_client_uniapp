@@ -454,3 +454,53 @@ export function updateRoom(patientId: string, patientRoom: string) {
     loading: true,
   })
 }
+
+/**
+ * 获取表单打印记录
+ * @param patientId
+ * @param formType 1： 安全核查单，2.手术计费单
+ */
+export function checkPrinted(patientId: string, formType: "1" | "2") {
+  return request<boolean>({
+    path: '/api/PrintForm/IsPrinted',
+    data: {
+      anesthesiaId: patientId,
+      formType,
+    },
+    method: 'GET',
+    loading: true,
+  })
+}
+
+
+/**
+ * 打印表单文书
+ * @param patientId
+ * @param formType 1： 安全核查单，2.手术计费单
+ * @param printerCode 打印机编号
+ * @param loginName 当前登录人用户名
+ */
+export function print(patientId: string, formType: "1" | "2", printerCode: string, loginName: string) {
+  return request<boolean>({
+    path: '/api/PrintForm/Print',
+    data: {
+      anesthesiaId: patientId,
+      formType,
+      printerCode,
+      loginName
+    },
+    method: 'GET',
+    loading: true,
+  })
+}
+
+/**
+ * 获取打印机列表
+ */
+export function getPrinterList() {
+  return request<ItemInfo[]>({
+    path: '/api/PrintForm/GetPrinters',
+    method: 'GET',
+    loading: true,
+  })
+}
