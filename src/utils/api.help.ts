@@ -132,8 +132,9 @@ export namespace ApiRequestType {
      * InputTextBox
      * InputComboBox
      * InputTimePicker
+     * InputRadioButton
      */
-    ControlType: string
+    ControlType: ControlType
     /**
      * 项目名称
      */
@@ -143,6 +144,11 @@ export namespace ApiRequestType {
      */
     ItemValue: string | boolean
   }
+
+  /**
+   * 控件类型
+   */
+  export type ControlType = "InputLabel" | "InputImage" | "InputDatePicker" | "InputCheckBox" | "InputTextBox" | "InputComboBox" | "InputTimePicker" | 'InputRadioButton'
 
   /** 流程节点信息 */
   export interface FlowStateInfo {

@@ -110,7 +110,7 @@ export function narcoticItemsConvert(data: any) {
           items.push({
             ItemName: `术中特殊情况${item.text}`,
             ItemValue: item.value === value,
-            ControlType: 'InputTextBox',
+            ControlType: 'InputRadioButton'
           })
         })
         if (value === '有') {
@@ -149,7 +149,7 @@ export function narcoticItemsConvert(data: any) {
           items.push({
             ItemName: `术后转${item.text}`,
             ItemValue: item.value === value,
-            ControlType: 'InputTextBox',
+            ControlType: "InputRadioButton",
           })
         })
         if (value === '其他') {
@@ -242,7 +242,7 @@ export function narcoticItemsConvert(data: any) {
           items.push({
             ItemName: `恢复室内情况${item.text}`,
             ItemValue: item.value === value,
-            ControlType: 'InputTextBox',
+            ControlType: 'InputRadioButton',
           })
         })
         if (value === '有') {
