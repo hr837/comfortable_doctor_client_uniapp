@@ -295,7 +295,7 @@ export function narcoticItemsConvert(data: any) {
           items.push({
             ItemName: `离院${item.text}`,
             ItemValue: item.value === value,
-            ControlType: 'InputTextBox',
+            ControlType: 'InputRadioButton',
           })
         })
         break
