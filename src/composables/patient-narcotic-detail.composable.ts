@@ -1,4 +1,4 @@
-import { dateFormat } from '.'
+import { dateFormat, toBoolean } from '.'
 import { getDrugList, getDrugUnitList, getDrugWayList, getMonitorItems, getPatientDetail } from '@/utils/api'
 import type { ApiRequestType, ApiResonseType } from '@/utils/api.help'
 
@@ -309,13 +309,14 @@ export function narcoticItemRevert({ Items }: ApiResonseType.NarcoticResult, mod
     return
 
   Items.forEach((item) => {
+    const trueValue = toBoolean(item.ItemValue as string)
     switch (item.ItemName) {
       case '术中特殊情况无':
-        if (item.ItemValue === 'true')
+        if (trueValue)
           model.specific = '无'
         break
       case '术中特殊情况有':
-        if (item.ItemValue === 'true')
+        if (trueValue)
           model.specific = '有'
         break
       case '术中特殊情况':
@@ -334,15 +335,15 @@ export function narcoticItemRevert({ Items }: ApiResonseType.NarcoticResult, mod
         model.StewardCount = item.ItemValue
         break
       case '术后转恢复室':
-        if (item.ItemValue === 'true')
+        if (trueValue)
           model.passTo = '恢复室'
         break
       case '术后转观察室':
-        if (item.ItemValue === 'true')
+        if (trueValue)
           model.passTo = '观察室'
         break
       case '术后转其他':
-        if (item.ItemValue === 'true')
+        if (trueValue)
           model.passTo = '其他'
         break
       case '术后转其他内容':
@@ -374,15 +375,15 @@ export function narcoticItemRevert({ Items }: ApiResonseType.NarcoticResult, mod
         }
         break
       case '恢复室内情况无':
-        if (item.ItemValue === 'true')
+        if (trueValue)
           model.recoverySpecific = '无'
         break
       case '恢复室内情况有':
-        if (item.ItemValue === 'true')
+        if (trueValue)
           model.recoverySpecific = '有'
         break
       case '恢复室内情况':
-        if (item.ItemValue === 'true')
+        if (trueValue)
           model.recoverySpecificText = '有'
         break
       case 'PADS1':
@@ -404,11 +405,11 @@ export function narcoticItemRevert({ Items }: ApiResonseType.NarcoticResult, mod
         model.PADSCount = item.ItemValue
         break
       case '离院可':
-        if (item.ItemValue === 'true')
+        if (trueValue)
           model.canLeave = '可'
         break
       case '离院否':
-        if (item.ItemValue === 'true')
+        if (trueValue)
           model.canLeave = '否'
         break
       case '麻醉医师签名2#BTN#':

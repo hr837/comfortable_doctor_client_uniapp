@@ -150,3 +150,10 @@ export function roleFormat(roleName: ApiRequestType.RoleCode) {
   }
   return name
 }
+
+/** 转化字符串为bool类型 */
+export function toBoolean(val: string) {
+  if (!val) return false;
+  if(typeof val !== "string") return false
+  return val.toLocaleLowerCase() === 'true'
+}
