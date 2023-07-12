@@ -141,6 +141,13 @@ import { PatientDetailDict, patientInfo } from '@/composables/patient-narcotic-d
           </uni-forms-item>
         </uni-col>
       </uni-row>
+      <uni-row>
+        <uni-col :xs="24" :sm="12">
+          <uni-forms-item label="评估医生">
+            <uni-easyinput :value="patientInfo.AssessorName" disabled />
+          </uni-forms-item>
+        </uni-col>
+      </uni-row>
     </uni-forms>
   </view>
 </template>

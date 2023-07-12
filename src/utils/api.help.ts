@@ -518,6 +518,9 @@ export namespace ApiResonseType {
     PatientHeight: string
     /** 体重指数 */
     Bmi: string
+
+    /** 评估医生 */
+    AssessorName: string
   }
 
   /** 获取用药单位返回列表 */

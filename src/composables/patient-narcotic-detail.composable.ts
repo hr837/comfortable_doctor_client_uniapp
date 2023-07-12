@@ -529,6 +529,7 @@ export const patientInfo = reactive<ApiResonseType.PatientDetailInfo>({
   PatientHeight: '',
   PatientWeight: '',
   Bmi: '',
+  AssessorName: ""
 })
 
 /** 当前详情页是否可以编辑 */
@@ -597,6 +598,7 @@ export const initPatientInfo = () => {
   patientInfo.PatientHeight = ''
   patientInfo.PatientWeight = ''
   patientInfo.Bmi = ''
+  patientInfo.AssessorName = ""
 }
 
 /** 刷新病人信息 */
@@ -659,4 +661,5 @@ export const refreshPatientInfo = (id: string) => getPatientDetail(id).then((dat
   patientInfo.PatientHeight = data.PatientHeight
   patientInfo.PatientWeight = data.PatientWeight
   patientInfo.Bmi = data.Bmi
+  patientInfo.AssessorName = data.AssessorName
 })
