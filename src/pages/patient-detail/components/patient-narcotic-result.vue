@@ -103,7 +103,7 @@ function setSignInfo(data?: any) {
 }
 
 function saveData() {
-  if (!modelData.narcoticDoctorSign || !modelData.narcoticDoctor2Sign) {
+  if (!modelData.narcoticDoctorSign) {
     uni.showToast({
       title: '麻醉医师还未签名!',
       icon: "none"
