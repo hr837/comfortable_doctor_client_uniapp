@@ -45,18 +45,18 @@ function onRowClick(data: ApiResonseType.SafeCheckInfo) {
     <PatientQueryForm show-room-item :show-department="false" show-dept-type @submit="onSubmit">
       <template #append>
         <uni-row>
-          <uni-col :xs="22" :sm="11">
+          <uni-col :span="11">
             <PatientQuerySelectStatus v-model="queryData.OperateState" />
           </uni-col>
-          <uni-col :offset="1" :xs="22" :sm="12">
+          <uni-col :offset="1" :span="12">
             <PatientQuerySelectPain v-model="queryData.Analgesia" />
           </uni-col>
         </uni-row>
         <uni-row class="m-t-2">
-          <uni-col :xs="22" :sm="11">
+          <uni-col :span="11">
             <PatientQuerySelectSource v-model="queryData.PatientSource" />
           </uni-col>
-          <uni-col :offset="1" :xs="22" :sm="12">
+          <uni-col :offset="1" :span="12">
             <PatientQuerySelectSpan v-model="queryData.ExamineSpan" />
           </uni-col>
         </uni-row>
