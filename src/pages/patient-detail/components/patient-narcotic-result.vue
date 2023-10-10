@@ -2,7 +2,7 @@
 import type { Ref } from 'vue'
 import NarcoticResultTempalteSelect from './narcotic-result-tempalte-select.vue'
 import DoctorSign from './doctor-sign.vue'
-import { PatientDetailDict, canEdit, narcoticItemRevert, narcoticItemsConvert } from '@/composables/patient-narcotic-detail.composable'
+import { PatientDetailDict, canEdit, narcoticItemRevert, narcoticItemsConvert, refreshPatientInfo } from '@/composables/patient-narcotic-detail.composable'
 import { getNarcoticResult, saveNarcoticResult } from '@/utils/api'
 import { dateTimeFormat } from '@/composables'
 
@@ -42,11 +42,9 @@ const modelData = reactive({
   nurseDate: '',
 })
 
-onMounted(() => {
-  getNarcoticResult(id!.value).then((data) => {
-    narcoticItemRevert(data, modelData)
-  })
-})
+onMounted(refreshNarcoticResult)
+
+
 
 const StewardCount = computed(() => modelData.comToLifeState + modelData.bodyActiveState + modelData.breathActiveState)
 const PADSCount = computed(() => modelData.vitalsignState + modelData.activeState + modelData.painState + modelData.nauseaState + modelData.bleedingState)
@@ -99,6 +97,27 @@ function setSignInfo(data?: any) {
       modelData.nurseSign = data?.userCode ?? ''
       modelData.nurseDate = data ? dateStr : ''
       break
+  }
+}
+
+/** 刷新麻醉小结数据 */
+async function refreshNarcoticResult() {
+  const data = await getNarcoticResult(id!.value)
+  narcoticItemRevert(data, modelData)
+}
+
+/** 提交数据前检查当前单据数据状态 */
+async function checkDataState() {
+  await refreshPatientInfo(id!.value);
+  // 已经审核的数据就直接刷新UI
+  if (canEdit.value) {
+    saveData()
+  } else {
+    uni.showToast({
+      title: '数据已审核',
+      icon: "error"
+    })
+    refreshNarcoticResult()
   }
 }
 
@@ -293,7 +312,7 @@ function saveData() {
       </uni-row>
     </uni-forms>
     <view v-if="canEdit" class="patient-narcotic-result-bottom">
-      <button type="primary" @click="saveData">
+      <button type="primary" @click="checkDataState">
         保存
       </button>
     </view>
