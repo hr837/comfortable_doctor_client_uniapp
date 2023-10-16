@@ -168,7 +168,7 @@ function saveData() {
 
     <uni-section class="patient-narcotic-result-header" title="麻醉情况" type="line">
       <template v-if="canEdit" #right>
-        <button type="primary" style="width: 100px;" @click="saveData">
+        <button type="primary" style="width: 100px;" @click="checkDataState">
           保存
         </button>
       </template>
