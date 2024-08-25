@@ -535,6 +535,7 @@ export const patientInfo = reactive<ApiResonseType.PatientDetailInfo>({
 /** 当前详情页是否可以编辑 */
 export const canEdit = computed(() => patientInfo.IsChecked !== true)
 
+
 /**
  * 初始化病人详情信息
  */

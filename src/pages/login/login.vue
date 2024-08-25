@@ -2,13 +2,17 @@
 import LoginSetting from './components/login-setting.vue'
 import { getDeptList, login } from '@/utils/api'
 import type { ApiRequestType } from '@/utils/api.help'
-import { STORE_KEY_ROOM, STORE_KEY_SYSNAME, STORE_KEY_USER, STORE_ROOM_LIST, SYS_NAME_DEFAULT } from '@/utils/app.constant'
+import { STORE_KEY_ROOM, STORE_KEY_ROOM_TYPE, STORE_KEY_SYSNAME, STORE_KEY_USER, STORE_ROOM_LIST, SYS_NAME_DEFAULT } from '@/utils/app.constant'
 
-const loginModel = reactive<ApiRequestType.Login & { RoomCode: string }>({
+const loginModel = reactive<ApiRequestType.Login & { RoomCode: string, RoomType: string }>({
   LoginName: '',
   Password: '',
   RoomCode: '',
+  RoomType: ''
 })
+
+// 拉取缓存的操作间类型
+loginModel.RoomType = uni.getStorageSync(STORE_KEY_ROOM_TYPE) || ''
 
 const rules = {
   LoginName: {
@@ -16,6 +20,9 @@ const rules = {
   },
   Password: {
     rules: [{ required: true, errorMessage: '请输入登录密码' }],
+  },
+  RoomType: {
+    rules: [{ required: true, errorMessage: '请选择操作科室' }],
   },
 }
 
@@ -49,6 +56,11 @@ onMounted(refreshRoomList)
 const toLogin = () => login(loginModel).then((data) => {
   // 缓存默认手术间
   uni.setStorageSync(STORE_KEY_ROOM, loginModel.RoomCode)
+  // 缓存操作间类型
+  uni.setStorage({
+    key: STORE_KEY_ROOM_TYPE,
+    data: loginModel.RoomType
+  });
   // 缓存用户信息
   uni.setStorage({
     key: STORE_KEY_USER,
@@ -64,6 +76,10 @@ const toLogin = () => login(loginModel).then((data) => {
   icon: 'error',
 }))
 
+function onRoomTypeChange(e: UniEvent<{ value: string }>) {
+  loginModel.RoomType = e.detail!.value;
+}
+
 function submitForm() {
   formRef.value?.validate().then(toLogin).catch(() => { })
 }
@@ -72,10 +88,8 @@ function submitForm() {
 <template>
   <view class="page login">
     <view class="login-setting">
-      <uni-data-select
-        v-model="loginModel.RoomCode" class="login-setting-room" :localdata="roomList" :clear="false"
-        placeholder="手术间"
-      />
+      <uni-data-select v-model="loginModel.RoomCode" class="login-setting-room" :localdata="roomList" :clear="false"
+        placeholder="手术间" />
       <LoginSetting @settinged="refreshRoomList" />
     </view>
     <image class="login-logo" src="/static/login-logo.png" />
@@ -88,10 +102,18 @@ function submitForm() {
           <uni-easyinput v-model="loginModel.LoginName" prefix-icon="person" placeholder="账号" confirm-type="next" />
         </uni-forms-item>
         <uni-forms-item name="Password">
-          <uni-easyinput
-            ref="inputPwdRef" v-model="loginModel.Password" prefix-icon="locked" type="password"
-            placeholder="密码"
-          />
+          <uni-easyinput ref="inputPwdRef" v-model="loginModel.Password" prefix-icon="locked" type="password"
+            placeholder="密码" />
+        </uni-forms-item>
+        <uni-forms-item name="RoomType">
+          <radio-group @change="onRoomTypeChange" class="login__form-item__room-type">
+            <label>
+              <radio value="operate" :checked="loginModel.RoomType === 'operate'" />手术室
+            </label>
+            <label>
+              <radio value="revert" :checked="loginModel.RoomType === 'revert'" />恢复室
+            </label>
+          </radio-group>
         </uni-forms-item>
       </uni-forms>
 
@@ -151,5 +173,13 @@ function submitForm() {
   }
 
   // #endif
+
+  .login__form-item__room-type {
+    color: #fff;
+
+    .uni-label-pointer+.uni-label-pointer {
+      @apply ml-4;
+    }
+  }
 }
 </style>

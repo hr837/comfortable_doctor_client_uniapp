@@ -8,6 +8,8 @@ export const STORE_KEY_ROOM = 'ROOM_CODE'
 export const STORE_ROOM_LIST = 'ROOM_LIST'
 /** storageKey 系统名称 */
 export const STORE_KEY_SYSNAME = 'SYS_NAME'
+/** storageKey 操作间类型 */
+export const STORE_KEY_ROOM_TYPE = 'SYS_ROOM_TYPE'
 
 /** 系统名称 */
 export const SYS_NAME_DEFAULT = '麻醉舒适化管理信息系统'
